@@ -1,6 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-import EditScreenInfo from './EditScreenInfo';
 
 type ScreenContentProps = {
   title: string;
@@ -9,11 +9,31 @@ type ScreenContentProps = {
 };
 
 export const ScreenContent = ({ title, path, children }: ScreenContentProps) => {
+  const [userFullName, setUserFullName] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Função para carregar o nome e sobrenome do AsyncStorage
+    const loadUserData = async () => {
+      try {
+        const firstName = await AsyncStorage.getItem('userFirstName');
+        const lastName = await AsyncStorage.getItem('userLastName');
+
+        if (firstName && lastName) {
+          setUserFullName(`${firstName} ${lastName}`);
+        }
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
+      {userFullName && <Text style={styles.userName}>Hello, {userFullName}!</Text>}
       <View style={styles.separator} />
-      <EditScreenInfo path={path} />
       {children}
     </View>
   );
@@ -34,5 +54,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  userName: {
+    fontSize: 16,
+    marginVertical: 10,
+    fontStyle: 'italic',
   },
 });

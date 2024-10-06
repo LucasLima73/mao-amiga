@@ -1,7 +1,13 @@
 import 'react-native-gesture-handler';
 
+import { UserProvider } from 'utils/useContext';
+
 import RootStack from './navigation';
 
 export default function App() {
-  return <RootStack />;
+  return (
+    <UserProvider>
+      <RootStack />
+    </UserProvider>
+  );
 }

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./(components)/utils/navbar";
 import AboutButton from "./(components)/utils/aboutbutton";
+import Footer from "./(components)/utils/footer";
+import ChatButton from "./(components)/utils/chatbutton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +28,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Link do CSS do Bootstrap */}
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRVp31sC1lM9VgxL4Rc+I2L9PldJ2jXQ+rhbTr5z4"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar/>
+        <Navbar />
         {children}
-        <AboutButton/>
+        <AboutButton />
+        <ChatButton />
+        <Footer />
+
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-7OnEgAG4d92QeZlXclH4ZxnbyZp1mUtrVpXEnbB/wqQWo9z6dnzeIUn9ejhYDp/u"
+          crossOrigin="anonymous"
+        ></script>
       </body>
     </html>
   );

@@ -1,12 +1,22 @@
 'use client';
 import React from 'react';
 
-const WavyButton = ({ buttonText = 'Clique Aqui' }) => {
+interface WavyButtonProps {
+  buttonText?: string;
+  backgroundColor?: string; // Cor de fundo dinâmica
+  textColor?: string; // Cor do texto dinâmica
+}
+
+const WavyButton: React.FC<WavyButtonProps> = ({
+  buttonText = 'Clique Aqui',
+  backgroundColor = '#ffde59', // Cor de fundo padrão
+  textColor = '#333', // Cor do texto padrão
+}) => {
   return (
     <button
       style={{
-        backgroundColor: '#ffde59', // Fundo amarelo
-        color: '#333', // Cor do texto
+        backgroundColor, // Usa a cor de fundo recebida como prop
+        color: textColor, // Usa a cor do texto recebida como prop
         fontSize: '16px', // Tamanho do texto
         fontWeight: 'bold', // Texto em negrito
         border: 'none', // Sem borda

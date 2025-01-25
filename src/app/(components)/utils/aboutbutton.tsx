@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
 
-interface AboutButtonProps {
-}
+type AboutButtonProps = object;
 
 const AboutButton: React.FC<AboutButtonProps> = () => {
   return (

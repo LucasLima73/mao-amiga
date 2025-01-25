@@ -6,6 +6,7 @@ import Link from 'next/link';
 import WavyButton from './(components)/utils/wavybutton';
 import FloatingArrow from './(components)/utils/floatingarrow';
 import AboutButton from './(components)/utils/aboutbutton';
+import ChatBotBalloon from './(components)/utils/ballon';
 
 const Home = () => {
   return (
@@ -15,7 +16,7 @@ const Home = () => {
         overflowX: 'hidden', // Impede scroll horizontal
       }}
     >
-      <AboutButton onClick={() => { /* handle click event */ }} />
+      <AboutButton />
       <div
         style={{
           height: '100vh',
@@ -31,6 +32,7 @@ const Home = () => {
         }}
       >
         <FloatingArrow />
+        <ChatBotBalloon />
         <div
           style={{
             color: '#ffde59',

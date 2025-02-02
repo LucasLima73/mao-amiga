@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { FaHeadset } from "react-icons/fa";
 
 const ChatBotBalloon: React.FC = () => {
+  const [iconColor, setIconColor] = useState("#ffde59");
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [responses, setResponses] = useState<string[]>([]);
@@ -65,20 +67,58 @@ const ChatBotBalloon: React.FC = () => {
   };
 
   return (
+    
     <div className="fixed bottom-6 right-6 z-50">
       {/* Mensagem rotativa acima do balão */}
+      {!isOpen && (
       <div className="fixed bottom-20 right-6 text-center text-sm text-gray-600 bg-white rounded-md px-4 py-2 shadow-md">
         {messages[currentMessageIndex]}
       </div>
-
+      )}
+      
       {/* Botão flutuante (exibido apenas quando o balão está fechado) */}
       {!isOpen && (
-        <button
-          onClick={toggleChatBot}
-          className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center shadow-lg text-white hover:bg-blue-600"
-        >
-          💬
-        </button>
+         <button onClick={toggleChatBot}
+         style={{
+           position: "fixed",
+           bottom: "20px",
+           right: "20px",
+           width: "60px",
+           height: "60px",
+           borderRadius: "50%",
+           border: "4px solid #ffde59",
+           backgroundColor: "transparent",
+           display: "flex",
+           alignItems: "center",
+           justifyContent: "center",
+           cursor: "pointer",
+           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+           transition: "transform 0.2s ease, box-shadow 0.2s ease",
+         }}
+         onMouseOver={(e) => {
+           e.currentTarget.style.transform = "scale(1.1)";
+           e.currentTarget.style.boxShadow = "0 6px 8px rgba(0, 0, 0, 0.2)";
+         }}
+         onMouseOut={(e) => {
+           e.currentTarget.style.transform = "scale(1)";
+           e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+         }}
+         onMouseDown={(e) => {
+           e.currentTarget.style.transform = "scale(0.98)";
+           e.currentTarget.style.boxShadow = "0 3px 5px rgba(0, 0, 0, 0.2)";
+         }}
+         onMouseUp={(e) => {
+           e.currentTarget.style.transform = "scale(1.1)";
+           e.currentTarget.style.boxShadow = "0 6px 8px rgba(0, 0, 0, 0.2)";
+         }}
+       >
+         <FaHeadset
+           style={{
+             fontSize: "24px",
+             color: iconColor,
+           }}
+         />
+       </button>
       )}
 
       {/* Container do balão (exibido apenas quando aberto) */}

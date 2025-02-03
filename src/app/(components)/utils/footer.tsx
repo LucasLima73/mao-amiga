@@ -1,86 +1,55 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer
-      style={{
-        backgroundColor: '#fff',
-        color: '#333',
-        padding: '40px 20px',
-        textAlign: 'center',
-        fontFamily: "'Roboto', sans-serif",
-      }}
-    >
-      {/* Contêiner geral */}
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-        }}
-      >
-        {/* Sobre o projeto */}
-        <div style={{ flex: '1', minWidth: '250px', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Mão Amiga</h3>
-          <p style={{ fontSize: '1rem', lineHeight: '1.8' }}>
-            Um projeto dedicado a apoiar refugiados no Brasil, oferecendo acesso a
-            serviços essenciais e suporte em desafios legais, culturais e linguísticos.
+    <footer className="bg-black text-white py-10 px-5">
+      {/* Contêiner Principal */}
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-center items-center text-center md:text-left gap-8">
+        {/* Seção Sobre */}
+        <div className="flex-1 min-w-[250px]">
+          <h3 className="text-2xl font-semibold mb-3 text-yellow-400">Mão Amiga</h3>
+          <p className="text-base leading-7 text-gray-300">
+            Um projeto dedicado a apoiar refugiados no Brasil, oferecendo acesso a serviços essenciais e suporte em desafios legais, culturais e linguísticos.
           </p>
         </div>
 
-        {/* Links úteis */}
-        <div style={{ flex: '1', minWidth: '250px', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Links Úteis</h3>
-          <ul style={{ listStyle: 'none', padding: '0', lineHeight: '2' }}>
-            <li>
-              <Link href="/trilhaSaude" style={{ textDecoration: 'none', color: '#333' }}>
-                Acesso à Saúde
-              </Link>
-            </li>
-            <li>
-              <Link href="/trilhaDocumentacao" style={{ textDecoration: 'none', color: '#333' }}>
-                Documentação
-              </Link>
-            </li>
-            <li>
-              <Link href="/trilhaDireitosHumanos" style={{ textDecoration: 'none', color: '#333' }}>
-                Direitos Humanos
-              </Link>
-            </li>
-            <li>
-              <Link href="/trilhaSocioeconomico" style={{ textDecoration: 'none', color: '#333' }}>
-                Apoio Socioeconômico
-              </Link>
-            </li>
+        {/* Links Úteis */}
+        <div className="flex-1 min-w-[250px]">
+          <h3 className="text-2xl font-semibold mb-3 text-yellow-400">Links Úteis</h3>
+          <ul className="space-y-2">
+            {[
+              { href: "/trilhaSaude", label: "Acesso à Saúde" },
+              { href: "/trilhaDocumentacao", label: "Documentação" },
+              { href: "/trilhaDireitosHumanos", label: "Direitos Humanos" },
+              { href: "/trilhaSocioeconomico", label: "Apoio Socioeconômico" },
+            ].map((link, index) => (
+              <li key={index}>
+                <Link
+                  href={link.href}
+                  className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 ease-in-out"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Contato */}
-        <div style={{ flex: '1', minWidth: '250px', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Contato</h3>
-          <p style={{ fontSize: '1rem', lineHeight: '1.8' }}>
+        <div className="flex-1 min-w-[250px]">
+          <h3 className="text-2xl font-semibold mb-3 text-yellow-400">Contato</h3>
+          <p className="text-base leading-7 text-gray-300">
             <strong>Email:</strong> contato@maoamiga.org.br
           </p>
-          <p style={{ fontSize: '1rem', lineHeight: '1.8' }}>
+          {/* <p className="text-base leading-7 text-gray-300">
             <strong>Telefone:</strong> +55 (11) 99999-9999
-          </p>
+          </p> */}
         </div>
       </div>
 
-      {/* Rodapé inferior */}
-      <div
-        style={{
-          borderTop: '1px solid #ddd',
-          marginTop: '20px',
-          paddingTop: '10px',
-          fontSize: '0.9rem',
-          color: '#555',
-        }}
-      >
+      {/* Rodapé Inferior */}
+      <div className="border-t border-gray-700 mt-8 pt-5 text-sm text-gray-500">
         <p>&copy; {new Date().getFullYear()} Mão Amiga. Todos os direitos reservados.</p>
       </div>
     </footer>

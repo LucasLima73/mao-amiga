@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 🎨 Cores padrões */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -14,8 +15,69 @@
   }
 }
 
+/* 🌍 Estilos Globais */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Mantém o footer no final da página */
+}
+
+/* 📌 Estilização do Footer */
+footer {
+  width: 100%;
+  background-color: #0a0a0a; 
+  color: #ffffff;
+  text-align: center;
+  padding: 40px 20px;
+  font-family: "Roboto", sans-serif;
+  border-top: 1px solid #ddd;
+}
+
+footer a {
+  color: #cccccc;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+footer a:hover {
+  color: #ffde59;
+  text-decoration: underline;
+}
+
+footer p, footer li {
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+footer h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+footer .border-t {
+  border-top: 1px solid #444;
+  margin-top: 20px;
+  padding-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #888;
+}
+
+/* Centralização do conteúdo para tela menor */
+@media (max-width: 768px) {
+  footer div {
+    text-align: center;
+  }
+}
+
+/* 📌 Garante que o conteúdo principal cresça para empurrar o Footer */
+main {
+  flex-grow: 1;
 }

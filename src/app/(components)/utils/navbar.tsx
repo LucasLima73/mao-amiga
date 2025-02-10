@@ -1,28 +1,51 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { db } from "../../../lib/firebase"; // Importando Firestore
-import {  getDoc, doc, setDoc } from "firebase/firestore"; // Firestore functions
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Firebase Authentication
-import firebaseApp from "../../../lib/firebase"; // Firebase App
+import Link from "next/link";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { db } from "../../../lib/firebase";
+import { getDoc, doc, setDoc } from "firebase/firestore";
+import firebaseApp from "../../../lib/firebase";
 
 const Navbar: React.FC = () => {
+  // Estados para menu mobile, modal de login e criação de conta
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isCreateAccountModalOpen, setIsCreateAccountModalOpen] = useState(false);
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Estados de autenticação do usuário
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null); // userId = telefone
+  const [userId, setUserId] = useState<string | null>(null);
+
   const auth = getAuth(firebaseApp);
 
-  // Função para abrir e fechar os modais
-  const toggleLoginModal = () => setIsLoginModalOpen(!isLoginModalOpen);
-  const toggleCreateAccountModal = () => setIsCreateAccountModalOpen(!isCreateAccountModalOpen);
+  // Recupera dados do usuário do localStorage, se existirem
+  useEffect(() => {
+    const storedUserName = localStorage.getItem("userName");
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserName && storedUserId) {
+      setUserName(storedUserName);
+      setUserId(storedUserId);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
-  // Função para login com telefone
+  // Função para alternar o menu mobile
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Função para alternar a exibição do modal de login (fecha o menu mobile)
+  const toggleLoginModal = () => {
+    setIsLoginModalOpen(!isLoginModalOpen);
+    setIsOpen(false);
+  };
+
+  // Login por telefone
   const handleLogin = async () => {
     setIsLoading(true);
     try {
@@ -31,14 +54,12 @@ const Navbar: React.FC = () => {
         const userData = userDoc.data();
         setUserName(userData?.userName);
         setUserId(userData?.userId);
-
-        // Salvar no localStorage
         localStorage.setItem("userName", userData?.userName || "");
         localStorage.setItem("userId", userData?.userId || "");
-
         alert("Login bem-sucedido!");
         setIsLoggedIn(true);
         setIsLoginModalOpen(false);
+        window.location.reload(); // Recarrega a página após login
       } else {
         alert("Telefone não encontrado!");
       }
@@ -49,7 +70,7 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Função para criar conta
+  // Criação de conta por telefone (com nome)
   const handleCreateAccount = async () => {
     setIsLoading(true);
     try {
@@ -57,18 +78,15 @@ const Navbar: React.FC = () => {
       if (userDoc.exists()) {
         alert("Este telefone já está registrado!");
       } else {
-        // Salvar usuário no Firestore
         await setDoc(doc(db, "users", phone), { userName: name, userId: phone });
-        
-        // Salvar no localStorage
         localStorage.setItem("userName", name);
         localStorage.setItem("userId", phone);
-
         alert("Conta criada com sucesso!");
         setIsLoggedIn(true);
         setUserName(name);
         setUserId(phone);
-        setIsCreateAccountModalOpen(false);
+        setIsLoginModalOpen(false);
+        window.location.reload(); // Recarrega a página após criação da conta
       }
     } catch (error) {
       alert("Erro ao criar conta: " + (error as any).message);
@@ -77,267 +95,218 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Função para login com Google
+  // Login com Google
   const handleLoginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-
-      // Salva os dados no localStorage
       localStorage.setItem("userName", user.displayName || "Usuário");
       localStorage.setItem("userId", user.uid);
-
-      alert("Login com Google bem-sucedido!");
-
-      // Atualiza o nome do usuário no estado
       setUserName(user.displayName || "Usuário");
       setUserId(user.uid);
-
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
+      alert("Login com Google bem-sucedido!");
+      window.location.reload(); // Recarrega a página após login com Google
     } catch (error) {
       alert("Erro ao fazer login com Google: " + (error as any).message);
     }
   };
 
-  // Função de logout
+  // Logout
   const handleLogout = () => {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     setUserName(null);
     setUserId(null);
     setIsLoggedIn(false);
-
-    // Remover dados do localStorage
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userId");
-
     alert("Logout bem-sucedido!");
+    window.location.reload(); // Recarrega a página após logout
   };
 
-  useEffect(() => {
-    // Verifica se o usuário já está logado
-    const storedUserName = localStorage.getItem("userName");
-    const storedUserId = localStorage.getItem("userId");
-
-    if (storedUserName && storedUserId) {
-      setUserName(storedUserName);
-      setUserId(storedUserId);
-      setIsLoggedIn(true);
-    }
-  }, []);
-
   return (
-    <nav className="relative z-10">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
+    <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
+      <div className="container mx-auto flex justify-between items-center px-6 py-4">
         {/* Logo */}
-        <div className="text-lg font-bold text-[#ffde59]">
-          <a href="/" className="hover:opacity-80">
-            Mão Amiga
-          </a>
+        <div
+          className="text-yellow-400 font-bold text-3xl tracking-widest uppercase"
+          style={{ fontFamily: "'Cinzel Decorative', serif" }}
+        >
+          <Link href="/">Mão Amiga</Link>
         </div>
-        {/* Hamburger Menu */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-[#ffde59] focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {isOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
+
         {/* Menu Desktop */}
-        <div className="hidden md:block">
-          <ul className="flex space-x-6 text-sm text-[#ffde59]">
-            <li>
-              <a href="/trilhaSaude" className="hover:opacity-80">
-                Saúde
-              </a>
-            </li>
-            <li>
-              <a href="#documentacao" className="hover:opacity-80">
-                Documentação
-              </a>
-            </li>
-            <li>
-              <a href="#direitos-humanos" className="hover:opacity-80">
-                Direitos Humanos
-              </a>
-            </li>
-            <li>
-              <a href="#socioeconomico" className="hover:opacity-80">
-                Socioeconômico
-              </a>
-            </li>
-          </ul>
+        <div className="hidden md:flex space-x-8 text-yellow-400 text-sm tracking-wide">
+          <Link href="/trilhaSaude" className="hover:text-yellow-300 transition">
+            SAÚDE
+          </Link>
+          <Link href="/documentacao" className="hover:text-yellow-300 transition">
+            DOCUMENTAÇÃO
+          </Link>
+          <Link href="/direitos-humanos" className="hover:text-yellow-300 transition">
+            DIREITOS HUMANOS
+          </Link>
+          <Link href="/socioeconomico" className="hover:text-yellow-300 transition">
+            SOCIOECONÔMICO
+          </Link>
         </div>
-      </div>
-      {/* Menu Mobile */}
-      <div
-        className={`${
-          isOpen ? "block" : "hidden"
-        } absolute top-full left-0 w-full md:hidden`}
-      >
-        <ul className="flex flex-col text-center text-sm text-[#ffde59] bg-transparent">
-          <li>
-            <a href="#saude" className="block px-4 py-2 hover:opacity-80">
-              Saúde
-            </a>
-          </li>
-          <li>
-            <a
-              href="#documentacao"
-              className="block px-4 py-2 hover:opacity-80"
-            >
-              Documentação
-            </a>
-          </li>
-          <li>
-            <a
-              href="#direitos-humanos"
-              className="block px-4 py-2 hover:opacity-80"
-            >
-              Direitos Humanos
-            </a>
-          </li>
-          <li>
-            <a
-              href="#socioeconomico"
-              className="block px-4 py-2 hover:opacity-80"
-            >
-              Socioeconômico
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        {isLoggedIn ? (
-          <div className="flex items-center">
-            <span className="text-white mr-4">{userName}</span>
-            <button
-              onClick={handleLogout}
-              className="text-white bg-red-500 px-4 py-2 rounded"
-            >
-              Sair
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-4">
+
+        {/* Login / Logout no Desktop via Modal */}
+        <div className="hidden md:flex">
+          {isLoggedIn ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-yellow-400">{userName}</span>
+              <button
+                onClick={handleLogout}
+                className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+              >
+                Sair
+              </button>
+            </div>
+          ) : (
             <button
               onClick={toggleLoginModal}
-              className="text-white bg-blue-500 px-4 py-2 rounded"
+              className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
             >
               Login
             </button>
-            <button
-              onClick={toggleCreateAccountModal}
-              className="text-white bg-green-500 px-4 py-2 rounded"
-            >
-              Criar Conta
-            </button>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Botão do Menu Mobile */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden text-yellow-400 focus:outline-none"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            {isOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            )}
+          </svg>
+        </button>
       </div>
 
-      {/* Modal de Login */}
+      {/* Menu Mobile */}
+      {isOpen && (
+        <div className="absolute top-full left-0 w-full bg-black bg-opacity-80 md:hidden">
+          <ul className="flex flex-col items-center py-4 space-y-4 text-yellow-400 text-sm">
+            <li>
+              <Link href="/trilhaSaude" onClick={toggleMenu}>
+                SAÚDE
+              </Link>
+            </li>
+            <li>
+              <Link href="/documentacao" onClick={toggleMenu}>
+                DOCUMENTAÇÃO
+              </Link>
+            </li>
+            <li>
+              <Link href="/direitos-humanos" onClick={toggleMenu}>
+                DIREITOS HUMANOS
+              </Link>
+            </li>
+            <li>
+              <Link href="/socioeconomico" onClick={toggleMenu}>
+                SOCIOECONÔMICO
+              </Link>
+            </li>
+            <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
+            {isLoggedIn ? (
+              <>
+                <li className="text-yellow-400">{userName}</li>
+                <li>
+                  <button
+                    onClick={() => {
+                      toggleMenu();
+                      handleLogout();
+                    }}
+                    className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+                  >
+                    Sair
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <button
+                  onClick={toggleLoginModal}
+                  className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+                >
+                  Login
+                </button>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+
+      {/* Modal de Login para Desktop */}
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Login</h3>
-
-            <div className="mb-4">
+          <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
+            <h3 className="text-xl font-bold mb-4">
+              {isCreatingAccount ? "Criar Conta" : "Login"}
+            </h3>
+            <input
+              type="text"
+              placeholder="Telefone"
+              className="w-full p-2 border rounded mb-4"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            {isCreatingAccount && (
               <input
                 type="text"
-                placeholder="Telefone"
-                className="w-full p-2 border rounded"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Nome"
+                className="w-full p-2 border rounded mb-4"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-            </div>
-
+            )}
             <button
-              onClick={handleLogin}
+              onClick={isCreatingAccount ? handleCreateAccount : handleLogin}
               className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
-              disabled={isLoading}
             >
-              {isLoading ? "Carregando..." : "Login"}
+              {isLoading
+                ? "Carregando..."
+                : isCreatingAccount
+                ? "Criar Conta"
+                : "Login"}
             </button>
-
-            {/* Login com Google */}
             <button
               onClick={handleLoginWithGoogle}
               className="bg-red-500 text-white px-4 py-2 rounded w-full mb-4"
             >
               Login com Google
             </button>
-
-            {/* Fechar o modal */}
+            <button
+              onClick={() => setIsCreatingAccount(!isCreatingAccount)}
+              className="text-blue-500 underline"
+            >
+              {isCreatingAccount
+                ? "Já tem uma conta? Faça login"
+                : "Não tem conta? Cadastre-se"}
+            </button>
             <button
               onClick={toggleLoginModal}
-              className="absolute top-2 right-2 text-black hover:text-gray-500"
-            >
-              ✖
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de Criar Conta */}
-      {isCreateAccountModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Criar Conta</h3>
-
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Telefone"
-                className="w-full p-2 border rounded"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Nome"
-                className="w-full p-2 border rounded"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-
-            <button
-              onClick={handleCreateAccount}
-              className="bg-green-500 text-white px-4 py-2 rounded w-full mb-4"
-              disabled={isLoading}
-            >
-              {isLoading ? "Carregando..." : "Criar Conta"}
-            </button>
-
-            {/* Fechar o modal */}
-            <button
-              onClick={toggleCreateAccountModal}
               className="absolute top-2 right-2 text-black hover:text-gray-500"
             >
               ✖

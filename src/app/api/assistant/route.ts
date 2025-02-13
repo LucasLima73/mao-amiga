@@ -5,10 +5,13 @@ import { OpenAI } from "openai";
 const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const assistantId = process.env.NEXT_PUBLIC_OPENAI_ASSISTANT_ID;
 
-if (!apiKey || !assistantId) {
-  throw new Error(
-    "As variáveis de ambiente OPENAI_API_KEY e OPENAI_ASSISTANT_ID são necessárias."
-  );
+// Verifique se as variáveis de ambiente estão definidas
+if (typeof apiKey !== 'string' || !apiKey.trim()) {
+  throw new Error("A variável de ambiente NEXT_PUBLIC_OPENAI_API_KEY é necessária.");
+}
+
+if (typeof assistantId !== 'string' || !assistantId.trim()) {
+  throw new Error("A variável de ambiente NEXT_PUBLIC_OPENAI_ASSISTANT_ID é necessária.");
 }
 
 const openai = new OpenAI({ apiKey });
@@ -25,8 +28,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Criação e execução do thread
     const run = await openai.beta.threads.createAndRun({
-      assistant_id: assistantId,
+      assistant_id: assistantId,  // Garantido como string
       thread: {
         messages: [{ role: "user", content: prompt }],
       },
@@ -35,16 +39,12 @@ export async function POST(req: NextRequest) {
     const threadId = run.thread_id;
     const runId = run.id;
 
+    // Verificação do status do run
     while (true) {
-      const runStatus = await openai.beta.threads.runs.retrieve(
-        threadId,
-        runId
-      );
+      const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
 
       if (runStatus.status === "completed") {
-        const threadMessages = await openai.beta.threads.messages.list(
-          threadId
-        );
+        const threadMessages = await openai.beta.threads.messages.list(threadId);
         const responseContent =
           threadMessages.data[0]?.content[0]?.type === "text"
             ? threadMessages.data[0].content[0].text.value

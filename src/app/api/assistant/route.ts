@@ -2,16 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
 // Configurações do OpenAI
-const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-const assistantId = process.env.NEXT_PUBLIC_OPENAI_ASSISTANT_ID;
+const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY as string;
+const assistantId = process.env.NEXT_PUBLIC_OPENAI_ASSISTANT_ID as string;
 
-// Verifique se as variáveis de ambiente estão definidas
-if (typeof apiKey !== 'string' || !apiKey.trim()) {
-  throw new Error("A variável de ambiente NEXT_PUBLIC_OPENAI_API_KEY é necessária.");
-}
-
-if (typeof assistantId !== 'string' || !assistantId.trim()) {
-  throw new Error("A variável de ambiente NEXT_PUBLIC_OPENAI_ASSISTANT_ID é necessária.");
+// Verifique se as variáveis de ambiente estão definidas corretamente
+if (!apiKey || !assistantId) {
+  throw new Error(
+    "As variáveis de ambiente OPENAI_API_KEY e OPENAI_ASSISTANT_ID são necessárias."
+  );
 }
 
 const openai = new OpenAI({ apiKey });

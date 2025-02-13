@@ -14,7 +14,7 @@ const Home = () => {
         overflowX: 'hidden', // Impede scroll horizontal
       }}
     >
-      <AboutButton onClick={() => { /* handle click event */ }} />
+      <AboutButton />
       <div
         style={{
           height: '100vh',

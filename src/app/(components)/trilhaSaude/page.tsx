@@ -16,12 +16,20 @@ const TrilhaSaude: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [steps, setSteps] = useState<Step[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Verifica se estamos no cliente (navegador) antes de acessar o localStorage
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Efeito para atualizar o userId (ex.: ao fazer login)
   useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    setUserId(storedUserId);
-  }, []);
+    if (isClient) {
+      const storedUserId = localStorage.getItem("userId");
+      setUserId(storedUserId);
+    }
+  }, [isClient]);
 
   // Efeito para buscar os passos sempre que o userId for atualizado
   useEffect(() => {

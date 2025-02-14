@@ -14,6 +14,19 @@ if (!apiKey || !assistantId) {
 
 const openai = new OpenAI({ apiKey });
 
+export async function OPTIONS() {
+  return NextResponse.json(
+    {},
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    }
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -22,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!prompt) {
       return NextResponse.json(
         { error: 'O campo "prompt" é obrigatório.' },
-        { status: 400 }
+        { status: 400, headers: { "Access-Control-Allow-Origin": "*" } }
       );
     }
 
@@ -48,11 +61,14 @@ export async function POST(req: NextRequest) {
             ? threadMessages.data[0].content[0].text.value
             : "";
 
-        return NextResponse.json({ response: responseContent }, { headers: { 'Access-Control-Allow-Origin': '*' } });
+        return NextResponse.json(
+          { response: responseContent },
+          { headers: { "Access-Control-Allow-Origin": "*" } }
+        );
       } else if (runStatus.status === "failed") {
         return NextResponse.json(
           { error: "Falha no processamento do OpenAI Assistant." },
-          { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
+          { status: 500, headers: { "Access-Control-Allow-Origin": "*" } }
         );
       }
 
@@ -62,7 +78,7 @@ export async function POST(req: NextRequest) {
     console.error("Erro ao executar o thread:", error);
     return NextResponse.json(
       { error: "Erro interno no servidor." },
-      { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
+      { status: 500, headers: { "Access-Control-Allow-Origin": "*" } }
     );
   }
 }

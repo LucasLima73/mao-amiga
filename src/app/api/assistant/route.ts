@@ -48,11 +48,11 @@ export async function POST(req: NextRequest) {
             ? threadMessages.data[0].content[0].text.value
             : "";
 
-        return NextResponse.json({ response: responseContent });
+        return NextResponse.json({ response: responseContent }, { headers: { 'Access-Control-Allow-Origin': '*' } });
       } else if (runStatus.status === "failed") {
         return NextResponse.json(
           { error: "Falha no processamento do OpenAI Assistant." },
-          { status: 500 }
+          { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
         );
       }
 
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     console.error("Erro ao executar o thread:", error);
     return NextResponse.json(
       { error: "Erro interno no servidor." },
-      { status: 500 }
+      { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
     );
   }
 }

@@ -26,11 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Carrega o script do Google Analytics com crossOrigin para ajudar no preload */}
+        {/* Carrega o script do Google Analytics */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV"
-          crossOrigin="anonymous"
         />
         {/* Inicializa o GA */}
         <Script id="ga-init" strategy="afterInteractive">

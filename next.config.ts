@@ -1,12 +1,13 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://www.google-analytics.com;
   font-src 'self';
   object-src 'none';
+  connect-src 'self' https://identitytoolkit.googleapis.com;
   base-uri 'self';
   form-action 'self';
   frame-ancestors 'none';
@@ -15,18 +16,16 @@ const cspHeader = `
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // Ignora o ESLint durante o build
+    ignoreDuringBuilds: true,
   },
   async headers() {
     return [
       {
-        // Aplica para todas as rotas
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'Content-Security-Policy',
-            // Remove as quebras de linha para deixar a string em uma única linha
-            value: cspHeader.replace(/\n/g, ' ').trim(),
+            key: "Content-Security-Policy",
+            value: cspHeader.replace(/\n/g, " ").trim(),
           },
         ],
       },

@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/next-script-for-ga */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Navbar from "./(components)/utils/navbar";
 import AboutButton from "./(components)/utils/aboutbutton";

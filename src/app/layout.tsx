@@ -29,7 +29,7 @@ export default function RootLayout({
         {/* Script da biblioteca do Google Analytics */}
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
         />
         {/* Inicializa o GA */}
         <Script id="ga-init" strategy="afterInteractive">

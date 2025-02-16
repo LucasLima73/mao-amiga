@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/next-script-for-ga */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
@@ -27,8 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Carrega o script do Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV"></script>
+        {/* Carrega o script do Google Analytics com crossOrigin para ajudar no preload */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV"
+        />
         {/* Inicializa o GA */}
         <Script id="ga-init" strategy="afterInteractive">
           {`

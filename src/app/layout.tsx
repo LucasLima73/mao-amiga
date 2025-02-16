@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script"; // Importa o Script do Next.js
+import Script from "next/script";
 import "./globals.css";
 import Navbar from "./(components)/utils/navbar";
 import AboutButton from "./(components)/utils/aboutbutton";
@@ -29,7 +29,7 @@ export default function RootLayout({
         {/* Script da biblioteca do Google Analytics */}
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+          src="https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV"
         />
         {/* Inicializa o GA */}
         <Script id="ga-init" strategy="afterInteractive">
@@ -37,15 +37,13 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+            gtag('config', 'G-4JXWD7BCWV', {
               page_path: window.location.pathname,
             });
           `}
         </Script>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         {children}
         <AboutButton />

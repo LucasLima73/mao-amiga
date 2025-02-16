@@ -9,6 +9,12 @@ import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 const Navbar: React.FC = () => {
   // Estados para menu mobile, modal de login e criação de conta
   const [isOpen, setIsOpen] = useState(false);

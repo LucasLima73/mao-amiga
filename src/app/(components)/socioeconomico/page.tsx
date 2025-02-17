@@ -12,7 +12,7 @@ interface Step {
   order: number;
 }
 
-const TrilhaDireitosHumanos: React.FC = () => {
+const socioeconomico: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [steps, setSteps] = useState<Step[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
@@ -27,7 +27,7 @@ const TrilhaDireitosHumanos: React.FC = () => {
   useEffect(() => {
     const fetchSteps = async () => {
       try {
-        const q = query(collection(db, "trilhaDireitosHumanos"), orderBy("order"));
+        const q = query(collection(db, "steps"), orderBy("order"));
         const querySnapshot = await getDocs(q);
         const fetchedSteps: Step[] = querySnapshot.docs.map((doc) => doc.data() as Step);
 
@@ -63,7 +63,7 @@ const TrilhaDireitosHumanos: React.FC = () => {
   return (
     <div className="min-h-screen w-screen flex items-center justify-center p-8"
         style={{
-          backgroundImage: "url('/assets/images/public/assets/images/direitoshumanos.png')",
+          backgroundImage: "url('/assets/images/saude.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',
@@ -71,7 +71,7 @@ const TrilhaDireitosHumanos: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-      <h2 className="text-4xl font-bold text-[#ffde59] mb-6  mt-[9vh]">Direitos Humanos</h2>
+      <h2 className="text-4xl font-bold text-[#ffde59] mb-6  mt-[9vh]">Documentação</h2>
       <Timeline 
         steps={steps} 
         activeStep={activeStep} 
@@ -82,4 +82,4 @@ const TrilhaDireitosHumanos: React.FC = () => {
   );
 };
 
-export default TrilhaDireitosHumanos;
+export default socioeconomico;

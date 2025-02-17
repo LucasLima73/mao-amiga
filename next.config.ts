@@ -7,7 +7,7 @@ const cspHeader = `
   img-src 'self' blob: data: https://www.google-analytics.com;
   font-src 'self';
   object-src 'none';
-  connect-src 'self' https://identitytoolkit.googleapis.com;
+  connect-src 'self' https://identitytoolkit.googleapis.com https://www.google-analytics.com;
   base-uri 'self';
   form-action 'self';
   frame-ancestors 'none';

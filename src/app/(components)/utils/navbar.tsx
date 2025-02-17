@@ -143,13 +143,13 @@ const Navbar: React.FC = () => {
           <Link href="/trilhaSaude" className="hover:text-yellow-300 transition">
             SAÚDE
           </Link>
-          <Link href="/documentacao" className="hover:text-yellow-300 transition">
+          <Link href="/trilhaDocumentacao" className="hover:text-yellow-300 transition">
             DOCUMENTAÇÃO
           </Link>
-          <Link href="/direitos-humanos" className="hover:text-yellow-300 transition">
+          <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
             DIREITOS HUMANOS
           </Link>
-          <Link href="/socioeconomico" className="hover:text-yellow-300 transition">
+          <Link href="/trilhaSocioeconomico" className="hover:text-yellow-300 transition">
             SOCIOECONÔMICO
           </Link>
         </div>

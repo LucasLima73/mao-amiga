@@ -40,7 +40,7 @@ const Footer = () => {
         <div className="flex-1 min-w-[250px]">
           <h3 className="text-2xl font-semibold mb-3 text-yellow-400">Contato</h3>
           <p className="text-base leading-7 text-gray-300">
-            <strong>Email:</strong> contato@maoamiga.org.br
+            <strong>Email:</strong> tccfesa@gmail.com
           </p>
           {/* <p className="text-base leading-7 text-gray-300">
             <strong>Telefone:</strong> +55 (11) 99999-9999

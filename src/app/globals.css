@@ -81,3 +81,23 @@ footer .border-t {
 main {
   flex-grow: 1;
 }
+
+/* Perspectiva para os elementos "flip" */
+.perspective {
+  perspective: 1000px; /* Ajuste conforme necessário */
+}
+
+/* Permite que elementos filhos mantenham o 3D */
+.transform-style {
+  transform-style: preserve-3d;
+}
+
+/* Oculta a face de trás quando está "de costas" */
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Classe para rotacionar em 180 graus no eixo Y */
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

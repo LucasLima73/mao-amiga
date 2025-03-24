@@ -29,7 +29,7 @@ interface LineStyle {
 // Função para transformar URLs em links clicáveis
 function makeLinksClickable(text: string): string {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, (url) => {
+  return (text || "").replace(urlRegex, (url) => {
     return `<a href="${url}" target="_blank" class="text-blue-500 underline">${url}</a>`;
   });
 }
@@ -245,10 +245,10 @@ const Timeline: React.FC<TimelineProps> = ({
                     <p className="text-sm text-gray-600">{step.description}</p>
                   </div>
 
-                  {/* Agora mostramos o botão "Ver Documento" no passo 0 e no passo 1 */}
-                  {(index === 0 || index === 1) && showDocumentButton && (
+                  {/* Exibimos o botão "Ver Documento" nos passos 0, 1 e 2 */}
+                  {((index === 0 || index === 1 || index === 2) && showDocumentButton) && (
                     <button
-                      className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (onStepClick) {

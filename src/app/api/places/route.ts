@@ -3,92 +3,97 @@ import axios from "axios";
 
 const GOOGLE_PLACES_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-// Definir o formato esperado da resposta do Google Geocoding API
-interface GeocodeResponse {
-    results: {
-        geometry: {
-            location: {
-                lat: number;
-                lng: number;
-            };
-        };
-    }[];
-}
-
-// Definir o formato esperado da resposta do Google Places API
 interface PlacesResponse {
-    results: {
-        name: string;
-        geometry: {
-            location: {
-                lat: number;
-                lng: number;
-            };
-        };
-    }[];
+  results: Array<{
+    geometry: {
+      location: {
+        lat: number;
+        lng: number;
+      };
+    };
+    name: string;
+  }>;
 }
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const cep = searchParams.get("cep");
+  const { searchParams } = new URL(req.url);
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
 
-    console.log("🔍 Requisição recebida para o CEP:", cep);
+  if (!lat || !lng) {
+    return NextResponse.json(
+      { error: "Parâmetros 'lat' e 'lng' são obrigatórios." },
+      { status: 400 }
+    );
+  }
 
-    if (!cep) {
-        console.error("❌ Erro: CEP não fornecido.");
-        return NextResponse.json({ error: "CEP não fornecido." }, { status: 400 });
+  // Define as palavras-chave permitidas e excluídas (todas em minúsculas)
+  const allowedKeywords = [
+    "policia federal",
+    "polícia federal",
+    // "detran",
+    "poupatempo",
+    // "autoescola",
+    // "auto escola",
+    "receita federal",
+    "banco do brasil",
+    "caixa econômica federal",
+    "bradesco",
+    "itaú",
+    "santander",
+    "cras",
+  ];
+  const excludedKeywords = ["psicolog", "sefaz"];
+
+  try {
+    // Cria uma requisição para cada palavra-chave
+    const requests = allowedKeywords.map((keyword) =>
+      axios.get<PlacesResponse>(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?` +
+          `location=${lat},${lng}&radius=5000&type=establishment` +
+          `&keyword=${encodeURIComponent(keyword)}` +
+          `&key=${GOOGLE_PLACES_API_KEY}`
+      )
+    );
+
+    // Executa todas as requisições em paralelo
+    const responses = await Promise.all(requests);
+
+    // Mescla todos os resultados em um único array
+    let mergedResults: Array<{ geometry: { location: { lat: number; lng: number } }; name: string }> = [];
+    responses.forEach((res) => {
+      mergedResults = mergedResults.concat(res.data.results);
+    });
+
+    // Remove duplicatas (baseado no nome, por exemplo)
+    const uniqueResults = mergedResults.filter((result, index, self) =>
+      index === self.findIndex((r) => r.name === result.name)
+    );
+
+    // Filtra os resultados: somente os que contenham alguma palavra permitida e não contenham palavras excluídas
+    const filteredResults = uniqueResults.filter((result) => {
+      const nameLower = result.name.toLowerCase();
+      const containsAllowed = allowedKeywords.some((keyword) =>
+        nameLower.includes(keyword)
+      );
+      const containsExcluded = excludedKeywords.some((keyword) =>
+        nameLower.includes(keyword)
+      );
+      return containsAllowed && !containsExcluded;
+    });
+
+    // Se a filtragem retornar vazio, retorna os resultados originais para debug
+    if (filteredResults.length === 0) {
+      console.warn("Filtragem retornou vazio. Retornando resultados originais.");
+      return NextResponse.json(uniqueResults, { status: 200 });
     }
 
-    try {
-        console.log("📡 Buscando localização no Google Geocoding API...");
-        const geoResponse = await axios.get<GeocodeResponse>(
-            `https://maps.googleapis.com/maps/api/geocode/json?address=${cep},Brazil&key=${GOOGLE_PLACES_API_KEY}`
-        );
-
-        console.log("📍 Resposta do Google Geocoding API:", JSON.stringify(geoResponse.data, null, 2));
-
-        if (!geoResponse.data.results.length) {
-            console.error("❌ Erro: Nenhuma localização encontrada para o CEP.");
-            return NextResponse.json({ error: "Nenhuma localização encontrada." }, { status: 404 });
-        }
-
-        const { lat, lng } = geoResponse.data.results[0].geometry.location;
-        console.log(`✅ Localização encontrada: LAT ${lat}, LNG ${lng}`);
-
-        console.log("📡 Buscando estabelecimentos próximos no Google Places API...");
-        const placesResponse = await axios.get<PlacesResponse>(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=hospital&key=${GOOGLE_PLACES_API_KEY}`
-        );
-
-        console.log("🏥 Estabelecimentos encontrados:", JSON.stringify(placesResponse.data, null, 2));
-
-        return NextResponse.json(placesResponse.data.results, { status: 200 });
-
-    } catch (error: unknown) {
-        // Verifica se o erro é uma instância de AxiosError
-        if (error instanceof Error && "isAxiosError" in error) {
-            const axiosError = error as any; // Forçamos o tipo para acessar AxiosError
-            console.error("❌ Erro no backend:", axiosError.response?.data || axiosError.message);
-            return NextResponse.json({
-                error: "Erro ao buscar locais.",
-                details: axiosError.response?.data || axiosError.message
-            }, { status: 500 });
-        }
-
-        // Se for um erro genérico do JavaScript
-        if (error instanceof Error) {
-            console.error("❌ Erro inesperado:", error.message);
-            return NextResponse.json({
-                error: "Erro inesperado no servidor.",
-                details: error.message
-            }, { status: 500 });
-        }
-
-        // Captura um erro desconhecido
-        console.error("❌ Erro desconhecido:", error);
-        return NextResponse.json({ error: "Erro desconhecido no servidor." }, { status: 500 });
-    }
-
-
-
+    return NextResponse.json(filteredResults, { status: 200 });
+  } catch (error: any) {
+    console.error("Erro na API Places:", error.response?.data || error.message);
+    return NextResponse.json(
+      { error: "Erro ao buscar locais.", details: error.message },
+      { status: 500 }
+    );
+  }
 }

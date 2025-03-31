@@ -152,6 +152,10 @@ const Navbar: React.FC = () => {
           <Link href="/trilhaSocioeconomico" className="hover:text-yellow-300 transition">
             SOCIOECONÔMICO
           </Link>
+          {/* Novo link para MAPA */}
+          <Link href="/mapa" className="hover:text-yellow-300 transition">
+            MAPA
+          </Link>
         </div>
 
         {/* Login / Logout no Desktop via Modal */}
@@ -228,6 +232,12 @@ const Navbar: React.FC = () => {
             <li>
               <Link href="/socioeconomico" onClick={toggleMenu}>
                 SOCIOECONÔMICO
+              </Link>
+            </li>
+            {/* Novo item de menu para MAPA */}
+            <li>
+              <Link href="/mapa" onClick={toggleMenu}>
+                MAPA
               </Link>
             </li>
             <li className="border-t border-yellow-400 w-3/4 mt-4"></li>

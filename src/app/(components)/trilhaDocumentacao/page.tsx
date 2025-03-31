@@ -11,13 +11,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import Timeline from "../utils/timeline";
-import dynamic from "next/dynamic";
-
-// Importa dinamicamente o componente do mapa, sem SSR
-const GoogleMapComponent = dynamic(
-  () => import("@/app/(components)/utils/googleMap"),
-  { ssr: false }
-);
 
 interface Step {
   title: string;
@@ -34,9 +27,9 @@ const TrilhaDocumentacao: React.FC = () => {
   const [selectedPath, setSelectedPath] = useState<number | null>(null);
 
   // Estados para popups
-  const [showPopup, setShowPopup] = useState(false);
-  const [showCPFPopup, setShowCPFPopup] = useState(false);
-  const [showThirdDocPopup, setShowThirdDocPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // CRNM/DPRNM
+  const [showCPFPopup, setShowCPFPopup] = useState(false); // CPF/CTPS
+  const [showThirdDocPopup, setShowThirdDocPopup] = useState(false); // Terceiro documento
   const [showCRNMBack, setShowCRNMBack] = useState(false);
   const [showDPRNMBack, setShowDPRNMBack] = useState(false);
 
@@ -53,20 +46,20 @@ const TrilhaDocumentacao: React.FC = () => {
       title: "CPF (Cadastro de Pessoa Física)",
       image: "/assets/images/cpf.png",
       text: `O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:
-    • Abrir conta bancária e obter serviços financeiros.
-    • Realizar compras online e emitir notas fiscais.
-    • Acessar programas sociais e benefícios do governo.
-    • Emitir outros documentos (CNH, passaporte).
-    Em resumo, o CPF é indispensável para viver legalmente no Brasil.`,
+• Abrir conta bancária e obter serviços financeiros.
+• Realizar compras online e emitir notas fiscais.
+• Acessar programas sociais e benefícios do governo.
+• Emitir outros documentos (CNH, passaporte).
+Em resumo, o CPF é indispensável para viver legalmente no Brasil.`,
     },
     {
       title: "CTPS (Carteira de Trabalho e Previdência Social)",
       image: "/assets/images/ctps.png",
       text: `A CTPS (Carteira de Trabalho e Previdência Social) é o documento que registra oficialmente o histórico profissional do trabalhador no Brasil.
-    • É utilizada para contratos de trabalho com carteira assinada.
-    • Garante acesso a direitos como FGTS, INSS, férias, 13º salário e seguro-desemprego.
-    • Pode ser emitida na versão física ou digital.
-    A CTPS é essencial para comprovar vínculos empregatícios e acessar benefícios trabalhistas.`,
+• É utilizada para contratos de trabalho com carteira assinada.
+• Garante acesso a direitos como FGTS, INSS, férias, 13º salário e seguro-desemprego.
+• Pode ser emitida na versão física ou digital.
+A CTPS é essencial para comprovar vínculos empregatícios e acessar benefícios trabalhistas.`,
     },
   ];
 
@@ -101,56 +94,62 @@ const TrilhaDocumentacao: React.FC = () => {
     }
   }, [isClient]);
 
-  // Busca dos passos no Firestore
+  // Busca dos passos no Firestore com base no selectedPath
   useEffect(() => {
-    const fetchSteps = async () => {
-      try {
-        const q = query(collection(db, "stepsDocumentacao"), orderBy("order"));
-        const querySnapshot = await getDocs(q);
-        const fetchedSteps: Step[] = querySnapshot.docs.map(
-          (doc) => doc.data() as Step
-        );
+    if (selectedPath !== null) {
+      const fetchSteps = async () => {
+        try {
+          const collectionName =
+            selectedPath === 2
+              ? "stepsDocumentacao-autorizacaoResidencia"
+              : "stepsDocumentacao";
+          const q = query(collection(db, collectionName), orderBy("order"));
+          const querySnapshot = await getDocs(q);
+          const fetchedSteps: Step[] = querySnapshot.docs.map(
+            (doc) => doc.data() as Step
+          );
 
-        if (userId) {
-          const userRef = doc(db, "user_progress", userId);
-          const userSnapshot = await getDoc(userRef);
-          if (userSnapshot.exists()) {
-            const userProgress = userSnapshot.data()?.progress_steps;
-            if (userProgress) {
-              const updatedSteps = fetchedSteps.map((step) => ({
-                ...step,
-                checklist: step.checklist?.map((task, taskIndex) => ({
-                  ...task,
-                  checked:
-                    userProgress[step.order]?.[taskIndex]?.checked || false,
-                })),
-              }));
-              setSteps(updatedSteps);
-              return;
+          if (userId) {
+            const userRef = doc(db, "user_progress", userId);
+            const userSnapshot = await getDoc(userRef);
+            if (userSnapshot.exists()) {
+              const userProgress = userSnapshot.data()?.progress_steps;
+              if (userProgress) {
+                const updatedSteps = fetchedSteps.map((step) => ({
+                  ...step,
+                  checklist: step.checklist?.map((task, taskIndex) => ({
+                    ...task,
+                    checked:
+                      userProgress[step.order]?.[taskIndex]?.checked || false,
+                  })),
+                }));
+                setSteps(updatedSteps);
+                return;
+              }
             }
           }
+          setSteps(fetchedSteps);
+        } catch (error) {
+          console.error("Erro ao buscar dados:", error);
         }
-        setSteps(fetchedSteps);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    };
+      };
 
-    fetchSteps();
-  }, [userId]);
+      fetchSteps();
+    }
+  }, [userId, selectedPath]);
 
   // Handlers para abertura dos popups
   const handleFirstStepClick = () => {
-    setShowPopup(true);
+    setShowPopup(true); // Abre o popup de CRNM/DPRNM
   };
   const handleSecondStepClick = () => {
     setDocIndex(0);
-    setShowCPFPopup(true);
+    setShowCPFPopup(true); // Abre o popup de CPF/CTPS
   };
   const handleThirdStepClick = () => {
     setThirdDocIndex(0);
     setShowThirdDocBack(false);
-    setShowThirdDocPopup(true);
+    setShowThirdDocPopup(true); // Abre o popup do terceiro documento
   };
 
   const handleClosePopup = () => {
@@ -165,16 +164,65 @@ const TrilhaDocumentacao: React.FC = () => {
   const handleCRNMFlip = () => setShowCRNMBack(!showCRNMBack);
   const handleDPRNMFlip = () => setShowDPRNMBack(!showDPRNMBack);
 
-  // Título dinâmico da página
   const pageTitle =
     selectedPath === 1
       ? "Documentação - Solicitação de Refúgio"
       : selectedPath === 2
-      ? "Documentação - Autorização de Residência"
-      : "Documentação";
+        ? "Documentação - Autorização de Residência"
+        : "Documentação";
 
-  // Estado para colapsar/expandir o bloco do mapa
-  const [mapCollapsed, setMapCollapsed] = useState(false);
+  // Botão "Consultar Mapa" padronizado para todas as trilhas
+  const MapaButton = () => (
+    <div className="absolute top-4 right-4 z-10">
+      <a
+        href="/mapa"
+        className="
+          group inline-flex items-center
+          h-16 w-16
+          bg-blue-600 text-white
+          rounded-full
+          transition-all duration-300
+          hover:w-56 hover:bg-blue-700
+          overflow-hidden
+        "
+      >
+        <div className="flex items-center justify-center w-16 h-16">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+        </div>
+        <span
+          className="
+            ml-4
+            text-base
+            opacity-0
+            group-hover:opacity-100
+            transition-opacity duration-300
+            whitespace-nowrap
+          "
+        >
+          Consultar Mapa
+        </span>
+      </a>
+    </div>
+  );
 
   return (
     <div
@@ -189,7 +237,6 @@ const TrilhaDocumentacao: React.FC = () => {
         {pageTitle}
       </h2>
 
-      {/* Tela de seleção */}
       {selectedPath === null && (
         <div className="max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 mb-8">
           <h3 className="text-center text-2xl font-semibold mb-4">
@@ -201,7 +248,6 @@ const TrilhaDocumentacao: React.FC = () => {
           </p>
           <p className="text-center mb-6">Principais opções:</p>
           <div className="flex gap-4 justify-center">
-            {/* Botão Solicitação de Refúgio com tooltip */}
             <div className="group relative">
               <button
                 onClick={() => setSelectedPath(1)}
@@ -209,7 +255,6 @@ const TrilhaDocumentacao: React.FC = () => {
               >
                 Solicitação de Refúgio
               </button>
-              {/* Tooltip */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
                 <p>
                   <strong>Refúgio:</strong> Para quem fugiu de perseguição, guerra ou crises
@@ -218,7 +263,6 @@ const TrilhaDocumentacao: React.FC = () => {
               </div>
             </div>
 
-            {/* Botão Autorização de Residência com tooltip */}
             <div className="group relative">
               <button
                 onClick={() => setSelectedPath(2)}
@@ -226,7 +270,6 @@ const TrilhaDocumentacao: React.FC = () => {
               >
                 Autorização de Residência
               </button>
-              {/* Tooltip */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
                 <p>
                   <strong>Residência:</strong> Para quem deseja viver e trabalhar legalmente no Brasil,
@@ -238,74 +281,58 @@ const TrilhaDocumentacao: React.FC = () => {
         </div>
       )}
 
-      {/* Caminho 1: Solicitação de Refúgio */}
       {selectedPath === 1 && (
-        <>
-          <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8">
-            <button
-              onClick={() => setSelectedPath(null)}
-              className="text-blue-600 hover:text-blue-800 mb-4"
-            >
-              ← Voltar
-            </button>
-            <Timeline
-              steps={steps}
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              userId={userId}
-              onStepClick={(index) => {
-                if (index === 0) {
-                  handleFirstStepClick();
-                } else if (index === 1) {
-                  handleSecondStepClick();
-                } else if (index === 2) {
-                  handleThirdStepClick();
-                }
-              }}
-              showDocumentButton
-            />
-          </div>
-
-          {/* Bloco branco do mapa com toggle */}
-          <div className="relative max-w-6xl w-full bg-white p-4 rounded-md shadow-md mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-semibold text-black">
-                Mapa de Serviços Próximos
-              </h3>
-              <button
-                className="text-3xl text-black"
-                onClick={() => setMapCollapsed(!mapCollapsed)}
-              >
-                {mapCollapsed ? "▼" : "▲"}
-              </button>
-            </div>
-            <div
-              style={{
-                height: mapCollapsed ? "0px" : "50vh",
-                overflow: mapCollapsed ? "hidden" : "visible",
-                transition: "height 0.3s ease",
-              }}
-            >
-              {/* Componente dinâmico do mapa */}
-              <GoogleMapComponent />
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Autorização de Residência */}
-      {selectedPath === 2 && (
-        <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8">
+        <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
+          {/* Botão de Voltar no canto esquerdo */}
           <button
             onClick={() => setSelectedPath(null)}
             className="text-blue-600 hover:text-blue-800 mb-4"
           >
             ← Voltar
           </button>
-          <p className="text-center mb-4">
-            Para pessoas que desejam viver e trabalhar legalmente no Brasil. Em breve, mais informações.
-          </p>
-          <div className="text-center text-lg font-semibold text-gray-600">Em breve...</div>
+          {/* Botão "Consultar Mapa" padronizado */}
+          <MapaButton />
+          <Timeline
+            steps={steps}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            userId={userId}
+            onStepClick={(index) => {
+              if (index === 0) {
+                handleFirstStepClick(); // Abre popup de CRNM/DPRNM
+              } else if (index === 1) {
+                handleSecondStepClick(); // Abre popup de CPF/CTPS
+              } else if (index === 2) {
+                handleThirdStepClick(); // Abre popup do terceiro documento
+              }
+            }}
+            showDocumentButton
+          />
+        </div>
+      )}
+
+      {selectedPath === 2 && (
+        <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
+          {/* Botão de Voltar no canto esquerdo */}
+          <button
+            onClick={() => setSelectedPath(null)}
+            className="text-blue-600 hover:text-blue-800 mb-4"
+          >
+            ← Voltar
+          </button>
+          {/* Botão "Consultar Mapa" padronizado */}
+          <MapaButton />
+          <Timeline
+            steps={steps}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            userId={userId}
+            onStepClick={(index) => {
+              // Comportamento de clique para Autorização de Residência, se necessário
+            }}
+            showDocumentButton
+            hideFirstStepDocButton={true}
+          />
         </div>
       )}
 
@@ -328,33 +355,37 @@ const TrilhaDocumentacao: React.FC = () => {
             <p className="text-2xl font-bold text-center mb-8 w-full mt-4 text-black">
               Clique no documento para ver o verso e o descritivo
             </p>
-            <div className="flex-1 flex flex-col items-center justify-center gap-24 w-full">
+
+            {/* Container com perspectiva para efeito de flip */}
+            <div
+              className="flex-1 flex flex-col items-center justify-center gap-24 w-full"
+              style={{ perspective: "1000px" }}
+            >
               {/* CRNM */}
-              <div
-                className="w-[36rem] h-[22rem] relative cursor-pointer perspective"
-                onClick={handleCRNMFlip}
-              >
+              <div onClick={handleCRNMFlip} className="cursor-pointer relative w-full max-w-md h-auto">
                 <div
-                  className={`absolute w-full h-full transition-transform duration-500 transform-style preserve-3d ${
-                    showCRNMBack ? "rotate-y-180" : ""
-                  }`}
+                  className={`relative w-full transition-transform duration-500 transform-style preserve-3d ${showCRNMBack ? "rotate-y-180" : ""
+                    }`}
                 >
-                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
-                    <h4 className="text-3xl font-semibold mb-4 text-black">CRNM</h4>
+                  {/* Frente */}
+                  <div className="w-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
+                    <h4 className="text-2xl font-semibold mb-4 text-black">CRNM</h4>
                     <img
                       src="/assets/images/crnm.png"
                       alt="CRNM Frente"
-                      className="w-full h-auto"
+                      className="w-full h-auto max-w-lg mb-4 scale-100"
                     />
                   </div>
-                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white rotate-y-180 p-4">
+
+                  {/* Verso */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex flex-col items-center justify-center bg-white p-4">
                     <img
                       src="/assets/images/verso-crnm.png"
                       alt="CRNM Verso"
-                      className="w-full h-auto"
+                      className="w-full h-auto max-w-lg mb-4 scale-100"
                     />
-                    <p className="text-center px-2 text-xl mt-4 text-black">
-                      <strong>CRNM (Carteira de Registro Nacional Migratório):</strong>{" "}
+                    <p className="text-center text-lg text-black p-[10px]">
+                      <strong>CRNM (Carteira de Registro Nacional Migratório):</strong><br />
                       Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.
                     </p>
                   </div>
@@ -362,31 +393,30 @@ const TrilhaDocumentacao: React.FC = () => {
               </div>
 
               {/* DPRNM */}
-              <div
-                className="w-[36rem] h-[22rem] relative cursor-pointer perspective"
-                onClick={handleDPRNMFlip}
-              >
+              <div onClick={handleDPRNMFlip} className="cursor-pointer relative w-full max-w-md h-auto">
                 <div
-                  className={`absolute w-full h-full transition-transform duration-500 transform-style preserve-3d ${
-                    showDPRNMBack ? "rotate-y-180" : ""
-                  }`}
+                  className={`relative w-full transition-transform duration-500 transform-style preserve-3d ${showDPRNMBack ? "rotate-y-180" : ""
+                    }`}
                 >
-                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
-                    <h4 className="text-3xl font-semibold mb-4 text-black">DPRNM</h4>
+                  {/* Frente */}
+                  <div className="w-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
+                    <h4 className="text-2xl font-semibold mb-4 text-black">DPRNM</h4>
                     <img
                       src="/assets/images/dprnm.png"
                       alt="DPRNM Frente"
-                      className="w-full h-auto"
+                      className="w-full h-auto max-w-lg mb-4"
                     />
                   </div>
-                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white rotate-y-180 p-4">
+
+                  {/* Verso */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex flex-col items-center justify-center bg-white p-4">
                     <img
                       src="/assets/images/verso-dprnm.png"
                       alt="DPRNM Verso"
-                      className="w-full h-auto"
+                      className="w-full h-auto max-w-lg mb-4"
                     />
-                    <p className="text-center px-2 text-xl mt-4 text-black">
-                      <strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong>{" "}
+                    <p className="text-center text-lg text-black p-[10px]">
+                      <strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong><br />
                       Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.
                     </p>
                   </div>
@@ -397,7 +427,7 @@ const TrilhaDocumentacao: React.FC = () => {
         </div>
       )}
 
-      {/* Popup do segundo passo: CPF/CTPS */}
+      {/* Popup do segundo passo: CPF / CTPS */}
       {showCPFPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -432,9 +462,8 @@ const TrilhaDocumentacao: React.FC = () => {
               </div>
               <button
                 onClick={() => setDocIndex((prev) => (prev === 0 ? 1 : 0))}
-                className={`absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 ${
-                  docIndex === 0 ? "right-8" : "left-8"
-                }`}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 ${docIndex === 0 ? "right-8" : "left-8"
+                  }`}
               >
                 {docIndex === 0 ? ">" : "<"}
               </button>
@@ -497,8 +526,6 @@ const TrilhaDocumentacao: React.FC = () => {
                   {thirdDocData[thirdDocIndex].text}
                 </p>
               </div>
-
-              {/* Botões de navegação do carrossel de documentos */}
               {thirdDocIndex === 0 && (
                 <button
                   onClick={() => setThirdDocIndex(1)}

@@ -18,6 +18,8 @@ interface TimelineProps {
   userId: string | null;
   onStepClick?: (index: number) => void;
   showDocumentButton?: boolean;
+  // Nova propriedade para ocultar o botão no primeiro passo
+  hideFirstStepDocButton?: boolean;
 }
 
 interface LineStyle {
@@ -41,6 +43,7 @@ const Timeline: React.FC<TimelineProps> = ({
   userId,
   onStepClick,
   showDocumentButton = false,
+  hideFirstStepDocButton = false,
 }) => {
   const [localSteps, setLocalSteps] = useState<Step[]>(steps);
 
@@ -245,8 +248,11 @@ const Timeline: React.FC<TimelineProps> = ({
                     <p className="text-sm text-gray-600">{step.description}</p>
                   </div>
 
-                  {/* Exibimos o botão "Ver Documento" nos passos 0, 1 e 2 */}
-                  {((index === 0 || index === 1 || index === 2) && showDocumentButton) && (
+                  {/* Exibe o botão "Ver Documento" para os passos 0, 1 e 2,
+                      mas oculta no primeiro passo se hideFirstStepDocButton for true */}
+                  {((index === 0 || index === 1 || index === 2) &&
+                    showDocumentButton &&
+                    !(hideFirstStepDocButton && index === 0)) && (
                     <button
                       className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
                       onClick={(e) => {

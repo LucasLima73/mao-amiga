@@ -7,11 +7,10 @@ import { FaHeadset } from "react-icons/fa";
 const ChatBotBalloon: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false); // Controla se o chatbot está aberto
   const [input, setInput] = useState("");
-  const [responses, setResponses] = useState<string[]>(
-    JSON.parse(localStorage.getItem("chatHistory") || "[]")
-  );
+  const [responses, setResponses] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   // Referência para rolar automaticamente para o final
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -23,9 +22,22 @@ const ChatBotBalloon: React.FC = () => {
   ];
 
   useEffect(() => {
-    localStorage.setItem("chatHistory", JSON.stringify(responses));
-    scrollToBottom(); // Rola automaticamente para o final sempre que `responses` mudar
-  }, [responses]);
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      const storedResponses = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+      setResponses(storedResponses);
+    }
+  }, [isClient]);
+
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem("chatHistory", JSON.stringify(responses));
+      scrollToBottom(); // Rola automaticamente para o final sempre que `responses` mudar
+    }
+  }, [responses, isClient]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,13 +69,18 @@ const ChatBotBalloon: React.FC = () => {
 
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:3001/api/assistant", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt: input }),
-        });
+        const response = await fetch(
+          process.env.NODE_ENV === "production"
+            ? "https://mao-amiga-one.vercel.app/api/assistant"
+            : "http://localhost:3001/api/assistant",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt: input }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erro ao consultar a API");
@@ -93,7 +110,9 @@ const ChatBotBalloon: React.FC = () => {
 
   const clearChat = () => {
     setResponses([]);
-    localStorage.removeItem("chatHistory");
+    if (isClient) {
+      localStorage.removeItem("chatHistory");
+    }
   };
 
   return (

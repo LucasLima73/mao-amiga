@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -6,6 +8,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
 
 const Navbar: React.FC = () => {
   // Estados para menu mobile, modal de login e criação de conta
@@ -45,6 +53,36 @@ const Navbar: React.FC = () => {
     setIsOpen(false);
   };
 
+  // Função para registrar eventos de navegação
+  const handleNavClick = (label: string) => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_nav", {
+        event_category: "Navigation",
+        event_label: label,
+      });
+    }
+  };
+
+  // Evento para o botão de Login
+  const handleLoginButtonEvent = () => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_login", {
+        event_category: "User",
+        event_label: "Login Button",
+      });
+    }
+  };
+
+  // Evento para o botão de Logout
+  const handleLogoutButtonEvent = () => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_logout", {
+        event_category: "User",
+        event_label: "Logout Button",
+      });
+    }
+  };
+
   // Login por telefone
   const handleLogin = async () => {
     setIsLoading(true);
@@ -78,7 +116,10 @@ const Navbar: React.FC = () => {
       if (userDoc.exists()) {
         alert("Este telefone já está registrado!");
       } else {
-        await setDoc(doc(db, "users", phone), { userName: name, userId: phone });
+        await setDoc(doc(db, "users", phone), {
+          userName: name,
+          userId: phone,
+        });
         localStorage.setItem("userName", name);
         localStorage.setItem("userId", phone);
         alert("Conta criada com sucesso!");
@@ -121,6 +162,7 @@ const Navbar: React.FC = () => {
     setUserName(null);
     setUserId(null);
     setIsLoggedIn(false);
+    handleLogoutButtonEvent();
     alert("Logout bem-sucedido!");
     window.location.reload(); // Recarrega a página após logout
   };
@@ -138,16 +180,32 @@ const Navbar: React.FC = () => {
 
         {/* Menu Desktop */}
         <div className="hidden md:flex space-x-8 text-yellow-400 text-sm tracking-wide">
-          <Link href="/trilhaSaude" className="hover:text-yellow-300 transition">
+          <Link
+            href="/trilhaSaude"
+            onClick={() => handleNavClick("Saúde")}
+            className="hover:text-yellow-300 transition"
+          >
             SAÚDE
           </Link>
-          <Link href="/documentacao" className="hover:text-yellow-300 transition">
+          <Link
+            href="/documentacao"
+            onClick={() => handleNavClick("Documentação")}
+            className="hover:text-yellow-300 transition"
+          >
             DOCUMENTAÇÃO
           </Link>
-          <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
+          <Link
+            href="/direitos-humanos"
+            onClick={() => handleNavClick("Direitos Humanos")}
+            className="hover:text-yellow-300 transition"
+          >
             DIREITOS HUMANOS
           </Link>
-          <Link href="/socioeconomico" className="hover:text-yellow-300 transition">
+          <Link
+            href="/socioeconomico"
+            onClick={() => handleNavClick("Socioeconômico")}
+            className="hover:text-yellow-300 transition"
+          >
             SOCIOECONÔMICO
           </Link>
         </div>
@@ -166,7 +224,10 @@ const Navbar: React.FC = () => {
             </div>
           ) : (
             <button
-              onClick={toggleLoginModal}
+              onClick={() => {
+                handleLoginButtonEvent();
+                toggleLoginModal();
+              }}
               className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
             >
               Login
@@ -209,22 +270,46 @@ const Navbar: React.FC = () => {
         <div className="absolute top-full left-0 w-full bg-black bg-opacity-80 md:hidden">
           <ul className="flex flex-col items-center py-4 space-y-4 text-yellow-400 text-sm">
             <li>
-              <Link href="/trilhaSaude" onClick={toggleMenu}>
+              <Link
+                href="/trilhaSaude"
+                onClick={() => {
+                  handleNavClick("Saúde");
+                  toggleMenu();
+                }}
+              >
                 SAÚDE
               </Link>
             </li>
             <li>
-              <Link href="/documentacao" onClick={toggleMenu}>
+              <Link
+                href="/documentacao"
+                onClick={() => {
+                  handleNavClick("Documentação");
+                  toggleMenu();
+                }}
+              >
                 DOCUMENTAÇÃO
               </Link>
             </li>
             <li>
-              <Link href="/direitos-humanos" onClick={toggleMenu}>
+              <Link
+                href="/direitos-humanos"
+                onClick={() => {
+                  handleNavClick("Direitos Humanos");
+                  toggleMenu();
+                }}
+              >
                 DIREITOS HUMANOS
               </Link>
             </li>
             <li>
-              <Link href="/socioeconomico" onClick={toggleMenu}>
+              <Link
+                href="/socioeconomico"
+                onClick={() => {
+                  handleNavClick("Socioeconômico");
+                  toggleMenu();
+                }}
+              >
                 SOCIOECONÔMICO
               </Link>
             </li>
@@ -247,7 +332,10 @@ const Navbar: React.FC = () => {
             ) : (
               <li>
                 <button
-                  onClick={toggleLoginModal}
+                  onClick={() => {
+                    handleLoginButtonEvent();
+                    toggleLoginModal();
+                  }}
                   className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
                 >
                   Login

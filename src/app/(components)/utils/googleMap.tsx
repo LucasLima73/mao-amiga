@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 
 // Altura total do contêiner (lista + mapa)
-const MAP_HEIGHT_PX = 600;
+const MAP_HEIGHT_PX = 1000;
 
 // Estilo do container do mapa
 const containerStyle = {
@@ -29,7 +29,12 @@ const defaultCenter = {
 };
 
 // Função para calcular a distância em km (Fórmula de Haversine)
-function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
+function haversineDistance(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+) {
   const R = 6371; // Raio médio da Terra em km
   const dLat = (lat2 - lat1) * (Math.PI / 180);
   const dLng = (lng2 - lng1) * (Math.PI / 180);
@@ -61,6 +66,72 @@ interface GeocodeResponse {
   }>;
 }
 
+// Constantes com as palavras-chave para cada categoria
+const allowedDocumentationKeywords = [
+  "policia federal",
+  "polícia federal",
+  "poupatempo",
+  "receita federal",
+  "banco do brasil",
+  "caixa econômica federal",
+  "bradesco",
+  "itaú",
+  "santander",
+  "cras",
+];
+
+const allowedHealthKeywords = [
+  "hospital",
+  "clinica",
+  "posto de saúde",
+  "centro de saúde",
+  "ubs",
+];
+
+// Função que retorna uma descrição para cada local com base no nome
+const getDocumentsForPlace = (name: string): string => {
+  const lower = name.toLowerCase();
+  if (allowedDocumentationKeywords.some((keyword) => lower.includes(keyword))) {
+    if (lower.includes("polícia federal") || lower.includes("policia federal")) {
+      return "Realiza a regularização documental (CRNM e DPRNM) para facilitar o acesso aos direitos de imigrantes e refugiados.";
+    } else if (lower.includes("poupatempo")) {
+      return "Oferece serviços integrados para obtenção de documentos essenciais, como CPF e CTPS, contribuindo para a integração no país.";
+    } else if (lower.includes("receita federal")) {
+      return "Auxilia na regularização fiscal e no processamento de documentos junto à Receita Federal.";
+    } else if (lower.includes("banco do brasil")) {
+      return "Fornece serviços bancários que promovem a inclusão financeira de imigrantes e refugiados.";
+    } else if (lower.includes("caixa econômica federal")) {
+      return "Dispõe de serviços bancários e programas habitacionais para apoiar a estabilidade social e financeira.";
+    } else if (lower.includes("bradesco")) {
+      return "Oferece soluções financeiras que ajudam na organização e inclusão econômica.";
+    } else if (lower.includes("itaú")) {
+      return "Disponibiliza uma variedade de serviços financeiros para facilitar a integração econômica.";
+    } else if (lower.includes("santander")) {
+      return "Presta serviços bancários com foco na inclusão e apoio financeiro.";
+    } else if (lower.includes("cras")) {
+      return "Centros de Referência de Assistência Social que fornecem suporte e orientação para famílias em situação de vulnerabilidade.";
+    } else {
+      return "Oferece diversos serviços relacionados à documentação e regularização.";
+    }
+  }
+  if (allowedHealthKeywords.some((keyword) => lower.includes(keyword))) {
+    if (lower.includes("hospital")) {
+      return "Presta atendimento hospitalar de emergência e cuidados médicos essenciais.";
+    } else if (lower.includes("clinica")) {
+      return "Oferece atendimento clínico e especializado com enfoque no cuidado humanizado.";
+    } else if (
+      lower.includes("posto de saúde") ||
+      lower.includes("centro de saúde") ||
+      lower.includes("ubs")
+    ) {
+      return "Fornece atendimento básico e preventivo, promovendo programas de saúde voltados à integração e bem-estar.";
+    } else {
+      return "Dispõe de serviços de saúde diversos para atender as necessidades da comunidade.";
+    }
+  }
+  return "Serviços diversos.";
+};
+
 const GoogleMapComponent: React.FC = () => {
   const [cep, setCep] = useState(""); // para quando a geolocalização não for permitida
   const [error, setError] = useState<string | null>(null);
@@ -82,45 +153,57 @@ const GoogleMapComponent: React.FC = () => {
   // Guarda o resultado do DirectionsService (rota)
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
 
-  // Índice do estabelecimento com InfoWindow aberto
+  // Índice do estabelecimento com InfoWindow aberto ou selecionado
   const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
 
-  // Campo de busca para filtrar estabelecimentos
+  // Campo de busca para filtrar estabelecimentos por nome
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Filtro de categoria: "all", "documentation", ou "health"
+  const [filterType, setFilterType] = useState("all");
 
   // Referência ao mapa para forçar o resize
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
 
   // Tenta obter a geolocalização assim que o componente monta
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          setMapCenter({ lat: latitude, lng: longitude });
-          setHasUserLocation(true);
-          setLocationChecked(true);
-          // Busca estabelecimentos com base na localização do usuário
-          searchPlaces(latitude, longitude);
-        },
-        (err) => {
-          console.warn("Geolocalização negada ou indisponível:", err);
-          setHasUserLocation(false);
-          setLocationChecked(true);
-        }
-      );
-    } else {
-      setLocationChecked(true);
+    if (typeof window !== "undefined") {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const { latitude, longitude } = pos.coords;
+            setUserLocation({ lat: latitude, lng: longitude });
+            setMapCenter({ lat: latitude, lng: longitude });
+            setHasUserLocation(true);
+            setLocationChecked(true);
+            // Busca estabelecimentos com base na localização do usuário e filtro atual
+            searchPlaces(latitude, longitude, filterType);
+          },
+          (err) => {
+            console.warn("Geolocalização negada ou indisponível:", err);
+            setHasUserLocation(false);
+            setLocationChecked(true);
+          }
+        );
+      } else {
+        setLocationChecked(true);
+      }
     }
   }, []);
 
+  // Recarrega os estabelecimentos quando o filtro mudar, se já tivermos a localização do usuário
+  useEffect(() => {
+    if (userLocation) {
+      searchPlaces(userLocation.lat, userLocation.lng, filterType);
+    }
+  }, [filterType]);
+
   // Função para buscar estabelecimentos (rota: /api/places)
-  const searchPlaces = async (lat: number, lng: number) => {
+  const searchPlaces = async (lat: number, lng: number, filter: string) => {
     try {
       setError(null);
       setDirections(null);
-      const url = `/api/places?lat=${lat}&lng=${lng}`;
+      const url = `/api/places?lat=${lat}&lng=${lng}&filter=${filter}`;
       const res = await axios.get(url);
       const data = res.data as {
         geometry: { location: { lat: number; lng: number } };
@@ -141,7 +224,7 @@ const GoogleMapComponent: React.FC = () => {
       });
 
       // Ordena os estabelecimentos do mais próximo para o mais distante
-      mapped.sort((a, b) => (a.distance! - b.distance!));
+      mapped.sort((a, b) => a.distance! - b.distance!);
 
       setLocations(mapped);
       // Centraliza no primeiro estabelecimento (opcional)
@@ -173,7 +256,7 @@ const GoogleMapComponent: React.FC = () => {
       setUserLocation({ lat, lng });
       setMapCenter({ lat, lng });
       setHasUserLocation(true);
-      searchPlaces(lat, lng);
+      searchPlaces(lat, lng, filterType);
     } catch (err) {
       console.error(err);
       setError("Erro ao buscar localização via CEP.");
@@ -211,25 +294,7 @@ const GoogleMapComponent: React.FC = () => {
     );
   };
 
-  // Retorna uma descrição dos documentos atendidos com base no nome do local
-  const getDocumentsForPlace = (name: string): string => {
-    const lower = name.toLowerCase();
-    if (lower.includes("polícia federal") || lower.includes("policia federal")) {
-      return "Processa CRNM e DPRNM (para imigrantes e refugiados).";
-    }
-    if (lower.includes("detran")) {
-      return "Responsável pela CNH (Carteira Nacional de Habilitação).";
-    }
-    if (lower.includes("poupatempo")) {
-      return "Solicita CPF, CTPS e outros serviços integrados.";
-    }
-    if (lower.includes("autoescola") || lower.includes("auto escola")) {
-      return "Oferece treinamento e suporte para obtenção da CNH.";
-    }
-    return "Documentos diversos.";
-  };
-
-  // Filtra os locais com base no termo de busca
+  // Filtra os locais com base no termo de busca digitado
   const filteredLocations = locations.filter((loc) =>
     loc.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -239,58 +304,127 @@ const GoogleMapComponent: React.FC = () => {
       className="flex flex-col md:flex-row w-full rounded-lg overflow-hidden shadow-lg border border-gray-200"
       style={{ height: `${MAP_HEIGHT_PX}px` }}
     >
-      {/* Coluna da lista */}
-      <div className="w-full md:w-1/3 bg-white p-4 overflow-auto">
-        {(!hasUserLocation && locationChecked) && (
+      {/* Painel lateral: Filtros, busca e lista de locais */}
+      <div
+        className="w-full md:w-2/6 bg-white p-4 overflow-y-auto overflow-x-hidden"
+        style={{ maxHeight: "100%" }}
+      >
+        {/* Seção de filtros */}
+        <div className="mb-4">
+          <h2 className="text-xl font-bold mb-2 text-gray-800">Filtros</h2>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setFilterType("all")}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                filterType === "all"
+                  ? "bg-[#f4cb35] text-white"
+                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              Tudo
+            </button>
+            <button
+              onClick={() => setFilterType("documentation")}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                filterType === "documentation"
+                  ? "bg-[#f4cb35] text-white"
+                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              Documentação
+            </button>
+            <button
+              onClick={() => setFilterType("health")}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                filterType === "health"
+                  ? "bg-[#f4cb35] text-white"
+                  : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              Saúde
+            </button>
+          </div>
+        </div>
+
+        {/* Seção para definir localização via CEP, caso necessário */}
+        {locationChecked && !hasUserLocation && (
           <div className="mb-4">
             <input
               type="text"
               value={cep}
               onChange={(e) => setCep(e.target.value)}
               placeholder="Digite seu CEP"
-              className="border border-gray-300 p-2 mr-2 rounded text-black placeholder:text-black"
+              className="w-full border border-gray-300 p-2 rounded mb-2 text-gray-800"
               maxLength={8}
             />
             <button
               onClick={handleSearchByCep}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
             >
               Definir Minha Localização
             </button>
           </div>
         )}
 
-        {error && <p className="text-red-500 mb-2 text-black">{error}</p>}
+        {error && <p className="text-red-500 mb-2">{error}</p>}
 
-        <h4 className="text-lg font-semibold mb-2 text-black">Locais para Documentação</h4>
-        <input
-          type="text"
-          placeholder="Pesquisar local..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 p-2 mb-4 rounded w-full text-black placeholder:text-black"
-        />
-        <ul className="divide-y divide-gray-200">
+        {/* Seção de busca */}
+        <div className="mb-4">
+          <h2 className="text-xl font-bold mb-2 text-gray-800">Locais</h2>
+          <input
+            type="text"
+            placeholder="Pesquisar local..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border border-gray-300 p-2 rounded text-gray-800"
+          />
+        </div>
+
+        {/* Lista de locais */}
+        <div className="space-y-4">
           {filteredLocations.map((loc, index) => (
-            <li
+            <div
               key={index}
-              className="py-3 cursor-pointer hover:bg-gray-100 text-black transition px-2 rounded"
               onClick={() => handleClickPlace(loc, index)}
+              className={`p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer ${
+                hoveredMarker === index ? "bg-[#f4cb35] text-white" : "bg-white"
+              }`}
             >
-              <div className="font-bold text-black">{loc.name}</div>
+              <div
+                className={`font-bold text-lg mb-1 ${
+                  hoveredMarker === index ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {loc.name}
+              </div>
               {loc.distance !== undefined && (
-                <div className="text-sm text-black">
-                  Distância: {loc.distance.toFixed(2)} km
+                <div
+                  className={`text-sm mb-2 ${
+                    hoveredMarker === index ? "text-white" : "text-gray-600"
+                  }`}
+                >
+                  <span className="font-medium">Distância:</span>{" "}
+                  {loc.distance.toFixed(2)} km
                 </div>
               )}
-            </li>
+              <button
+                className={`underline text-sm ${
+                  hoveredMarker === index ? "text-white" : "text-blue-600"
+                }`}
+              >
+                Ver no mapa
+              </button>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
       {/* Coluna do mapa */}
-      <div className="w-full md:w-2/3 relative">
-        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
+      <div className="w-full md:w-5/6 relative">
+        <LoadScript
+          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+          libraries={["places"]}
+        >
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={mapCenter}
@@ -301,26 +435,29 @@ const GoogleMapComponent: React.FC = () => {
               mapTypeControl: false,
               zoomControl: true,
             }}
-            // onLoad obtém a referência do mapa
             onLoad={(map) => setMapRef(map)}
-            // Quando as tiles são carregadas, força o redimensionamento
             onTilesLoaded={() => {
               if (mapRef) {
                 google.maps.event.trigger(mapRef, "resize");
               }
             }}
           >
+            {/* Marcador para a localização do usuário com ícone customizado e label */}
             {userLocation && (
               <Marker
                 position={userLocation}
                 icon={{
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 8,
-                  fillColor: "#4285F4",
-                  fillOpacity: 1,
-                  strokeColor: "#FFFFFF",
-                  strokeWeight: 2,
+                  url: "/assets/images/localization-realtime.png",
+                  scaledSize: new google.maps.Size(40, 40),
+                  labelOrigin: new google.maps.Point(20, -10),
                 }}
+                label={{
+                  text: "Você está aqui",
+                  color: "#000000",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+                title="Você está aqui!"
               />
             )}
 
@@ -332,24 +469,22 @@ const GoogleMapComponent: React.FC = () => {
               >
                 {hoveredMarker === idx && (
                   <InfoWindow onCloseClick={() => setHoveredMarker(null)}>
-                    <div style={{ color: "#000" }}>
-                      <h4 style={{ fontWeight: "bold", marginBottom: "4px" }}>
-                        {location.name}
-                      </h4>
-                      <p style={{ marginBottom: "4px" }}>
-                        <strong>Documentos atendidos:</strong>{" "}
-                        {getDocumentsForPlace(location.name)}
-                      </p>
+                    <div className="text-gray-900">
+                      <h4 className="font-bold mb-1">{location.name}</h4>
                       {location.distance !== undefined && (
-                        <p style={{ marginBottom: "8px" }}>
+                        <p className="text-sm mb-2">
                           <strong>Distância:</strong> {location.distance.toFixed(2)} km
                         </p>
                       )}
+                      <p className="text-sm mb-2">
+                        <strong>Descrição:</strong>{" "}
+                        {getDocumentsForPlace(location.name)}
+                      </p>
                       <a
                         href={buildGoogleMapsRouteUrl(location)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ textDecoration: "underline", color: "#1D4ED8" }}
+                        className="underline text-blue-600 text-sm"
                       >
                         Ver rotas
                       </a>
@@ -361,7 +496,8 @@ const GoogleMapComponent: React.FC = () => {
 
             {/* Exibe a rota no mapa se a posição do usuário for diferente do local clicado */}
             {userLocation &&
-              (userLocation.lat !== mapCenter.lat || userLocation.lng !== mapCenter.lng) && (
+              (userLocation.lat !== mapCenter.lat ||
+                userLocation.lng !== mapCenter.lng) && (
                 <DirectionsService
                   options={{
                     origin: userLocation,

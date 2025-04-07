@@ -9,8 +9,10 @@ import {
   orderBy,
   doc,
   getDoc,
+  setDoc,
 } from "firebase/firestore";
 import Timeline from "../utils/timeline";
+import { usePathname } from "next/navigation";
 
 interface Step {
   title: string;
@@ -19,6 +21,83 @@ interface Step {
   order: number;
 }
 
+// Dados para os popups (carrossel de documentos)
+const docData = [
+  {
+    title: "CPF (Cadastro de Pessoa Física)",
+    image: "/assets/images/cpf.png",
+    text: `O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:
+• Abrir conta bancária e obter serviços financeiros.
+• Realizar compras online e emitir notas fiscais.
+• Acessar programas sociais e benefícios do governo.
+• Emitir outros documentos (CNH, passaporte).
+Em resumo, o CPF é indispensável para viver legalmente no Brasil.`,
+  },
+  {
+    title: "CTPS (Carteira de Trabalho e Previdência Social)",
+    image: "/assets/images/ctps.png",
+    text: `A CTPS é o documento que registra oficialmente o histórico profissional do trabalhador no Brasil.
+• É utilizada para contratos de trabalho com carteira assinada.
+• Garante acesso a direitos como FGTS, INSS, férias, 13º salário e seguro-desemprego.
+• Pode ser emitida na versão física ou digital.
+A CTPS é essencial para comprovar vínculos empregatícios e acessar benefícios trabalhistas.`,
+  },
+];
+
+const thirdDocData = [
+  {
+    title: "Cadastro Único",
+    image: "/assets/images/CadUnico.png",
+    text: "O Cadastro Único identifica e caracteriza famílias de baixa renda, sendo essencial para o acesso a programas sociais.",
+  },
+  {
+    title: "Bolsa Família",
+    image: "/assets/images/bolsaFamilia.png",
+    text: "O Bolsa Família é um programa de transferência de renda que beneficia famílias em situação de vulnerabilidade, garantindo acesso a direitos fundamentais.",
+  },
+  {
+    title: "Cartão SUS",
+    image: "/assets/images/cartao-do-sus.png",
+    text: "O Cartão SUS assegura o acesso aos serviços de saúde pública.",
+  },
+];
+
+// Botão "Consultar Mapa" – posicionado no canto superior direito
+const MapaButton: React.FC = () => (
+  <div className="absolute top-4 right-4 z-10">
+    <a
+      href="/mapa"
+      className="group inline-flex items-center h-16 w-16 bg-blue-600 text-white rounded-full transition-all duration-300 hover:w-56 hover:bg-blue-700 overflow-hidden"
+    >
+      <div className="flex items-center justify-center w-16 h-16">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-8 h-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      </div>
+      <span className="ml-4 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        Consultar Mapa
+      </span>
+    </a>
+  </div>
+);
+
 const TrilhaDocumentacao: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [steps, setSteps] = useState<Step[]>([]);
@@ -26,63 +105,25 @@ const TrilhaDocumentacao: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [selectedPath, setSelectedPath] = useState<number | null>(null);
 
-  // Estados para popups
+  // Popups
   const [showPopup, setShowPopup] = useState(false); // CRNM/DPRNM
   const [showCPFPopup, setShowCPFPopup] = useState(false); // CPF/CTPS
   const [showThirdDocPopup, setShowThirdDocPopup] = useState(false); // Terceiro documento
+
+  // Flip states para CRNM/DPRNM
   const [showCRNMBack, setShowCRNMBack] = useState(false);
   const [showDPRNMBack, setShowDPRNMBack] = useState(false);
 
   // Para CPF/CTPS
   const [docIndex, setDocIndex] = useState(0);
 
-  // Para terceiro passo (Cadastro Único, Bolsa Família, Cartão SUS)
+  // Para terceiro passo
   const [thirdDocIndex, setThirdDocIndex] = useState(0);
   const [showThirdDocBack, setShowThirdDocBack] = useState(false);
 
-  // Dados para CPF/CTPS
-  const docData = [
-    {
-      title: "CPF (Cadastro de Pessoa Física)",
-      image: "/assets/images/cpf.png",
-      text: `O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:
-• Abrir conta bancária e obter serviços financeiros.
-• Realizar compras online e emitir notas fiscais.
-• Acessar programas sociais e benefícios do governo.
-• Emitir outros documentos (CNH, passaporte).
-Em resumo, o CPF é indispensável para viver legalmente no Brasil.`,
-    },
-    {
-      title: "CTPS (Carteira de Trabalho e Previdência Social)",
-      image: "/assets/images/ctps.png",
-      text: `A CTPS (Carteira de Trabalho e Previdência Social) é o documento que registra oficialmente o histórico profissional do trabalhador no Brasil.
-• É utilizada para contratos de trabalho com carteira assinada.
-• Garante acesso a direitos como FGTS, INSS, férias, 13º salário e seguro-desemprego.
-• Pode ser emitida na versão física ou digital.
-A CTPS é essencial para comprovar vínculos empregatícios e acessar benefícios trabalhistas.`,
-    },
-  ];
+  const pathname = usePathname();
 
-  // Dados para o Terceiro Passo
-  const thirdDocData = [
-    {
-      title: "Cadastro Único",
-      image: "/assets/images/CadUnico.png",
-      text: "O Cadastro Único identifica e caracteriza famílias de baixa renda, sendo essencial para o acesso a programas sociais.",
-    },
-    {
-      title: "Bolsa Família",
-      image: "/assets/images/bolsaFamilia.png",
-      text: "O Bolsa Família é um programa de transferência de renda que beneficia famílias em situação de vulnerabilidade, garantindo acesso a direitos fundamentais.",
-    },
-    {
-      title: "Cartão SUS",
-      image: "/assets/images/cartao-do-sus.png",
-      text: "O Cartão SUS assegura o acesso aos serviços de saúde pública. Clique na imagem para ver o verso.",
-    },
-  ];
-
-  // Marca que estamos no client (evita problemas com SSR)
+  // Marca que estamos no client
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -94,7 +135,7 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
     }
   }, [isClient]);
 
-  // Busca dos passos no Firestore com base no selectedPath
+  // Busca dos passos no Firestore (baseado em selectedPath)
   useEffect(() => {
     if (selectedPath !== null) {
       const fetchSteps = async () => {
@@ -133,23 +174,22 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
           console.error("Erro ao buscar dados:", error);
         }
       };
-
       fetchSteps();
     }
   }, [userId, selectedPath]);
 
-  // Handlers para abertura dos popups
+  // Handlers para abrir popups
   const handleFirstStepClick = () => {
-    setShowPopup(true); // Abre o popup de CRNM/DPRNM
+    setShowPopup(true); // Abre popup de CRNM/DPRNM
   };
   const handleSecondStepClick = () => {
     setDocIndex(0);
-    setShowCPFPopup(true); // Abre o popup de CPF/CTPS
+    setShowCPFPopup(true); // Abre popup de CPF/CTPS
   };
   const handleThirdStepClick = () => {
     setThirdDocIndex(0);
     setShowThirdDocBack(false);
-    setShowThirdDocPopup(true); // Abre o popup do terceiro documento
+    setShowThirdDocPopup(true); // Abre popup do terceiro documento
   };
 
   const handleClosePopup = () => {
@@ -171,61 +211,9 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
         ? "Documentação - Autorização de Residência"
         : "Documentação";
 
-  // Botão "Consultar Mapa" padronizado para todas as trilhas
-  const MapaButton = () => (
-    <div className="absolute top-4 right-4 z-10">
-      <a
-        href="/mapa"
-        className="
-          group inline-flex items-center
-          h-16 w-16
-          bg-blue-600 text-white
-          rounded-full
-          transition-all duration-300
-          hover:w-56 hover:bg-blue-700
-          overflow-hidden
-        "
-      >
-        <div className="flex items-center justify-center w-16 h-16">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-8 h-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-        </div>
-        <span
-          className="
-            ml-4
-            text-base
-            opacity-0
-            group-hover:opacity-100
-            transition-opacity duration-300
-            whitespace-nowrap
-          "
-        >
-          Consultar Mapa
-        </span>
-      </a>
-    </div>
-  );
-
   return (
     <div
+      key={pathname}
       className="min-h-screen w-screen flex flex-col items-center justify-center p-8"
       style={{
         backgroundImage: "url('/assets/images/documentacao.png')",
@@ -233,6 +221,7 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
         backgroundPosition: "center",
       }}
     >
+      {/* Título principal */}
       <h2 className="text-4xl font-bold text-[#ffde59] mb-6 mt-[9vh]">
         {pageTitle}
       </h2>
@@ -283,14 +272,12 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
 
       {selectedPath === 1 && (
         <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
-          {/* Botão de Voltar no canto esquerdo */}
           <button
             onClick={() => setSelectedPath(null)}
             className="text-blue-600 hover:text-blue-800 mb-4"
           >
             ← Voltar
           </button>
-          {/* Botão "Consultar Mapa" padronizado */}
           <MapaButton />
           <Timeline
             steps={steps}
@@ -299,11 +286,11 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
             userId={userId}
             onStepClick={(index) => {
               if (index === 0) {
-                handleFirstStepClick(); // Abre popup de CRNM/DPRNM
+                handleFirstStepClick();
               } else if (index === 1) {
-                handleSecondStepClick(); // Abre popup de CPF/CTPS
+                handleSecondStepClick();
               } else if (index === 2) {
-                handleThirdStepClick(); // Abre popup do terceiro documento
+                handleThirdStepClick();
               }
             }}
             showDocumentButton
@@ -313,14 +300,12 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
 
       {selectedPath === 2 && (
         <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
-          {/* Botão de Voltar no canto esquerdo */}
           <button
             onClick={() => setSelectedPath(null)}
             className="text-blue-600 hover:text-blue-800 mb-4"
           >
             ← Voltar
           </button>
-          {/* Botão "Consultar Mapa" padronizado */}
           <MapaButton />
           <Timeline
             steps={steps}
@@ -328,15 +313,20 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
             setActiveStep={setActiveStep}
             userId={userId}
             onStepClick={(index) => {
-              // Comportamento de clique para Autorização de Residência, se necessário
+              if (index === 0) {
+                handleFirstStepClick();
+              } else if (index === 1) {
+                handleSecondStepClick();
+              } else if (index === 2) {
+                handleThirdStepClick();
+              }
             }}
             showDocumentButton
-            hideFirstStepDocButton={true}
           />
         </div>
       )}
 
-      {/* Popup do primeiro passo: CRNM / DPRNM */}
+      {/* Popup 1: CRNM / DPRNM */}
       {showPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -347,78 +337,102 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
               onClick={handleClosePopup}
+              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
             >
               X
             </button>
-            <p className="text-2xl font-bold text-center mb-8 w-full mt-4 text-black">
+            <p className="text-2xl font-bold text-center mb-8 mt-4 text-black">
               Clique no documento para ver o verso e o descritivo
             </p>
-
-            {/* Container com perspectiva para efeito de flip */}
             <div
               className="flex-1 flex flex-col items-center justify-center gap-24 w-full"
               style={{ perspective: "1000px" }}
             >
               {/* CRNM */}
-              <div onClick={handleCRNMFlip} className="cursor-pointer relative w-full max-w-md h-auto">
+              <div
+                className="w-[36rem] h-[22rem] relative cursor-pointer"
+                style={{ perspective: "1000px" }}
+                onClick={handleCRNMFlip}
+              >
                 <div
-                  className={`relative w-full transition-transform duration-500 transform-style preserve-3d ${showCRNMBack ? "rotate-y-180" : ""
+                  className={`absolute w-full h-full transition-transform duration-500 transform-style preserve-3d ${showCRNMBack ? "rotate-y-180" : ""
                     }`}
                 >
-                  {/* Frente */}
-                  <div className="w-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
-                    <h4 className="text-2xl font-semibold mb-4 text-black">CRNM</h4>
+                  {/* Frente CRNM */}
+                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
+                    <h4 className="text-3xl font-semibold mb-4 text-black">
+                      CRNM (Frente)
+                    </h4>
                     <img
                       src="/assets/images/crnm.png"
                       alt="CRNM Frente"
-                      className="w-full h-auto max-w-lg mb-4 scale-100"
+                      className="w-full h-auto max-w-lg mb-4"
                     />
-                  </div>
-
-                  {/* Verso */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex flex-col items-center justify-center bg-white p-4">
-                    <img
-                      src="/assets/images/verso-crnm.png"
-                      alt="CRNM Verso"
-                      className="w-full h-auto max-w-lg mb-4 scale-100"
-                    />
-                    <p className="text-center text-lg text-black p-[10px]">
-                      <strong>CRNM (Carteira de Registro Nacional Migratório):</strong><br />
-                      Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.
+                    <p className="text-center text-xl text-black">
+                      Clique para ver o verso.
                     </p>
+                  </div>
+                  {/* Verso CRNM - agora com layout horizontal */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex items-center bg-white p-4 -mt-4">
+                    <div className="flex flex-row items-center justify-center w-full">
+                      <img
+                        src="/assets/images/verso-crnm.png"
+                        alt="CRNM Verso"
+                        className="w-1/2 h-auto max-w-lg mr-4"
+                      />
+                      <p className="text-center text-xl text-black px-2">
+                        <strong>CRNM (Carteira de Registro Nacional Migratório):</strong>
+                        <br />
+                        Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.
+                        <br />
+                        Clique novamente para voltar à frente.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* DPRNM */}
-              <div onClick={handleDPRNMFlip} className="cursor-pointer relative w-full max-w-md h-auto">
+              <div
+                className="w-[36rem] h-[22rem] relative cursor-pointer"
+                style={{ perspective: "1000px" }}
+                onClick={handleDPRNMFlip}
+              >
                 <div
-                  className={`relative w-full transition-transform duration-500 transform-style preserve-3d ${showDPRNMBack ? "rotate-y-180" : ""
+                  className={`absolute w-full h-full transition-transform duration-500 transform-style preserve-3d ${showDPRNMBack ? "rotate-y-180" : ""
                     }`}
                 >
-                  {/* Frente */}
-                  <div className="w-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
-                    <h4 className="text-2xl font-semibold mb-4 text-black">DPRNM</h4>
+                  {/* Frente DPRNM */}
+                  <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
+                    <h4 className="text-3xl font-semibold mb-4 text-black">
+                      DPRNM (Frente)
+                    </h4>
                     <img
                       src="/assets/images/dprnm.png"
                       alt="DPRNM Frente"
                       className="w-full h-auto max-w-lg mb-4"
                     />
-                  </div>
-
-                  {/* Verso */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex flex-col items-center justify-center bg-white p-4">
-                    <img
-                      src="/assets/images/verso-dprnm.png"
-                      alt="DPRNM Verso"
-                      className="w-full h-auto max-w-lg mb-4"
-                    />
-                    <p className="text-center text-lg text-black p-[10px]">
-                      <strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong><br />
-                      Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.
+                    <p className="text-center text-xl text-black">
+                      Clique para ver o verso.
                     </p>
+                  </div>
+                  {/* Verso DPRNM - layout horizontal */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex items-center bg-white p-4 -mt-4">
+                    <div className="flex flex-row items-center justify-center w-full">
+                      <img
+                        src="/assets/images/verso-dprnm.png"
+                        alt="DPRNM Verso"
+                        className="w-1/2 h-auto max-w-lg mr-4"
+                      />
+                      <p className="text-center text-xl text-black px-2">
+                        <strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong>
+                        <br />
+                        Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.
+                        <br />
+                        Clique novamente para voltar à frente.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -427,7 +441,8 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
         </div>
       )}
 
-      {/* Popup do segundo passo: CPF / CTPS */}
+
+      {/* Popup 2: CPF / CTPS */}
       {showCPFPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -438,16 +453,16 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
               onClick={handleClosePopup}
+              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
             >
               X
             </button>
-            <p className="text-2xl font-bold text-center mb-4 w-full mt-4 text-black">
+            <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
               Documento - {docData[docIndex].title}
             </p>
             <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4">
-              <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center relative">
+              <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
                 <h4 className="text-2xl font-semibold mb-4 text-black">
                   {docData[docIndex].title}
                 </h4>
@@ -472,7 +487,7 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
         </div>
       )}
 
-      {/* Popup do terceiro passo: Terceiro Documento */}
+      {/* Popup 3: Cadastro Único, Bolsa Família, Cartão SUS */}
       {showThirdDocPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -483,16 +498,16 @@ A CTPS é essencial para comprovar vínculos empregatícios e acessar benefício
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
               onClick={handleClosePopup}
+              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
             >
               X
             </button>
-            <p className="text-2xl font-bold text-center mb-4 w-full mt-4 text-black">
+            <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
               Documento - {thirdDocData[thirdDocIndex].title}
             </p>
             <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4 relative">
-              <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center relative">
+              <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
                 <h4 className="text-2xl font-semibold mb-4 text-black">
                   {thirdDocData[thirdDocIndex].title}
                 </h4>

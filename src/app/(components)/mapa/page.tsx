@@ -11,14 +11,7 @@ const GoogleMapComponent = dynamic(
 
 const MapPage: React.FC = () => {
   return (
-    <div
-      className="min-h-screen w-screen flex flex-col items-center justify-center p-8"
-      style={{
-        backgroundImage: "url('/assets/images/map-background.png')", // Altere para o background desejado
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen w-screen flex flex-col items-center justify-center p-8 bg-gray-700">
       <h2 className="text-4xl font-bold text-white mb-6 mt-[9vh]">
         Mapa de Serviços
       </h2>

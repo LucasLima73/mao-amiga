@@ -18,8 +18,8 @@ interface TimelineProps {
   userId: string | null;
   onStepClick?: (index: number) => void;
   showDocumentButton?: boolean;
-  // Nova propriedade para ocultar o botão no primeiro passo
-  hideFirstStepDocButton?: boolean;
+  // Nova propriedade: array com índices onde não deve aparecer o botão "Ver Documento"
+  hideDocumentButtonForSteps?: number[];
 }
 
 interface LineStyle {
@@ -43,7 +43,7 @@ const Timeline: React.FC<TimelineProps> = ({
   userId,
   onStepClick,
   showDocumentButton = false,
-  hideFirstStepDocButton = false,
+  hideDocumentButtonForSteps,
 }) => {
   const [localSteps, setLocalSteps] = useState<Step[]>(steps);
 
@@ -248,23 +248,22 @@ const Timeline: React.FC<TimelineProps> = ({
                     <p className="text-sm text-gray-600">{step.description}</p>
                   </div>
 
-                  {/* Exibe o botão "Ver Documento" para os passos 0, 1 e 2,
-                      mas oculta no primeiro passo se hideFirstStepDocButton for true */}
-                  {((index === 0 || index === 1 || index === 2) &&
-                    showDocumentButton &&
-                    !(hideFirstStepDocButton && index === 0)) && (
-                    <button
-                      className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onStepClick) {
-                          onStepClick(index);
-                        }
-                      }}
-                    >
-                      Ver Documento
-                    </button>
-                  )}
+                  {/* Exibe o botão "Ver Documento" se showDocumentButton for true
+                      e se o índice não estiver no array hideDocumentButtonForSteps */}
+                  {showDocumentButton &&
+                    (!hideDocumentButtonForSteps || !hideDocumentButtonForSteps.includes(index)) && (
+                      <button
+                        className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onStepClick) {
+                            onStepClick(index);
+                          }
+                        }}
+                      >
+                        Ver Documento
+                      </button>
+                    )}
                 </div>
 
                 {totalTasks > 0 && (

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import WavyButton from './(components)/utils/wavybutton';
 import FloatingArrow from './(components)/utils/floatingarrow';
 import AboutButton from './(components)/utils/aboutbutton';
+import ChatBotBalloon from './(components)/utils/ballon';
 import Image from 'next/image';
 
 const Home = () => {
@@ -15,6 +16,7 @@ const Home = () => {
       }}
     >
       <AboutButton />
+      <ChatBotBalloon />
       <div
         style={{
           height: '100vh',

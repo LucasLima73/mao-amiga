@@ -1,41 +1,67 @@
-# Etapa 1: Construção
-FROM node:18-alpine AS builder
+# Etapa base
+FROM node:20-alpine AS base
 
-WORKDIR /mao-amiga
-
-# Copia os arquivos de dependências
-COPY package.json package-lock.json ./
-
-# Instala as dependências
-RUN npm install --force
-
-# Copia o restante do código
-COPY . .
-
-# Build da aplicação
-RUN npm run build
-
-# Remove as devDependencies para reduzir o tamanho da imagem
-RUN npm prune --production --force
-
-# Etapa 2: Execução
-FROM node:18-alpine
+# Etapa de dependências
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Copia apenas os arquivos necessários do estágio de construção
-COPY --from=builder /mao-amiga/package.json ./ 
-COPY --from=builder /mao-amiga/package-lock.json ./ 
-COPY --from=builder /mao-amiga/node_modules ./node_modules 
-COPY --from=builder /mao-amiga/.next ./.next  
-COPY --from=builder /mao-amiga/next.config.js ./ 
-COPY --from=builder /mao-amiga/public ./public  
+# Copiando arquivos de dependência
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps --verbose
 
-# Instala apenas as dependências de produção (não é necessário instalar as devDependencies)
-RUN npm install --only=production --force
+# Etapa de build
+FROM base AS builder
+WORKDIR /app
 
-# Expondo a porta 3031
-EXPOSE 3031
+# Variáveis de ambiente públicas para build
+ARG NEXT_PUBLIC_FIREBASE_API_KEY
+ARG NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+ARG NEXT_PUBLIC_FIREBASE_PROJECT_ID
+ARG NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+ARG NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+ARG NEXT_PUBLIC_FIREBASE_APP_ID
+ARG NEXT_PUBLIC_OPENAI_API_KEY
+ARG NEXT_PUBLIC_OPENAI_ASSISTANT_ID
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
-# Comando para iniciar a aplicação
-CMD ["npm", "start"]
+ENV NEXT_PUBLIC_FIREBASE_API_KEY=$NEXT_PUBLIC_FIREBASE_API_KEY
+ENV NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+ENV NEXT_PUBLIC_FIREBASE_PROJECT_ID=$NEXT_PUBLIC_FIREBASE_PROJECT_ID
+ENV NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+ENV NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+ENV NEXT_PUBLIC_FIREBASE_APP_ID=$NEXT_PUBLIC_FIREBASE_APP_ID
+ENV NEXT_PUBLIC_OPENAI_API_KEY=$NEXT_PUBLIC_OPENAI_API_KEY
+ENV NEXT_PUBLIC_OPENAI_ASSISTANT_ID=$NEXT_PUBLIC_OPENAI_ASSISTANT_ID
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
+# Copia os node_modules da etapa anterior
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copia o restante da aplicação
+COPY . .
+
+# Gera o build de produção
+RUN npm run build
+
+# Etapa de execução
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copia arquivos essenciais
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

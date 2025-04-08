@@ -175,13 +175,12 @@ const Navbar: React.FC = () => {
           >
             SAÚDE
           </Link>
-          <Link
-            href="/documentacao"
-            onClick={() => handleNavClick("Documentação")}
-            className="hover:text-yellow-300 transition"
-          >
+
+          <Link href="/trilhaDocumentacao" className="hover:text-yellow-300 transition">
             DOCUMENTAÇÃO
           </Link>
+ 
+       
           <Link
             href="/trilhaDireitosHumanos"
             onClick={() => handleNavClick("Direitos Humanos")}
@@ -189,12 +188,18 @@ const Navbar: React.FC = () => {
           >
             DIREITOS HUMANOS
           </Link>
+         
           <Link
             href="/socioeconomico"
             onClick={() => handleNavClick("Socioeconômico")}
             className="hover:text-yellow-300 transition"
           >
+
             SOCIOECONÔMICO
+          </Link>
+          {/* Novo link para MAPA */}
+          <Link href="/mapa" className="hover:text-yellow-300 transition">
+            MAPA
           </Link>
         </div>
 
@@ -299,6 +304,12 @@ const Navbar: React.FC = () => {
                 }}
               >
                 SOCIOECONÔMICO
+              </Link>
+            </li>
+            {/* Novo item de menu para MAPA */}
+            <li>
+              <Link href="/mapa" onClick={toggleMenu}>
+                MAPA
               </Link>
             </li>
             <li className="border-t border-yellow-400 w-3/4 mt-4"></li>

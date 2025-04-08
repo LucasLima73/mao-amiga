@@ -194,9 +194,7 @@ const Navbar: React.FC = () => {
           <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
             DIREITOS HUMANOS
           </Link>
-          <Link href="/trilhaSocioeconomico" className="hover:text-yellow-300 transition">
-            SOCIOECONÔMICO
-          </Link>
+         
           <Link
             href="/socioeconomico"
             onClick={() => handleNavClick("Socioeconômico")}

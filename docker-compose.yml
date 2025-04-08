@@ -1,8 +1,5 @@
-version: "3.9"
-
 services:
-  mao-amiga:
-    container_name: mao-amiga
+  lawyer:
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,11 +10,10 @@ services:
         NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
         NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
         NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
-        NEXT_PUBLIC_OPENAI_API_KEY: ${NEXT_PUBLIC_OPENAI_API_KEY}
-        NEXT_PUBLIC_OPENAI_ASSISTANT_ID: ${NEXT_PUBLIC_OPENAI_ASSISTANT_ID}
         NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+        OPENAI_API_KEY: ${OPENAI_API_KEY}  # Ajustado: removido o prefixo NEXT_PUBLIC_
+        OPENAI_ASSISTANT_ID: ${OPENAI_ASSISTANT_ID}  # Ajustado: removido o prefixo NEXT_PUBLIC_
     ports:
-      - "3031:3000"
+      - "3000:3000"  # Ajustado para refletir a porta interna 3000
+    container_name: mao-amiga
     restart: always
-    env_file:
-      - .env.local

@@ -21,7 +21,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}  
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Build da imagem Docker
+    # Build da imagem Dockers
     - name: Build Docker Image
       run: |
         docker build -t lucaslimabaseo/mao-amiga-deploy:latest . 

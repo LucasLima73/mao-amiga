@@ -3,10 +3,17 @@ FROM node:18-alpine AS builder
 
 WORKDIR /mao-amiga
 
+# Aceita variáveis como argumento no build
+ARG OPENAI_API_KEY
+ARG OPENAI_ASSISTANT_ID
+
+# Exporta para o ambiente da aplicação (necessário para Next.js build)
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+ENV OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID
+
 COPY package.json package-lock.json ./
 RUN npm install --force
 
-# Copia o restante do código e o arquivo de ambiente
 COPY . .
 
 RUN npm run build

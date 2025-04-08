@@ -3,19 +3,24 @@ FROM node:18-alpine AS builder
 
 WORKDIR /mao-amiga
 
-# Aceita variáveis como argumento no build
+# Variáveis de build para o Next.js
 ARG OPENAI_API_KEY
 ARG OPENAI_ASSISTANT_ID
 
-# Exporta para o ambiente da aplicação (necessário para Next.js build)
 ENV OPENAI_API_KEY=$OPENAI_API_KEY
 ENV OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID
 
 COPY package.json package-lock.json ./
 RUN npm install --force
 
+# Copia o restante do código
 COPY . .
 
+# Cria o .env.local com base nas variáveis de ARG
+RUN echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.local && \
+    echo "OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID" >> .env.local
+
+# Agora o build vai funcionar pois as variáveis estarão disponíveis
 RUN npm run build
 RUN npm prune --production --force
 

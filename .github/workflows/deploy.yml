@@ -75,5 +75,5 @@ jobs:
           docker pull lucaslimabaseo/mao-amiga-deploy:latest 
 
           # Rodar a nova imagem
-          docker run -d --name mao-amiga-deploy -p 3002:3002 lucaslimabaseo/mao-amiga-deploy:latest
+          docker run -d --name mao-amiga-deploy -p 3000:3000 lucaslimabaseo/mao-amiga-deploy:latest
         EOF

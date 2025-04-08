@@ -7,3 +7,5 @@ services:
     ports:
       - "3031:3031"
     restart: always
+    env_file:
+      - .env.local

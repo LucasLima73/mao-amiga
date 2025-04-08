@@ -6,11 +6,7 @@ const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY as string;
 const assistantId = process.env.NEXT_PUBLIC_OPENAI_ASSISTANT_ID as string;
 
 // Verifique se as variáveis de ambiente estão definidas corretamente
-if (!apiKey || !assistantId) {
-  throw new Error(
-    "As variáveis de ambiente OPENAI_API_KEY e OPENAI_ASSISTANT_ID são necessárias."
-  );
-}
+
 
 const openai = new OpenAI({ apiKey });
 

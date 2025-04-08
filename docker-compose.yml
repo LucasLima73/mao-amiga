@@ -1,5 +1,5 @@
 services:
-  mao-amiga:
+  lawyer:
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,4 +11,4 @@ services:
       - "3031:3031"
     restart: always
     env_file:
-      - .env
+      - .env.local

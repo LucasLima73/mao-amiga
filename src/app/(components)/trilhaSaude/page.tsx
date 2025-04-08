@@ -252,7 +252,6 @@ const TrilhaSaude: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
   );
 };
 

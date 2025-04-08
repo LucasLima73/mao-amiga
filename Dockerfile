@@ -8,7 +8,6 @@ RUN npm install --force
 
 # Copia o restante do código e o arquivo de ambiente
 COPY . .
-COPY .env .env
 
 RUN npm run build
 RUN npm prune --production --force

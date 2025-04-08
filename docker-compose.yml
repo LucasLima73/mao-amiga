@@ -1,0 +1,9 @@
+services:
+  lawyer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mao-amiga
+    ports:
+      - "3031:3031"
+    restart: always

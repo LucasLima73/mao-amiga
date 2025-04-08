@@ -3,40 +3,39 @@ FROM node:18-alpine AS builder
 
 WORKDIR /mao-amiga
 
-# Variáveis de build para o Next.js
-ARG OPENAI_API_KEY
-ARG OPENAI_ASSISTANT_ID
-
-ENV OPENAI_API_KEY=$OPENAI_API_KEY
-ENV OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID
-
+# Copia os arquivos de dependências
 COPY package.json package-lock.json ./
+
+# Instala as dependências
 RUN npm install --force
 
 # Copia o restante do código
 COPY . .
 
-# Cria o .env.local com base nas variáveis de ARG
-RUN echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.local && \
-    echo "OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID" >> .env.local
-
-# Agora o build vai funcionar pois as variáveis estarão disponíveis
+# Build da aplicação
 RUN npm run build
+
+# Remove as devDependencies para reduzir o tamanho da imagem
 RUN npm prune --production --force
 
 # Etapa 2: Execução
 FROM node:18-alpine
+
 WORKDIR /app
 
-COPY --from=builder /mao-amiga/package.json ./
-COPY --from=builder /mao-amiga/package-lock.json ./
-COPY --from=builder /mao-amiga/node_modules ./node_modules
-COPY --from=builder /mao-amiga/.next ./.next
-COPY --from=builder /mao-amiga/next.config.js ./
-COPY --from=builder /mao-amiga/public ./public
-COPY --from=builder /mao-amiga/.env.local .env.local
+# Copia apenas os arquivos necessários do estágio de construção
+COPY --from=builder /mao-amiga/package.json ./ 
+COPY --from=builder /mao-amiga/package-lock.json ./ 
+COPY --from=builder /mao-amiga/node_modules ./node_modules 
+COPY --from=builder /mao-amiga/.next ./.next  
+COPY --from=builder /mao-amiga/next.config.js ./ 
+COPY --from=builder /mao-amiga/public ./public  
 
+# Instala apenas as dependências de produção (não é necessário instalar as devDependencies)
 RUN npm install --only=production --force
 
+# Expondo a porta 3031
 EXPOSE 3031
+
+# Comando para iniciar a aplicação
 CMD ["npm", "start"]

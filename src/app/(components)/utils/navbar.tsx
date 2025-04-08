@@ -16,7 +16,6 @@ declare global {
 }
 
 const Navbar: React.FC = () => {
-  // Estados para menu mobile, modal de login e criação de conta
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -24,14 +23,12 @@ const Navbar: React.FC = () => {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Estados de autenticação do usuário
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   const auth = getAuth(firebaseApp);
 
-  // Recupera dados do usuário do localStorage, se existirem
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName");
     const storedUserId = localStorage.getItem("userId");
@@ -42,18 +39,15 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  // Função para alternar o menu mobile
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // Função para alternar a exibição do modal de login (fecha o menu mobile)
   const toggleLoginModal = () => {
     setIsLoginModalOpen(!isLoginModalOpen);
     setIsOpen(false);
   };
 
-  // Função para registrar eventos de navegação
   const handleNavClick = (label: string) => {
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "click_nav", {
@@ -63,7 +57,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Evento para o botão de Login
   const handleLoginButtonEvent = () => {
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "click_login", {
@@ -73,7 +66,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Evento para o botão de Logout
   const handleLogoutButtonEvent = () => {
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "click_logout", {
@@ -83,7 +75,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Login por telefone
   const handleLogin = async () => {
     setIsLoading(true);
     try {
@@ -97,7 +88,7 @@ const Navbar: React.FC = () => {
         alert("Login bem-sucedido!");
         setIsLoggedIn(true);
         setIsLoginModalOpen(false);
-        window.location.reload(); // Recarrega a página após login
+        window.location.reload();
       } else {
         alert("Telefone não encontrado!");
       }
@@ -108,7 +99,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Criação de conta por telefone (com nome)
   const handleCreateAccount = async () => {
     setIsLoading(true);
     try {
@@ -127,7 +117,7 @@ const Navbar: React.FC = () => {
         setUserName(name);
         setUserId(phone);
         setIsLoginModalOpen(false);
-        window.location.reload(); // Recarrega a página após criação da conta
+        window.location.reload();
       }
     } catch (error) {
       alert("Erro ao criar conta: " + (error as any).message);
@@ -136,7 +126,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Login com Google
   const handleLoginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -149,13 +138,12 @@ const Navbar: React.FC = () => {
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       alert("Login com Google bem-sucedido!");
-      window.location.reload(); // Recarrega a página após login com Google
+      window.location.reload();
     } catch (error) {
       alert("Erro ao fazer login com Google: " + (error as any).message);
     }
   };
 
-  // Logout
   const handleLogout = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
@@ -164,7 +152,7 @@ const Navbar: React.FC = () => {
     setIsLoggedIn(false);
     handleLogoutButtonEvent();
     alert("Logout bem-sucedido!");
-    window.location.reload(); // Recarrega a página após logout
+    window.location.reload();
   };
 
   return (
@@ -195,7 +183,7 @@ const Navbar: React.FC = () => {
             DOCUMENTAÇÃO
           </Link>
           <Link
-            href="/direitos-humanos"
+            href="/trilhaDireitosHumanos"
             onClick={() => handleNavClick("Direitos Humanos")}
             className="hover:text-yellow-300 transition"
           >
@@ -350,7 +338,7 @@ const Navbar: React.FC = () => {
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
-            <h3 className="text-xl font-bold mb-4">
+            <h3 className="text-xl font-bold mb-4 text-black">
               {isCreatingAccount ? "Criar Conta" : "Login"}
             </h3>
             <input

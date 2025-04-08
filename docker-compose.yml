@@ -1,11 +1,14 @@
 services:
-  lawyer:
+  mao-amiga:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
+        OPENAI_ASSISTANT_ID: ${OPENAI_ASSISTANT_ID}
     container_name: mao-amiga
     ports:
       - "3031:3031"
     restart: always
     env_file:
-      - .env  
+      - .env

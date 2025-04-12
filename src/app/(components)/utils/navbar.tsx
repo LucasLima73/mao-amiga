@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -7,6 +9,12 @@ import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -15,7 +23,6 @@ const Navbar: React.FC = () => {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Estados de autenticação
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -39,6 +46,33 @@ const Navbar: React.FC = () => {
   const toggleLoginModal = () => {
     setIsLoginModalOpen(!isLoginModalOpen);
     setIsOpen(false);
+  };
+
+  const handleNavClick = (label: string) => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_nav", {
+        event_category: "Navigation",
+        event_label: label,
+      });
+    }
+  };
+
+  const handleLoginButtonEvent = () => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_login", {
+        event_category: "User",
+        event_label: "Login Button",
+      });
+    }
+  };
+
+  const handleLogoutButtonEvent = () => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "click_logout", {
+        event_category: "User",
+        event_label: "Logout Button",
+      });
+    }
   };
 
   const handleLogin = async () => {
@@ -72,7 +106,10 @@ const Navbar: React.FC = () => {
       if (userDoc.exists()) {
         alert("Este telefone já está registrado!");
       } else {
-        await setDoc(doc(db, "users", phone), { userName: name, userId: phone });
+        await setDoc(doc(db, "users", phone), {
+          userName: name,
+          userId: phone,
+        });
         localStorage.setItem("userName", name);
         localStorage.setItem("userId", phone);
         alert("Conta criada com sucesso!");
@@ -113,13 +150,13 @@ const Navbar: React.FC = () => {
     setUserName(null);
     setUserId(null);
     setIsLoggedIn(false);
+    handleLogoutButtonEvent();
     alert("Logout bem-sucedido!");
     window.location.reload();
   };
 
   return (
-    // Navbar fixa no topo
-    <nav className="fixed top-0 left-0 w-full bg-transparent z-50">
+    <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
         {/* Logo */}
         <div
@@ -131,24 +168,46 @@ const Navbar: React.FC = () => {
 
         {/* Menu Desktop */}
         <div className="hidden md:flex space-x-8 text-yellow-400 text-sm tracking-wide">
-          <Link href="/trilhaSaude" className="hover:text-yellow-300 transition">
+          <Link
+            href="/trilhaSaude"
+            onClick={() => handleNavClick("Saúde")}
+            className="hover:text-yellow-300 transition"
+          >
             SAÚDE
           </Link>
+
           <Link href="/trilhaDocumentacao" className="hover:text-yellow-300 transition">
             DOCUMENTAÇÃO
           </Link>
-          <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
+ 
+       
+          <Link
+            href="/trilhaDireitosHumanos"
+            onClick={() => handleNavClick("Direitos Humanos")}
+            className="hover:text-yellow-300 transition"
+          >
             DIREITOS HUMANOS
           </Link>
-          <Link href="/trilhaSocioeconomico" className="hover:text-yellow-300 transition">
+         
+          <Link
+            href="/socioeconomico"
+            onClick={() => handleNavClick("Socioeconômico")}
+            className="hover:text-yellow-300 transition"
+          >
+
             SOCIOECONÔMICO
           </Link>
+          {/* Novo link para MAPA */}
           <Link href="/mapa" className="hover:text-yellow-300 transition">
             MAPA
           </Link>
+
+          <Link href="/chat" className="hover:text-yellow-300 transition">
+            CHAT
+          </Link>
         </div>
 
-        {/* Login / Logout Desktop */}
+        {/* Login / Logout no Desktop via Modal */}
         <div className="hidden md:flex">
           {isLoggedIn ? (
             <div className="flex items-center space-x-4">
@@ -162,7 +221,10 @@ const Navbar: React.FC = () => {
             </div>
           ) : (
             <button
-              onClick={toggleLoginModal}
+              onClick={() => {
+                handleLoginButtonEvent();
+                toggleLoginModal();
+              }}
               className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
             >
               Login
@@ -170,7 +232,7 @@ const Navbar: React.FC = () => {
           )}
         </div>
 
-        {/* Menu Mobile Button */}
+        {/* Botão do Menu Mobile */}
         <button
           onClick={toggleMenu}
           className="md:hidden text-yellow-400 focus:outline-none"
@@ -205,28 +267,58 @@ const Navbar: React.FC = () => {
         <div className="absolute top-full left-0 w-full bg-black bg-opacity-80 md:hidden">
           <ul className="flex flex-col items-center py-4 space-y-4 text-yellow-400 text-sm">
             <li>
-              <Link href="/trilhaSaude" onClick={toggleMenu}>
+              <Link
+                href="/trilhaSaude"
+                onClick={() => {
+                  handleNavClick("Saúde");
+                  toggleMenu();
+                }}
+              >
                 SAÚDE
               </Link>
             </li>
             <li>
-              <Link href="/trilhaDocumentacao" onClick={toggleMenu}>
+              <Link
+                href="/documentacao"
+                onClick={() => {
+                  handleNavClick("Documentação");
+                  toggleMenu();
+                }}
+              >
                 DOCUMENTAÇÃO
               </Link>
             </li>
             <li>
-              <Link href="/trilhaDireitosHumanos" onClick={toggleMenu}>
+              <Link
+                href="/direitos-humanos"
+                onClick={() => {
+                  handleNavClick("Direitos Humanos");
+                  toggleMenu();
+                }}
+              >
                 DIREITOS HUMANOS
               </Link>
             </li>
             <li>
-              <Link href="/trilhaSocioeconomico" onClick={toggleMenu}>
+              <Link
+                href="/socioeconomico"
+                onClick={() => {
+                  handleNavClick("Socioeconômico");
+                  toggleMenu();
+                }}
+              >
                 SOCIOECONÔMICO
               </Link>
             </li>
+            {/* Novo item de menu para MAPA */}
             <li>
               <Link href="/mapa" onClick={toggleMenu}>
                 MAPA
+              </Link>
+            </li>
+            <li>
+              <Link href="/chat" onClick={toggleMenu}>
+                CHAT
               </Link>
             </li>
             <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
@@ -248,7 +340,10 @@ const Navbar: React.FC = () => {
             ) : (
               <li>
                 <button
-                  onClick={toggleLoginModal}
+                  onClick={() => {
+                    handleLoginButtonEvent();
+                    toggleLoginModal();
+                  }}
                   className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
                 >
                   Login
@@ -263,7 +358,7 @@ const Navbar: React.FC = () => {
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
-            <h3 className="text-xl font-bold mb-4">
+            <h3 className="text-xl font-bold mb-4 text-black">
               {isCreatingAccount ? "Criar Conta" : "Login"}
             </h3>
             <input

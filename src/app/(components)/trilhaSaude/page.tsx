@@ -126,7 +126,8 @@ const TrilhaSaude: React.FC = () => {
           const userRef = doc(db, "user_progress", userId);
           const userSnapshot = await getDoc(userRef);
           if (userSnapshot.exists()) {
-            const userProgress = userSnapshot.data()?.progress_steps;
+            // Use uma chave exclusiva para a trilha de saúde
+            const userProgress = userSnapshot.data()?.progress_steps_saude;
             if (userProgress) {
               const updatedSteps = fetchedSteps.map((step) => ({
                 ...step,
@@ -152,7 +153,6 @@ const TrilhaSaude: React.FC = () => {
   // Ao clicar no passo 0, abre popup
   const handleStepClick = (index: number) => {
     if (index === 0) {
-      // Abre popup do primeiro passo
       setHealthDocIndex(0);
       setShowHealthDocsPopup(true);
     }
@@ -192,8 +192,9 @@ const TrilhaSaude: React.FC = () => {
             userId={userId}
             onStepClick={handleStepClick}
             showDocumentButton
-            // Aqui informamos ao Timeline que não queremos o botão no passo 1
+            // Esconde o botão "Ver Documento" para determinados passos
             hideDocumentButtonForSteps={[1]}
+            progressKey="progress_steps_saude" // Aqui definimos a chave exclusiva para a trilha de saúde
           />
         </div>
       </div>
@@ -231,7 +232,6 @@ const TrilhaSaude: React.FC = () => {
                   {healthDocData[healthDocIndex].text}
                 </p>
               </div>
-              {/* Navegação do carrossel */}
               {healthDocIndex > 0 && (
                 <button
                   onClick={() => setHealthDocIndex(healthDocIndex - 1)}

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -10,7 +8,6 @@ import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
 
 const Navbar: React.FC = () => {
-  // Estados para menu mobile, modal de login e criação de conta
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -18,14 +15,13 @@ const Navbar: React.FC = () => {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Estados de autenticação do usuário
+  // Estados de autenticação
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   const auth = getAuth(firebaseApp);
 
-  // Recupera dados do usuário do localStorage, se existirem
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName");
     const storedUserId = localStorage.getItem("userId");
@@ -36,18 +32,15 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  // Função para alternar o menu mobile
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // Função para alternar a exibição do modal de login (fecha o menu mobile)
   const toggleLoginModal = () => {
     setIsLoginModalOpen(!isLoginModalOpen);
     setIsOpen(false);
   };
 
-  // Login por telefone
   const handleLogin = async () => {
     setIsLoading(true);
     try {
@@ -61,7 +54,7 @@ const Navbar: React.FC = () => {
         alert("Login bem-sucedido!");
         setIsLoggedIn(true);
         setIsLoginModalOpen(false);
-        window.location.reload(); // Recarrega a página após login
+        window.location.reload();
       } else {
         alert("Telefone não encontrado!");
       }
@@ -72,7 +65,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Criação de conta por telefone (com nome)
   const handleCreateAccount = async () => {
     setIsLoading(true);
     try {
@@ -88,7 +80,7 @@ const Navbar: React.FC = () => {
         setUserName(name);
         setUserId(phone);
         setIsLoginModalOpen(false);
-        window.location.reload(); // Recarrega a página após criação da conta
+        window.location.reload();
       }
     } catch (error) {
       alert("Erro ao criar conta: " + (error as any).message);
@@ -97,7 +89,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Login com Google
   const handleLoginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -110,13 +101,12 @@ const Navbar: React.FC = () => {
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       alert("Login com Google bem-sucedido!");
-      window.location.reload(); // Recarrega a página após login com Google
+      window.location.reload();
     } catch (error) {
       alert("Erro ao fazer login com Google: " + (error as any).message);
     }
   };
 
-  // Logout
   const handleLogout = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
@@ -124,11 +114,12 @@ const Navbar: React.FC = () => {
     setUserId(null);
     setIsLoggedIn(false);
     alert("Logout bem-sucedido!");
-    window.location.reload(); // Recarrega a página após logout
+    window.location.reload();
   };
 
   return (
-    <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
+    // Navbar fixa no topo
+    <nav className="fixed top-0 left-0 w-full bg-transparent z-50">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
         {/* Logo */}
         <div
@@ -152,13 +143,12 @@ const Navbar: React.FC = () => {
           <Link href="/trilhaSocioeconomico" className="hover:text-yellow-300 transition">
             SOCIOECONÔMICO
           </Link>
-          {/* Novo link para MAPA */}
           <Link href="/mapa" className="hover:text-yellow-300 transition">
             MAPA
           </Link>
         </div>
 
-        {/* Login / Logout no Desktop via Modal */}
+        {/* Login / Logout Desktop */}
         <div className="hidden md:flex">
           {isLoggedIn ? (
             <div className="flex items-center space-x-4">
@@ -180,7 +170,7 @@ const Navbar: React.FC = () => {
           )}
         </div>
 
-        {/* Botão do Menu Mobile */}
+        {/* Menu Mobile Button */}
         <button
           onClick={toggleMenu}
           className="md:hidden text-yellow-400 focus:outline-none"
@@ -220,21 +210,20 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/documentacao" onClick={toggleMenu}>
+              <Link href="/trilhaDocumentacao" onClick={toggleMenu}>
                 DOCUMENTAÇÃO
               </Link>
             </li>
             <li>
-              <Link href="/direitos-humanos" onClick={toggleMenu}>
+              <Link href="/trilhaDireitosHumanos" onClick={toggleMenu}>
                 DIREITOS HUMANOS
               </Link>
             </li>
             <li>
-              <Link href="/socioeconomico" onClick={toggleMenu}>
+              <Link href="/trilhaSocioeconomico" onClick={toggleMenu}>
                 SOCIOECONÔMICO
               </Link>
             </li>
-            {/* Novo item de menu para MAPA */}
             <li>
               <Link href="/mapa" onClick={toggleMenu}>
                 MAPA

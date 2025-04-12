@@ -18,8 +18,8 @@ interface TimelineProps {
   userId: string | null;
   onStepClick?: (index: number) => void;
   showDocumentButton?: boolean;
-  // Nova propriedade: array com índices onde não deve aparecer o botão "Ver Documento"
   hideDocumentButtonForSteps?: number[];
+  progressKey?: string; // Nova propriedade para identificar o caminho
 }
 
 interface LineStyle {
@@ -44,7 +44,11 @@ const Timeline: React.FC<TimelineProps> = ({
   onStepClick,
   showDocumentButton = false,
   hideDocumentButtonForSteps,
+  progressKey, // recebendo a propriedade
 }) => {
+  // Se nenhuma progressKey for passada, use "progress_steps" como padrão.
+  const effectiveProgressKey = progressKey || "progress_steps";
+
   const [localSteps, setLocalSteps] = useState<Step[]>(steps);
 
   useEffect(() => {
@@ -157,7 +161,8 @@ const Timeline: React.FC<TimelineProps> = ({
       return acc;
     }, {});
     const userRef = doc(db, "user_progress", userId);
-    await setDoc(userRef, { progress_steps }, { merge: true });
+    // Atualiza usando a chave específica para este caminho
+    await setDoc(userRef, { [effectiveProgressKey]: progress_steps }, { merge: true });
   };
 
   const toggleExpansion = (stepIndex: number) => {
@@ -248,10 +253,9 @@ const Timeline: React.FC<TimelineProps> = ({
                     <p className="text-sm text-gray-600">{step.description}</p>
                   </div>
 
-                  {/* Exibe o botão "Ver Documento" se showDocumentButton for true
-                      e se o índice não estiver no array hideDocumentButtonForSteps */}
                   {showDocumentButton &&
-                    (!hideDocumentButtonForSteps || !hideDocumentButtonForSteps.includes(index)) && (
+                    (!hideDocumentButtonForSteps ||
+                      !hideDocumentButtonForSteps.includes(index)) && (
                       <button
                         className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
                         onClick={(e) => {

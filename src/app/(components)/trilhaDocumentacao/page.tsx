@@ -135,6 +135,15 @@ const TrilhaDocumentacao: React.FC = () => {
     }
   }, [isClient]);
 
+  // Define a progressKey de acordo com o caminho selecionado:
+  // "progress_steps_refugio" para Solicitação de Refúgio e "progress_steps_residencia" para Autorização de Residência.
+  const progressKey =
+    selectedPath === 1
+      ? "progress_steps_refugio"
+      : selectedPath === 2
+      ? "progress_steps_residencia"
+      : "progress_steps";
+
   // Busca dos passos no Firestore (baseado em selectedPath)
   useEffect(() => {
     if (selectedPath !== null) {
@@ -154,7 +163,8 @@ const TrilhaDocumentacao: React.FC = () => {
             const userRef = doc(db, "user_progress", userId);
             const userSnapshot = await getDoc(userRef);
             if (userSnapshot.exists()) {
-              const userProgress = userSnapshot.data()?.progress_steps;
+              // Usa a progressKey correta ao buscar o progresso
+              const userProgress = userSnapshot.data()?.[progressKey];
               if (userProgress) {
                 const updatedSteps = fetchedSteps.map((step) => ({
                   ...step,
@@ -176,7 +186,7 @@ const TrilhaDocumentacao: React.FC = () => {
       };
       fetchSteps();
     }
-  }, [userId, selectedPath]);
+  }, [userId, selectedPath, progressKey]);
 
   // Handlers para abrir popups
   const handleFirstStepClick = () => {
@@ -208,8 +218,8 @@ const TrilhaDocumentacao: React.FC = () => {
     selectedPath === 1
       ? "Documentação - Solicitação de Refúgio"
       : selectedPath === 2
-        ? "Documentação - Autorização de Residência"
-        : "Documentação";
+      ? "Documentação - Autorização de Residência"
+      : "Documentação";
 
   return (
     <div
@@ -294,6 +304,7 @@ const TrilhaDocumentacao: React.FC = () => {
               }
             }}
             showDocumentButton
+            progressKey={progressKey}
           />
         </div>
       )}
@@ -322,6 +333,7 @@ const TrilhaDocumentacao: React.FC = () => {
               }
             }}
             showDocumentButton
+            progressKey={progressKey}
           />
         </div>
       )}
@@ -373,7 +385,7 @@ const TrilhaDocumentacao: React.FC = () => {
                       Clique para ver o verso.
                     </p>
                   </div>
-                  {/* Verso CRNM - agora com layout horizontal */}
+                  {/* Verso CRNM */}
                   <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex items-center bg-white p-4 -mt-4">
                     <div className="flex flex-row items-center justify-center w-full">
                       <img
@@ -417,7 +429,7 @@ const TrilhaDocumentacao: React.FC = () => {
                       Clique para ver o verso.
                     </p>
                   </div>
-                  {/* Verso DPRNM - layout horizontal */}
+                  {/* Verso DPRNM */}
                   <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 flex items-center bg-white p-4 -mt-4">
                     <div className="flex flex-row items-center justify-center w-full">
                       <img
@@ -440,7 +452,6 @@ const TrilhaDocumentacao: React.FC = () => {
           </div>
         </div>
       )}
-
 
       {/* Popup 2: CPF / CTPS */}
       {showCPFPopup && (
@@ -477,8 +488,7 @@ const TrilhaDocumentacao: React.FC = () => {
               </div>
               <button
                 onClick={() => setDocIndex((prev) => (prev === 0 ? 1 : 0))}
-                className={`absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 ${docIndex === 0 ? "right-8" : "left-8"
-                  }`}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 ${docIndex === 0 ? "right-8" : "left-8"}`}
               >
                 {docIndex === 0 ? ">" : "<"}
               </button>

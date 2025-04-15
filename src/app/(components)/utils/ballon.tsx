@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeadset } from "react-icons/fa";
+import { useTranslation } from 'react-i18next';
 
 const ChatBotBalloon: React.FC = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false); // Controla se o chatbot está aberto
   const [input, setInput] = useState("");
   const [responses, setResponses] = useState<string[]>([]);
@@ -15,11 +17,7 @@ const ChatBotBalloon: React.FC = () => {
   // Referência para rolar automaticamente para o final
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const messages = [
-    "Tire suas dúvidas comigo",
-    "Pregúntame tus dudas",
-    "Ask me your questions",
-  ];
+  const messages: string[] = t('balloon.messages', { returnObjects: true }) as string[];
 
   useEffect(() => {
     setIsClient(true);
@@ -94,7 +92,7 @@ const ChatBotBalloon: React.FC = () => {
         console.error("Erro ao consultar a API:", error);
         setResponses((prev) => [
           ...prev,
-          "🤖 Ocorreu um erro ao processar sua solicitação.",
+          `🤖 ${t('chat.error_message')}`,
         ]);
         setTimeout(scrollToBottom, 100);
       } finally {
@@ -150,7 +148,7 @@ const ChatBotBalloon: React.FC = () => {
             >
               <div className="flex justify-between items-center mb-4 border-b pb-2">
                 <h3 className="text-[#e5b019] font-bold text-base">
-                  Assistente Virtual
+                  {t('chat.assistant')}
                 </h3>
                 <button
                   onClick={toggleChatBot}
@@ -181,12 +179,12 @@ const ChatBotBalloon: React.FC = () => {
                   ))
                 ) : (
                   <p className="text-gray-400 text-sm text-center">
-                    Faça sua primeira pergunta!
+                    {t('chat.first_question')}
                   </p>
                 )}
                 {isLoading && (
                   <p className="text-gray-500 text-sm text-center">
-                    Carregando...
+                    {t('chat.loading')}
                   </p>
                 )}
                 {/* Referência para rolar automaticamente para a última mensagem */}
@@ -197,7 +195,7 @@ const ChatBotBalloon: React.FC = () => {
                 onClick={clearChat}
                 className="mb-2 bg-[#e5b019] text-white px-4 py-2 rounded-xl text-sm hover:bg-yellow-600 focus:outline-none"
               >
-                Recomeçar conversa
+                {t('chat.restart')}
               </button>
 
               <div className="flex items-center">
@@ -205,7 +203,7 @@ const ChatBotBalloon: React.FC = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Digite sua pergunta..."
+                  placeholder={t('chat.question_placeholder')}
                   className="flex-1 border border-gray-300 rounded-xl p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#e5b019] bg-white text-black"
                   disabled={isLoading}
                 />
@@ -214,7 +212,7 @@ const ChatBotBalloon: React.FC = () => {
                   className="ml-2 bg-[#e5b019] text-white rounded-xl px-4 py-2 text-sm hover:bg-yellow-600 focus:outline-none disabled:opacity-60"
                   disabled={isLoading}
                 >
-                  Enviar
+                  {t('chat.send')}
                 </button>
               </div>
             </motion.div>

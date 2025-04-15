@@ -14,6 +14,115 @@
     "send": "Send",
     "thinking": "Thinking...",
     "error": "Sorry, an error occurred.",
-    "welcome": "Hello! How can I help you today?"
+    "welcome": "Hello! How can I help you today?",
+    "first_question": "Ask your first question!",
+    "loading": "Loading...",
+    "assistant": "Virtual Assistant",
+    "restart": "Restart conversation",
+    "question_placeholder": "Type your question...",
+    "error_message": "An error occurred while processing your request."
+  },
+  "balloon": {
+    "messages": [
+      "Ask me your questions",
+      "What can I help you with?",
+      "I'm here to help"
+    ]
+  },
+  "about": {
+  "title": "About the Mão Amiga Project",
+  "cause": {
+    "title": "The Cause",
+    "description1": "The project",
+    "description2": "was created with the goal of supporting refugees in Brazil, helping them overcome social, cultural, and linguistic barriers. Our mission is to provide accessible resources that facilitate the integration of these individuals into our society, promoting equality and respect for human rights."
+  },
+  "members_title": "Project Members",
+  "member1": {
+    "name": "Member 1",
+    "role": "Dev"
+  },
+  "member2": {
+    "name": "Member 2",
+    "role": "Dev"
+  },
+  "member3": {
+    "name": "Member 3",
+    "role": "Dev"
+  },
+  "member4": {
+    "name": "Member 4",
+    "role": "Dev"
+  },
+  "future": {
+    "title": "Future Vision",
+    "description": "Our long-term goal is to expand Mão Amiga to include more support tracks, partnerships with NGOs, and integration with government platforms. We aim to be a point of reference for refugees seeking welcome and support."
   }
+},
+"documentation": {
+  "title": "Documentation",
+  "refuge_request": "Refuge Request",
+  "residence_authorization": "Residence Authorization",
+  "choose_path": "Paths for Migratory Regularization in Brazil",
+  "choose_path_description": "Upon arriving in Brazil, immigrants and refugees can regularize their legal status in different ways, depending on each case.",
+  "main_options": "Main options:",
+  "refuge_info": "Refuge: For those who fled from persecution, war, or humanitarian crises, guaranteeing international protection while the request is under analysis.",
+  "residence_info": "Residence: For those who want to live and work legally in Brazil through family ties, employment, or international agreements.",
+  "step_title": {
+    "doc_refuge": "Documentation - Refuge Request",
+    "doc_residence": "Documentation - Residence Authorization"
+  },
+  "back": "← Back",
+  "map_button": "View Map",
+  "popup": {
+    "crnm_front": "CRNM (Front)",
+    "crnm_back": "CRNM (National Migratory Registration Card): Final document for immigrants with residence or recognized refugee status.",
+    "dprnm_front": "DPRNM (Front)",
+    "dprnm_back": "DPRNM (Provisional National Migratory Registration Document): Temporary document for asylum seekers, renewable annually until a final decision is made.",
+    "click_flip": "Click to flip and view the description",
+    "click_flip_back": "Click again to return to the front"
+  },
+  "doc_carousel": {
+    "cpf_title": "CPF (Individual Taxpayer Registry)",
+    "cpf_text": "The CPF is an identification number issued by the Federal Revenue Service. It is essential for: opening a bank account and accessing financial services, making online purchases, accessing social programs, and issuing other documents (like driver’s license, passport).",
+    "ctps_title": "CTPS (Work and Social Security Card)",
+    "ctps_text": "Registers employment history. Required for signed work contracts and access to labor rights like unemployment insurance and retirement.",
+    "cadunico": "Cadastro Único identifies low-income families for access to social programs.",
+    "bolsa": "Bolsa Família provides income to vulnerable families, ensuring access to basic rights.",
+    "sus": "The SUS Card grants access to public health services."
+  }
+}
+,
+  "consultar_mapa": "View Map",
+  "page_title_documentacao": "Documentation",
+  "page_title_refugio": "Documentation - Refugee Request",
+  "page_title_residencia": "Documentation - Residence Authorization",
+  "caminhos_regularizacao_title": "Paths to Migration Regularization in Brazil",
+  "caminhos_regularizacao_text": "Upon arriving in Brazil, immigrants and refugees can regularize their legal status in different ways, depending on each case.",
+  "principais_opcoes": "Main options:",
+  "solicitacao_refugio_button": "Refugee Request",
+  "solicitacao_refugio_tooltip": "<strong>Refuge:</strong> For those who fled persecution, war, or humanitarian crises, ensuring international protection while the request is processed.",
+  "autorizacao_residencia_button": "Residence Authorization",
+  "autorizacao_residencia_tooltip": "<strong>Residence:</strong> For those who wish to live and work legally in Brazil, through family ties, employment, or international agreements.",
+  "voltar": "← Back",
+  "clique_documento_verso": "Click on the document to see the back and description",
+  "crnm_frente": "CRNM (Front)",
+  "crnm_verso": "CRNM (Back)",
+  "crnm_verso_text": "<strong>CRNM (National Migration Registration Card):</strong><br />Permanent document for immigrants with residence authorization or recognized refugee status.<br />Click again to return to the front.",
+  "dprnm_frente": "DPRNM (Front)",
+  "dprnm_verso": "DPRNM (Back)",
+  "dprnm_verso_text": "<strong>DPRNM (Provisional National Migration Registration Document):</strong><br />Temporary document for refugee applicants, renewable annually until the final decision.<br />Click again to return to the front.",
+  "clique_ver_verso": "Click to see the back.",
+  "documento": "Document",
+  "cpf_title": "CPF (Cadastro de Pessoa Física)",
+  "cpf_text": "The CPF is an identification number issued by the Federal Revenue Service. It is essential for:\n• Opening bank accounts and accessing financial services.\n• Making online purchases and issuing invoices.\n• Accessing social programs and government benefits.\n• Obtaining other documents (driver's license, passport).\nIn summary, the CPF is indispensable for living legally in Brazil.",
+  "ctps_title": "CTPS (Carteira de Trabalho e Previdência Social)",
+  "ctps_text": "The CTPS is the document that officially records the worker's professional history in Brazil.\n• It is used for formal employment contracts.\n• Ensures access to rights such as FGTS, INSS, vacation, 13th salary, and unemployment insurance.\n• Can be issued in physical or digital versions.\nThe CTPS is essential for proving employment ties and accessing labor benefits.",
+  "cadastro_unico_title": "Cadastro Único",
+  "cadastro_unico_text": "The Cadastro Único identifies and characterizes low-income families, being essential for accessing social programs.",
+  "bolsa_familia_title": "Bolsa Família",
+  "bolsa_familia_text": "Bolsa Família is an income transfer program that benefits vulnerable families, ensuring access to fundamental rights.",
+  "cartao_sus_title": "SUS Card",
+  "cartao_sus_text": "The SUS Card ensures access to public healthcare services.",
+  "verso_cartao_sus": "SUS Card Back"
+
 }

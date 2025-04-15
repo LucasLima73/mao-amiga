@@ -7,13 +7,125 @@
     "map": "MAPA",
     "chat": "CHAT",
     "login": "Iniciar sesión",
-    "logout": "Salir"
+    "logout": "Cerrar sesión"
   },
   "chat": {
     "placeholder": "Escribe tu mensaje...",
     "send": "Enviar",
     "thinking": "Pensando...",
     "error": "Lo siento, ocurrió un error.",
-    "welcome": "¡Hola! ¿Cómo puedo ayudarte hoy?"
+    "welcome": "¡Hola! ¿Cómo puedo ayudarte hoy?",
+    "first_question": "¡Haz tu primera pregunta!",
+    "loading": "Cargando...",
+    "assistant": "Asistente Virtual",
+    "restart": "Reiniciar conversación",
+    "question_placeholder": "Escribe tu pregunta...",
+    "error_message": "Ocurrió un error al procesar tu solicitud."
+  },
+  "balloon": {
+    "messages": [
+      "Resuelve tus dudas conmigo",
+      "Pregúntame lo que necesites",
+      "Estoy aquí para ayudarte"
+    ]
+  },
+  "about": {
+  "title": "Sobre el Proyecto Mão Amiga",
+  "cause": {
+    "title": "La Causa",
+    "description1": "El proyecto",
+    "description2": "fue creado con el objetivo de apoyar a los refugiados en Brasil, ayudándolos a superar barreras sociales, culturales y lingüísticas. Nuestra misión es proporcionar recursos accesibles que faciliten la integración de estas personas en nuestra sociedad, promoviendo la igualdad y el respeto a los derechos humanos."
+  },
+  "members_title": "Miembros del Proyecto",
+  "member1": {
+    "name": "Miembro 1",
+    "role": "Dev"
+  },
+  "member2": {
+    "name": "Miembro 2",
+    "role": "Dev"
+  },
+  "member3": {
+    "name": "Miembro 3",
+    "role": "Dev"
+  },
+  "member4": {
+    "name": "Miembro 4",
+    "role": "Dev"
+  },
+  "future": {
+    "title": "Visión Futura",
+    "description": "Nuestro objetivo a largo plazo es expandir Mão Amiga para incluir más rutas de apoyo, asociaciones con ONGs e integración con plataformas gubernamentales. Queremos ser un punto de referencia para los refugiados que buscan acogida y apoyo."
   }
+},
+
+  "documentation": {
+    "title": "Documentación",
+    "refuge_request": "Solicitud de Refugio",
+    "residence_authorization": "Autorización de Residencia",
+    "choose_path": "Caminos para la Regularización Migratoria en Brasil",
+    "choose_path_description": "Al llegar a Brasil, los inmigrantes y refugiados pueden regularizar su situación legal de diferentes maneras, dependiendo de cada caso.",
+    "main_options": "Opciones principales:",
+    "refuge_info": "Refugio: Para quienes huyen de persecución, guerra o crisis humanitarias, garantizando protección internacional mientras se analiza la solicitud.",
+    "residence_info": "Residencia: Para quienes desean vivir y trabajar legalmente en Brasil a través de vínculos familiares, empleo o acuerdos internacionales.",
+    "step_title": {
+      "doc_refuge": "Documentación - Solicitud de Refugio",
+      "doc_residence": "Documentación - Autorización de Residencia"
+    },
+    "back": "← Volver",
+    "map_button": "Consultar Mapa",
+    "popup": {
+      "crnm_front": "CRNM (Frente)",
+      "crnm_back": "CRNM (Carnet Nacional de Registro Migratorio): Documento final para inmigrantes con residencia o refugio reconocido.",
+      "dprnm_front": "DPRNM (Frente)",
+      "dprnm_back": "DPRNM (Documento Provisional de Registro Migratorio): Documento temporal para solicitantes de refugio, renovable hasta la decisión final.",
+      "click_flip": "Haz clic para girar y ver la descripción",
+      "click_flip_back": "Haz clic de nuevo para volver al frente"
+    },
+    "doc_carousel": {
+      "cpf_title": "CPF (Registro de Contribuyente Individual)",
+      "cpf_text": "El CPF es un número de identificación emitido por la Receita Federal. Es esencial para: abrir cuentas bancarias, realizar compras, acceder a programas sociales y emitir documentos.",
+      "ctps_title": "CTPS (Carnet de Trabajo y Seguridad Social)",
+      "ctps_text": "Registra el historial laboral. Requerido para contratos laborales firmados y acceso a derechos laborales como seguro de desempleo y jubilación.",
+      "cadunico": "El Cadastro Único identifica a las familias de bajos ingresos para acceder a programas sociales.",
+      "bolsa": "Bolsa Familia transfiere ingresos a familias vulnerables, garantizando acceso a derechos fundamentales.",
+      "sus": "La Tarjeta SUS permite el acceso a los servicios de salud pública."
+    }
+  
+}
+,
+  "consultar_mapa": "Consultar Mapa",
+  "page_title_documentacao": "Documentación",
+  "page_title_refugio": "Documentación - Solicitud de Refugio",
+  "page_title_residencia": "Documentación - Autorización de Residencia",
+  "caminhos_regularizacao_title": "Caminos para la Regularización Migratoria en Brasil",
+  "caminhos_regularizacao_text": "Al llegar a Brasil, los inmigrantes y refugiados pueden regularizar su situación legal de diferentes maneras, dependiendo de cada caso.",
+  "principais_opcoes": "Opciones principales:",
+  "solicitacao_refugio_button": "Solicitud de Refugio",
+  "solicitacao_refugio_tooltip": "<strong>Refugio:</strong> Para quienes huyeron de persecución, guerra o crisis humanitarias, garantizando protección internacional mientras se analiza la solicitud.",
+  "autorizacao_residencia_button": "Autorización de Residencia",
+  "autorizacao_residencia_tooltip": "<strong>Residencia:</strong> Para quienes desean vivir y trabajar legalmente en Brasil, a través de vínculos familiares, empleo o acuerdos internacionales.",
+  "voltar": "← Volver",
+  "clique_documento_verso": "Haz clic en el documento para ver el reverso y la descripción",
+  "crnm_frente": "CRNM (Frente)",
+  "crnm_verso": "CRNM (Reverso)",
+  "crnm_verso_text": "<strong>CRNM (Tarjeta de Registro Nacional Migratorio):</strong><br />Documento definitivo para inmigrantes con autorización de residencia o estatus de refugiado reconocido.<br />Haz clic nuevamente para volver al frente.",
+  "dprnm_frente": "DPRNM (Frente)",
+  "dprnm_verso": "DPRNM (Reverso)",
+  "dprnm_verso_text": "<strong>DPRNM (Documento Provisorio de Registro Nacional Migratorio):</strong><br />Documento temporal para solicitantes de refugio, renovable anualmente hasta la decisión final.<br />Haz clic nuevamente para volver al frente.",
+  "clique_ver_verso": "Haz clic para ver el reverso.",
+  "documento": "Documento",
+  "cpf_title": "CPF (Cadastro de Pessoa Física)",
+  "cpf_text": "El CPF es un número de identificación emitido por la Receita Federal. Es fundamental para:\n• Abrir cuentas bancarias y acceder a servicios financieros.\n• Realizar compras en línea y emitir facturas.\n• Acceder a programas sociales y beneficios gubernamentales.\n• Obtener otros documentos (licencia de conducir, pasaporte).\nEn resumen, el CPF es indispensable para vivir legalmente en Brasil.",
+  "ctps_title": "CTPS (Carteira de Trabalho e Previdência Social)",
+  "ctps_text": "La CTPS es el documento que registra oficialmente el historial profesional del trabajador en Brasil.\n• Se utiliza para contratos de trabajo formales.\n• Garantiza acceso a derechos como FGTS, INSS, vacaciones, 13º salario y seguro de desempleo.\n• Puede emitirse en versión física o digital.\nLa CTPS es esencial para probar vínculos laborales y acceder a beneficios laborales.",
+  "cadastro_unico_title": "Cadastro Único",
+  "cadastro_unico_text": "El Cadastro Único identifica y caracteriza a familias de bajos ingresos, siendo esencial para acceder a programas sociales.",
+  "bolsa_familia_title": "Bolsa Família",
+  "bolsa_familia_text": "Bolsa Família es un programa de transferencia de ingresos que beneficia a familias en situación de vulnerabilidad, garantizando acceso a derechos fundamentales.",
+  "cartao_sus_title": "Tarjeta SUS",
+  "cartao_sus_text": "La Tarjeta SUS asegura el acceso a los servicios de salud pública.",
+  "verso_cartao_sus": "Reverso Tarjeta SUS"
+
+
 }

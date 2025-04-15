@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
 // Configurações do OpenAI
-const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY as string;
-const assistantId = process.env.NEXT_PUBLIC_OPENAI_ASSISTANT_ID as string;
+const apiKey = process.env.OPENAI_API_KEY as string;
+const assistantId = process.env.OPENAI_ASSISTANT_ID as string;
 
 // Verifique se as variáveis de ambiente estão definidas corretamente
 

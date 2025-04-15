@@ -1,6 +1,6 @@
 "use client";
 
-import TrilhaDireitosHumanos from "../(components)/trilhaDireitosHumanos/page";
+import TrilhaDireitosHumanos from "../(components)/direitosHumanos/page";
 
 export default function TrilhaDireitosHumanosPage() {
   return <TrilhaDireitosHumanos />;

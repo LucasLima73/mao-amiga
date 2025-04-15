@@ -45,7 +45,6 @@ const Home = () => {
           <p>ACOLHIMENTO</p>
         </div>
       </div>
-
       <div
         style={{
           width: '100%',

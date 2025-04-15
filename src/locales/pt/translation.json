@@ -1,0 +1,94 @@
+{
+  "navbar": {
+    "health": "SAÚDE",
+    "documentation": "DOCUMENTAÇÃO",
+    "human_rights": "DIREITOS HUMANOS",
+    "socioeconomic": "SOCIOECONÔMICO",
+    "map": "MAPA",
+    "chat": "CHAT",
+    "login": "Login",
+    "logout": "Sair"
+  },
+  "chat": {
+    "placeholder": "Digite sua mensagem...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "error": "Desculpe, ocorreu um erro.",
+    "welcome": "Olá! Como posso te ajudar hoje?",
+    "first_question": "Faça sua primeira pergunta!",
+    "loading": "Carregando...",
+    "assistant": "Assistente Virtual",
+    "restart": "Recomeçar conversa",
+    "question_placeholder": "Digite sua pergunta...",
+    "error_message": "Ocorreu um erro ao processar sua solicitação."
+  },
+  "balloon": {
+    "messages": [
+      "Tire suas dúvidas comigo",
+      "Pergunte o que precisar",
+      "Estou aqui para ajudar"
+    ]
+  },
+  "about": {
+    "title": "Sobre o Projeto Mão Amiga",
+    "cause": {
+      "title": "A Causa",
+      "description1": "O projeto",
+      "description2": "nasceu com o objetivo de apoiar refugiados no Brasil, ajudando-os a superar barreiras sociais, culturais e linguísticas. Nossa missão é fornecer recursos acessíveis que facilitem a integração desses indivíduos em nossa sociedade, promovendo a igualdade e o respeito aos direitos humanos."
+    },
+    "members_title": "Integrantes do Projeto",
+    "member1": {
+      "name": "Integrante 1",
+      "role": "Dev"
+    },
+    "member2": {
+      "name": "Integrante 2",
+      "role": "Dev"
+    },
+    "member3": {
+      "name": "Integrante 3",
+      "role": "Dev"
+    },
+    "member4": {
+      "name": "Integrante 4",
+      "role": "Dev"
+    },
+    "future": {
+      "title": "Visão de Futuro",
+      "description": "Nosso objetivo a longo prazo é expandir o Mão Amiga para incluir mais trilhas de suporte, parcerias com ONGs e integração com plataformas governamentais. Desejamos ser um ponto de referência para refugiados em busca de acolhimento e suporte."
+    }
+  },
+    "consultar_mapa": "Consultar Mapa",
+    "page_title_documentacao": "Documentação",
+    "page_title_refugio": "Documentação - Solicitação de Refúgio",
+    "page_title_residencia": "Documentação - Autorização de Residência",
+    "caminhos_regularizacao_title": "Caminhos para Regularização Migratória no Brasil",
+    "caminhos_regularizacao_text": "Ao chegar ao Brasil, imigrantes e refugiados podem regularizar sua situação legal de diferentes maneiras, dependendo de cada caso.",
+    "principais_opcoes": "Principais opções:",
+    "solicitacao_refugio_button": "Solicitação de Refúgio",
+    "solicitacao_refugio_tooltip": "<strong>Refúgio:</strong> Para quem fugiu de perseguição, guerra ou crises humanitárias, garantindo proteção internacional enquanto o pedido é analisado.",
+    "autorizacao_residencia_button": "Autorização de Residência",
+    "autorizacao_residencia_tooltip": "<strong>Residência:</strong> Para quem deseja viver e trabalhar legalmente no Brasil, via vínculos familiares, emprego ou acordos internacionais.",
+    "voltar": "← Voltar",
+    "clique_documento_verso": "Clique no documento para ver o verso e o descritivo",
+    "crnm_frente": "CRNM (Frente)",
+    "crnm_verso": "CRNM (Verso)",
+    "crnm_verso_text": "<strong>CRNM (Carteira de Registro Nacional Migratório):</strong><br />Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.<br />Clique novamente para voltar à frente.",
+    "dprnm_frente": "DPRNM (Frente)",
+    "dprnm_verso": "DPRNM (Verso)",
+    "dprnm_verso_text": "<strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong><br />Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.<br />Clique novamente para voltar à frente.",
+    "clique_ver_verso": "Clique para ver o verso.",
+    "documento": "Documento",
+    "cpf_title": "CPF (Cadastro de Pessoa Física)",
+    "cpf_text": "O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:\n• Abrir conta bancária e obter serviços financeiros.\n• Realizar compras online e emitir notas fiscais.\n• Acessar programas sociais e benefícios do governo.\n• Emitir outros documentos (CNH, passaporte).\nEm resumo, o CPF é indispensável para viver legalmente no Brasil.",
+    "ctps_title": "CTPS (Carteira de Trabalho e Previdência Social)",
+    "ctps_text": "A CTPS é o documento que registra oficialmente o histórico profissional do trabalhador no Brasil.\n• É utilizada para contratos de trabalho com carteira assinada.\n• Garante acesso a direitos como FGTS, INSS, férias, 13º salário e seguro-desemprego.\n• Pode ser emitida na versão física ou digital.\nA CTPS é essencial para comprovar vínculos empregatícios e acessar benefícios trabalhistas.",
+    "cadastro_unico_title": "Cadastro Único",
+    "cadastro_unico_text": "O Cadastro Único identifica e caracteriza famílias de baixa renda, sendo essencial para o acesso a programas sociais.",
+    "bolsa_familia_title": "Bolsa Família",
+    "bolsa_familia_text": "O Bolsa Família é um programa de transferência de renda que beneficia famílias em situação de vulnerabilidade, garantindo acesso a direitos fundamentais.",
+    "cartao_sus_title": "Cartão SUS",
+    "cartao_sus_text": "O Cartão SUS assegura o acesso aos serviços de saúde pública.",
+    "verso_cartao_sus": "Verso Cartão SUS"
+  
+}

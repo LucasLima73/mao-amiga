@@ -8,6 +8,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
+import { useTranslation } from 'react-i18next';
 
 declare global {
   interface Window {
@@ -16,6 +17,15 @@ declare global {
 }
 
 const Navbar: React.FC = () => {
+  const { t, i18n } = useTranslation();
+
+  // Debug: verificar idioma atual e salvar no localStorage
+  useEffect(() => {
+    console.log('Current language:', i18n.language);
+    localStorage.setItem('i18nextLng', i18n.language);
+  }, [i18n.language]);
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -167,26 +177,21 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Menu Desktop */}
-        <div className="hidden md:flex space-x-8 text-yellow-400 text-sm tracking-wide">
+        <div className="hidden md:flex items-center space-x-8 text-yellow-400 text-sm tracking-wide">
           <Link
             href="/trilhaSaude"
             onClick={() => handleNavClick("Saúde")}
             className="hover:text-yellow-300 transition"
           >
-            SAÚDE
+            {t('navbar.health')}
           </Link>
 
           <Link href="/trilhaDocumentacao" className="hover:text-yellow-300 transition">
-            DOCUMENTAÇÃO
+            {t('navbar.documentation')}
           </Link>
- 
-       
-          <Link
-            href="/trilhaDireitosHumanos"
-            onClick={() => handleNavClick("Direitos Humanos")}
-            className="hover:text-yellow-300 transition"
-          >
-            DIREITOS HUMANOS
+
+          <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
+            {t('navbar.human_rights')}
           </Link>
          
           <Link
@@ -194,13 +199,24 @@ const Navbar: React.FC = () => {
             onClick={() => handleNavClick("Socioeconômico")}
             className="hover:text-yellow-300 transition"
           >
-
-            SOCIOECONÔMICO
+            {t('navbar.socioeconomic')}
           </Link>
-          {/* Novo link para MAPA */}
           <Link href="/mapa" className="hover:text-yellow-300 transition">
-            MAPA
+            {t('navbar.map')}
           </Link>
+          <Link href="/chat" className="hover:text-yellow-300 transition">
+            {t('navbar.chat')}
+          </Link>
+
+          <select 
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            value={i18n.language}
+            className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md ml-4"
+          >
+            <option value="pt">PT</option>
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
         </div>
 
         {/* Login / Logout no Desktop via Modal */}
@@ -212,7 +228,7 @@ const Navbar: React.FC = () => {
                 onClick={handleLogout}
                 className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
               >
-                Sair
+                {t('navbar.logout')}
               </button>
             </div>
           ) : (
@@ -223,7 +239,7 @@ const Navbar: React.FC = () => {
               }}
               className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
             >
-              Login
+              {t('navbar.login')}
             </button>
           )}
         </div>
@@ -270,7 +286,7 @@ const Navbar: React.FC = () => {
                   toggleMenu();
                 }}
               >
-                SAÚDE
+                {t('navbar.health')}
               </Link>
             </li>
             <li>
@@ -281,7 +297,7 @@ const Navbar: React.FC = () => {
                   toggleMenu();
                 }}
               >
-                DOCUMENTAÇÃO
+                {t('navbar.documentation')}
               </Link>
             </li>
             <li>
@@ -292,7 +308,7 @@ const Navbar: React.FC = () => {
                   toggleMenu();
                 }}
               >
-                DIREITOS HUMANOS
+                {t('navbar.human_rights')}
               </Link>
             </li>
             <li>
@@ -303,13 +319,17 @@ const Navbar: React.FC = () => {
                   toggleMenu();
                 }}
               >
-                SOCIOECONÔMICO
+                {t('navbar.socioeconomic')}
               </Link>
             </li>
-            {/* Novo item de menu para MAPA */}
             <li>
               <Link href="/mapa" onClick={toggleMenu}>
-                MAPA
+                {t('navbar.map')}
+              </Link>
+            </li>
+            <li>
+              <Link href="/chat" onClick={toggleMenu}>
+                {t('navbar.chat')}
               </Link>
             </li>
             <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
@@ -324,7 +344,7 @@ const Navbar: React.FC = () => {
                     }}
                     className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
                   >
-                    Sair
+                    {t('navbar.logout')}
                   </button>
                 </li>
               </>
@@ -337,7 +357,7 @@ const Navbar: React.FC = () => {
                   }}
                   className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
                 >
-                  Login
+                  {t('navbar.login')}
                 </button>
               </li>
             )}
@@ -349,12 +369,13 @@ const Navbar: React.FC = () => {
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
-            <h3 className="text-xl font-bold mb-4 text-black">
-              {isCreatingAccount ? "Criar Conta" : "Login"}
+
+            <h3 className="text-xl font-bold mb-4">
+              {isCreatingAccount ? t('login.create_account') : t('login.login')}
             </h3>
             <input
               type="text"
-              placeholder="Telefone"
+              placeholder={t('login.phone')}
               className="w-full p-2 border rounded mb-4"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -362,7 +383,7 @@ const Navbar: React.FC = () => {
             {isCreatingAccount && (
               <input
                 type="text"
-                placeholder="Nome"
+                placeholder={t('login.name')}
                 className="w-full p-2 border rounded mb-4"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -373,24 +394,24 @@ const Navbar: React.FC = () => {
               className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
             >
               {isLoading
-                ? "Carregando..."
+                ? t('login.loading')
                 : isCreatingAccount
-                ? "Criar Conta"
-                : "Login"}
+                ? t('login.create_account')
+                : t('login.login')}
             </button>
             <button
               onClick={handleLoginWithGoogle}
               className="bg-red-500 text-white px-4 py-2 rounded w-full mb-4"
             >
-              Login com Google
+              {t('login.google_login')}
             </button>
             <button
               onClick={() => setIsCreatingAccount(!isCreatingAccount)}
               className="text-blue-500 underline"
             >
               {isCreatingAccount
-                ? "Já tem uma conta? Faça login"
-                : "Não tem conta? Cadastre-se"}
+                ? t('login.have_account')
+                : t('login.no_account')}
             </button>
             <button
               onClick={toggleLoginModal}

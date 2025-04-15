@@ -34,7 +34,7 @@ export default function Chat() {
     setInput('')
 
     try {
-      const response = await fetch('/api/assistant', {
+      const response = await fetch('https://mao-amiga-api.onrender.com/api/assistant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

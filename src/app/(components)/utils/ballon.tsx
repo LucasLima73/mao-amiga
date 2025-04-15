@@ -67,7 +67,7 @@ const ChatBotBalloon: React.FC = () => {
 
       try {
         setIsLoading(true);
-        const response = await fetch("/api/assistant", {
+        const response = await fetch("https://mao-amiga-api.onrender.com/api/assistant", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

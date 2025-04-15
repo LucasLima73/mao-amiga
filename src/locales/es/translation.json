@@ -125,7 +125,29 @@
   "bolsa_familia_text": "Bolsa Família es un programa de transferencia de ingresos que beneficia a familias en situación de vulnerabilidad, garantizando acceso a derechos fundamentales.",
   "cartao_sus_title": "Tarjeta SUS",
   "cartao_sus_text": "La Tarjeta SUS asegura el acceso a los servicios de salud pública.",
-  "verso_cartao_sus": "Reverso Tarjeta SUS"
-
+  "verso_cartao_sus": "Reverso Tarjeta SUS",
+  
+    "page_title": "Derechos Humanos",
+    "faq_1_title": "¿Qué son los Derechos Humanos y cómo se aplican a refugiados e inmigrantes?",
+    "faq_1_content": "Los Derechos Humanos son garantías universales e inalienables que aseguran la dignidad e igualdad para todos los seres humanos, independientemente de su nacionalidad, etnia, género o estatus migratorio. Los refugiados e inmigrantes tienen los mismos derechos fundamentales que cualquier persona, según lo establecido en la Declaración Universal de los Derechos Humanos (DUDH) de 1948.<br />📄 <a href=\"https://www.ohchr.org/sites/default/files/UDHR/Documents/UDHR_Translations/spa.pdf\" class=\"underline text-blue-600\" target=\"_blank\">Leer la DUDH (PDF - ONU)</a>",
+    "faq_2_title": "¿Qué es un refugiado y cómo se define según el derecho internacional?",
+    "faq_2_content": "Según la Convención de 1951 sobre el Estatuto de los Refugiados, un refugiado es cualquier persona que, por temor fundado de persecución por motivos de raza, religión, nacionalidad, opinión política o pertenencia a un grupo social particular, se encuentra fuera de su país de origen y no puede o no quiere regresar a él.",
+    "faq_3_title": "¿Cuáles son los principales instrumentos internacionales que protegen a los refugiados?",
+    "faq_3_content": "<ul class=\"list-disc ml-6\"><li>Convención de 1951 sobre el Estatuto de los Refugiados</li><li>Protocolo de 1967</li><li>Convención de Ginebra</li><li>Pacto Global sobre Refugiados de la ONU (2018)</li></ul>",
+    "faq_4_title": "¿Cuáles son los principales derechos de los refugiados?",
+    "faq_4_content": "<ul class=\"list-disc ml-6\"><li>Asilo y protección contra la deportación</li><li>Seguridad personal e integridad física</li><li>Libertad de expresión, religión y movimiento</li><li>Acceso a la educación, salud, vivienda y empleo</li><li>Reunificación familiar</li><li>Documentación legal e identidad</li></ul>🔗 <a href=\"https://www.acnur.org/\" class=\"underline text-blue-600\" target=\"_blank\">Saber más</a>",
+    "faq_5_title": "¿Cuáles son los principales desafíos enfrentados por refugiados e inmigrantes?",
+    "faq_5_content": "<ul class=\"list-disc ml-6\"><li>Discriminación, xenofobia y racismo institucional</li><li>Barreras lingüísticas y culturales</li><li>Dificultad para acceder a servicios básicos y oportunidades laborales</li><li>Falta de regularización y demoras en los procesos de refugio</li><li>Vulnerabilidad a abusos, explotación y trata de personas</li></ul>",
+    "faq_6_title": "¿Cuáles son las organizaciones que ayudan a los refugiados en Brasil?",
+    "faq_6_content": "<ul class=\"list-disc ml-6\"><li><a href=\"https://www.acnur.org/\" target=\"_blank\" class=\"underline text-blue-600\">ACNUR – Agencia de la ONU para los Refugiados</a></li><li><a href=\"https://adus.org.br/\" target=\"_blank\" class=\"underline text-blue-600\">ADUS</a></li><li><a href=\"https://www.migrante.org.br\" target=\"_blank\" class=\"underline text-blue-600\">IMDH</a></li><li><a href=\"https://missaonspaz.org\" target=\"_blank\" class=\"underline text-blue-600\">Missão Paz (SP)</a></li><li><a href=\"https://caritas.org.br\" target=\"_blank\" class=\"underline text-blue-600\">Cáritas Brasileña</a></li><li><a href=\"https://www.prefeitura.sp.gov.br/cidade/secretarias/direitos_humanos/imigrantes/\" target=\"_blank\" class=\"underline text-blue-600\">Centro de Referencia para Inmigrantes (SP)</a></li></ul>",
+    "faq_7_title": "¿Cómo se protege a los refugiados en tiempos de guerra o crisis humanitarias?",
+    "faq_7_content": "Durante guerras y crisis, los refugiados tienen derecho a la protección internacional. La Convención de Ginebra y otros tratados prohíben su deportación a lugares donde corren riesgo. La asistencia humanitaria es proporcionada por agencias como ACNUR, Cruz Roja y Médicos Sin Fronteras.<br />🔗 <a href=\"https://www.icrc.org/es\" target=\"_blank\" class=\"underline text-blue-600\">Comité Internacional de la Cruz Roja</a>",
+    "faq_8_title": "¿Qué pueden hacer los países para mejorar la protección de refugiados e inmigrantes?",
+    "faq_8_content": "<ul class=\"list-disc ml-6\"><li>Garantizar el derecho al asilo con procesos accesibles y transparentes</li><li>Fortalecer políticas públicas inclusivas</li><li>Ofrecer documentación y acceso a servicios sociales</li><li>Promover campañas contra la xenofobia</li><li>Invertir en programas de integración y empleabilidad</li><li>Cooperar con ONGs y organismos internacionales</li></ul>",
+    "faq_9_title": "¿Cómo puedo ayudar a refugiados e inmigrantes siendo un ciudadano común?",
+    "faq_9_content": "<ul class=\"list-disc ml-6\"><li>Voluntariar en ONGs e instituciones de apoyo</li><li>Donar ropa, alimentos o materiales escolares</li><li>Apoyar financieramente proyectos y campañas de acogida</li><li>Compartir información correcta y combatir noticias falsas</li><li>Participar en campañas de concienciación y políticas de inclusión</li></ul>🔗 <a href=\"https://www.acnur.org/es-ay/colabora-con-acnur\" target=\"_blank\" class=\"underline text-blue-600\">Voluntariado</a>",
+    "faq_10_title": "¿Cuál es la perspectiva futura para los refugiados en el escenario global?",
+    "faq_10_content": "Con el aumento de desplazamientos forzados por guerras, persecuciones, crisis ambientales y cambio climático, se espera que los flujos migratorios crezcan. Sin embargo, hay una tendencia hacia el fortalecimiento de políticas globales de protección, integración y reasentamiento."
+  
 
 }

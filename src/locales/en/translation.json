@@ -123,6 +123,29 @@
   "bolsa_familia_text": "Bolsa Família is an income transfer program that benefits vulnerable families, ensuring access to fundamental rights.",
   "cartao_sus_title": "SUS Card",
   "cartao_sus_text": "The SUS Card ensures access to public healthcare services.",
-  "verso_cartao_sus": "SUS Card Back"
+  "verso_cartao_sus": "SUS Card Back",
+  
+    "page_title": "Human Rights",
+    "faq_1_title": "What are Human Rights and how do they apply to refugees and immigrants?",
+    "faq_1_content": "Human Rights are universal and inalienable guarantees that ensure dignity and equality for all human beings, regardless of nationality, ethnicity, gender, or migratory status. Refugees and immigrants have the same fundamental rights as anyone else, as established in the Universal Declaration of Human Rights (UDHR) of 1948.<br />📄 <a href=\"https://www.ohchr.org/sites/default/files/UDHR/Documents/UDHR_Translations/eng.pdf\" class=\"underline text-blue-600\" target=\"_blank\">Read the UDHR (PDF - UN)</a>",
+    "faq_2_title": "What is a refugee and how are they defined by international law?",
+    "faq_2_content": "According to the 1951 Convention Relating to the Status of Refugees, a refugee is any person who, owing to a well-founded fear of persecution for reasons of race, religion, nationality, political opinion, or membership in a particular social group, is outside their country of origin and is unable or unwilling to return to it.",
+    "faq_3_title": "What are the main international instruments that protect refugees?",
+    "faq_3_content": "<ul class=\"list-disc ml-6\"><li>1951 Convention Relating to the Status of Refugees</li><li>1967 Protocol</li><li>Geneva Convention</li><li>UN Global Compact on Refugees (2018)</li></ul>",
+    "faq_4_title": "What are the main rights of refugees?",
+    "faq_4_content": "<ul class=\"list-disc ml-6\"><li>Asylum and protection against deportation</li><li>Personal safety and physical integrity</li><li>Freedom of expression, religion, and movement</li><li>Access to education, healthcare, housing, and employment</li><li>Family reunification</li><li>Legal documentation and identity</li></ul>🔗 <a href=\"https://www.unhcr.org/\" class=\"underline text-blue-600\" target=\"_blank\">Learn more</a>",
+    "faq_5_title": "What are the main challenges faced by refugees and immigrants?",
+    "faq_5_content": "<ul class=\"list-disc ml-6\"><li>Discrimination, xenophobia, and institutional racism</li><li>Language and cultural barriers</li><li>Difficulty accessing basic services and job opportunities</li><li>Lack of regularization and delays in asylum processes</li><li>Vulnerability to abuse, exploitation, and human trafficking</li></ul>",
+    "faq_6_title": "Which organizations help refugees in Brazil?",
+    "faq_6_content": "<ul class=\"list-disc ml-6\"><li><a href=\"https://www.unhcr.org/\" target=\"_blank\" class=\"underline text-blue-600\">UNHCR – UN Refugee Agency</a></li><li><a href=\"https://adus.org.br/\" target=\"_blank\" class=\"underline text-blue-600\">ADUS</a></li><li><a href=\"https://www.migrante.org.br\" target=\"_blank\" class=\"underline text-blue-600\">IMDH</a></li><li><a href=\"https://missaonspaz.org\" target=\"_blank\" class=\"underline text-blue-600\">Missão Paz (SP)</a></li><li><a href=\"https://caritas.org.br\" target=\"_blank\" class=\"underline text-blue-600\">Caritas Brasileira</a></li><li><a href=\"https://www.prefeitura.sp.gov.br/cidade/secretarias/direitos_humanos/imigrantes/\" target=\"_blank\" class=\"underline text-blue-600\">Immigrant Reference Center (SP)</a></li></ul>",
+    "faq_7_title": "How are refugees protected during times of war or humanitarian crises?",
+    "faq_7_content": "During wars and crises, refugees are entitled to international protection. The Geneva Convention and other treaties prohibit their deportation to places where they are at risk. Humanitarian assistance is provided by agencies such as UNHCR, Red Cross, and Doctors Without Borders.<br />🔗 <a href=\"https://www.icrc.org/en\" target=\"_blank\" class=\"underline text-blue-600\">International Committee of the Red Cross</a>",
+    "faq_8_title": "What can countries do to improve protection for refugees and immigrants?",
+    "faq_8_content": "<ul class=\"list-disc ml-6\"><li>Ensure the right to asylum with accessible and transparent processes</li><li>Strengthen inclusive public policies</li><li>Provide documentation and access to social services</li><li>Promote campaigns to combat xenophobia</li><li>Invest in integration and employability programs</li><li>Cooperate with NGOs and international organizations</li></ul>",
+    "faq_9_title": "How can I help refugees and immigrants as an ordinary citizen?",
+    "faq_9_content": "<ul class=\"list-disc ml-6\"><li>Volunteer at NGOs and support institutions</li><li>Donate clothes, food, or school supplies</li><li>Financially support projects and reception campaigns</li><li>Share accurate information and combat fake news</li><li>Participate in awareness campaigns and inclusion policies</li></ul>🔗 <a href=\"https://www.unhcr.org/work-with-unhcr\" target=\"_blank\" class=\"underline text-blue-600\">Volunteering</a>",
+    "faq_10_title": "What is the future outlook for refugees in the global scenario?",
+    "faq_10_content": "With the increase in forced displacements due to wars, persecution, environmental crises, and climate change, migratory flows are expected to grow. However, there is a trend toward strengthening global policies for protection, integration, and resettlement."
+  
 
 }

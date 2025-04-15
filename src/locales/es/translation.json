@@ -1,0 +1,19 @@
+{
+  "navbar": {
+    "health": "SALUD",
+    "documentation": "DOCUMENTACIÓN",
+    "human_rights": "DERECHOS HUMANOS",
+    "socioeconomic": "SOCIOECONÓMICO",
+    "map": "MAPA",
+    "chat": "CHAT",
+    "login": "Iniciar sesión",
+    "logout": "Salir"
+  },
+  "chat": {
+    "placeholder": "Escribe tu mensaje...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "error": "Lo siento, ocurrió un error.",
+    "welcome": "¡Hola! ¿Cómo puedo ayudarte hoy?"
+  }
+}

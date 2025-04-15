@@ -69,18 +69,13 @@ const ChatBotBalloon: React.FC = () => {
 
       try {
         setIsLoading(true);
-        const response = await fetch(
-          process.env.NODE_ENV === "production"
-            ? "https://mao-amiga-one.vercel.app/api/assistant"
-            : "http://localhost:3001/api/assistant",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt: input }),
-          }
-        );
+        const response = await fetch("/api/assistant", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: input }),
+        });
 
         if (!response.ok) {
           throw new Error("Erro ao consultar a API");

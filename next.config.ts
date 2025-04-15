@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  i18n: {
+    locales: ["pt-BR", "en"],
+    defaultLocale: "pt-BR",
+    localeDetection: false,
+  },
   async headers() {
     return [
       {

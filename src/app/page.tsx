@@ -47,59 +47,7 @@ const Home = () => {
       </div>
 
       {/* Bloco "O que é?" centralizado */}
-      <div
-        style={{
-          height: '100vh',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center', // Centraliza horizontalmente
-          justifyContent: 'center', // Centraliza verticalmente
-          textAlign: 'center',
-          backgroundColor: '#fff',
-          padding: '20px',
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "'Gochi Hand', cursive",
-            fontSize: '4rem',
-            color: '#ffde59',
-            marginBottom: '30px',
-          }}
-        >
-          O QUE É?
-        </h2>
-        <p
-          style={{
-            fontFamily: "'Roboto', sans-serif",
-            fontSize: '1rem',
-            color: '#333',
-            lineHeight: '1.8',
-            maxWidth: '800px',
-            marginBottom: '20px',
-          }}
-        >
-          O Mão Amiga é um projeto voltado para apoiar refugiados no Brasil,
-          integrando tecnologia para enfrentar desafios legais, culturais e linguísticos.
-          Seu principal objetivo é oferecer um aplicativo acessível que conecta refugiados
-          a informações e serviços essenciais, como regularização documental, acesso à saúde,
-          educação, trabalho e integração social.
-        </p>
-        <p
-          style={{
-            fontFamily: "'Roboto', sans-serif",
-            fontSize: '1rem',
-            color: '#333',
-            lineHeight: '1.8',
-            maxWidth: '800px',
-          }}
-        >
-          A plataforma promove inclusão ao simplificar o acesso a direitos e criar um ambiente
-          de acolhimento, com recursos como mapas de serviços, guias explicativos e suporte em
-          múltiplos idiomas.
-        </p>
-      </div>
+     
 
       {/* Bloco de Trilhas centralizado */}
       <div

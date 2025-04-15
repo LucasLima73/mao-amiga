@@ -111,7 +111,26 @@
       "faq_9_title": "Como posso ajudar refugiados e imigrantes mesmo sendo um cidadão comum?",
       "faq_9_content": "<ul class=\"list-disc ml-6\"><li>Voluntariar-se em ONGs e instituições de apoio</li><li>Oferecer doações (roupas, alimentos, materiais escolares)</li><li>Apoiar financeiramente projetos e campanhas de acolhimento</li><li>Compartilhar informações corretas e combater notícias falsas</li><li>Participar de campanhas de conscientização e políticas de inclusão</li></ul>🔗 <a href=\"https://www.acnur.org/br/ajude-os-refugiados/trabalhe-no-acnur\" target=\"_blank\" class=\"underline text-blue-600\">Voluntariado</a>",
       "faq_10_title": "Qual é a perspectiva futura para os refugiados no cenário global?",
-      "faq_10_content": "Com o aumento de deslocamentos forçados por guerras, perseguições, crises ambientais e mudanças climáticas, é esperado que os fluxos migratórios cresçam. Contudo, há uma tendência de fortalecimento de políticas globais de proteção, integração e reassentamento."
-    
+      "faq_10_content": "Com o aumento de deslocamentos forçados por guerras, perseguições, crises ambientais e mudanças climáticas, é esperado que os fluxos migratórios cresçam. Contudo, há uma tendência de fortalecimento de políticas globais de proteção, integração e reassentamento.",
+    "inclusao": "INCLUSÃO",
+  "cidadania": "CIDADANIA",
+  "acolhimento": "ACOLHIMENTO",
+  "trilhas_title": "TRILHAS",
+  "trilhas_description": "As trilhas têm como objetivo facilitar a integração de refugiados no Brasil, oferecendo suporte prático para desafios legais, culturais e linguísticos.",
+  "acesso_saude_button": "ACESSO À SAÚDE",
+  "direitos_humanos_button": "DIREITOS HUMANOS",
+  "documentacao_button": "DOCUMENTAÇÃO",
+  "apoio_socioeconomico_button": "APOIO SOCIOECONÔMICO",
+  "about_title": "Mão Amiga",
+  "about_description": "Um projeto dedicado a apoiar refugiados no Brasil, oferecendo acesso a serviços essenciais e suporte em desafios legais, culturais e linguísticos.",
+  "useful_links_title": "Links Úteis",
+  "link_acesso_saude": "Acesso à Saúde",
+  "link_documentacao": "Documentação",
+  "link_direitos_humanos": "Direitos Humanos",
+  "link_apoio_socioeconomico": "Apoio Socioeconômico",
+  "contact_title": "Contato",
+  "contact_email_label": "Email",
+  "contact_phone_label": "Telefone",
+  "footer_copyright": "Mão Amiga. Todos os direitos reservados."
   
 }

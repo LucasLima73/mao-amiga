@@ -145,7 +145,27 @@
     "faq_9_title": "How can I help refugees and immigrants as an ordinary citizen?",
     "faq_9_content": "<ul class=\"list-disc ml-6\"><li>Volunteer at NGOs and support institutions</li><li>Donate clothes, food, or school supplies</li><li>Financially support projects and reception campaigns</li><li>Share accurate information and combat fake news</li><li>Participate in awareness campaigns and inclusion policies</li></ul>🔗 <a href=\"https://www.unhcr.org/work-with-unhcr\" target=\"_blank\" class=\"underline text-blue-600\">Volunteering</a>",
     "faq_10_title": "What is the future outlook for refugees in the global scenario?",
-    "faq_10_content": "With the increase in forced displacements due to wars, persecution, environmental crises, and climate change, migratory flows are expected to grow. However, there is a trend toward strengthening global policies for protection, integration, and resettlement."
+    "faq_10_content": "With the increase in forced displacements due to wars, persecution, environmental crises, and climate change, migratory flows are expected to grow. However, there is a trend toward strengthening global policies for protection, integration, and resettlement.",
+    "inclusao": "INCLUSION",
+  "cidadania": "CITIZENSHIP",
+  "acolhimento": "WELCOME",
+  "trilhas_title": "PATHWAYS",
+  "trilhas_description": "The pathways aim to facilitate the integration of refugees in Brazil, providing practical support for legal, cultural, and linguistic challenges.",
+  "acesso_saude_button": "ACCESS TO HEALTHCARE",
+  "direitos_humanos_button": "HUMAN RIGHTS",
+  "documentacao_button": "DOCUMENTATION",
+  "apoio_socioeconomico_button": "SOCIOECONOMIC SUPPORT",
+  "about_title": "Friendly Hand",
+  "about_description": "A project dedicated to supporting refugees in Brazil, providing access to essential services and assistance with legal, cultural, and linguistic challenges.",
+  "useful_links_title": "Useful Links",
+  "link_acesso_saude": "Access to Healthcare",
+  "link_documentacao": "Documentation",
+  "link_direitos_humanos": "Human Rights",
+  "link_apoio_socioeconomico": "Socioeconomic Support",
+  "contact_title": "Contact",
+  "contact_email_label": "Email",
+  "contact_phone_label": "Phone",
+  "footer_copyright": "Friendly Hand. All rights reserved."
   
 
 }

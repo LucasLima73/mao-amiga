@@ -302,7 +302,7 @@ const Navbar: React.FC = () => {
             </li>
             <li>
               <Link
-                href="/direitos-humanos"
+                href="/trilhaDireitosHumanos"
                 onClick={() => {
                   handleNavClick("Direitos Humanos");
                   toggleMenu();

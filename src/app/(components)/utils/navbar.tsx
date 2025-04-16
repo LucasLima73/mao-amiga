@@ -9,6 +9,18 @@ import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
 import { useTranslation } from 'react-i18next';
+import { 
+  FaMedkit,
+  FaFileAlt,
+  FaHands,
+  FaChartLine,
+  FaEllipsisH,
+  FaMap,
+  FaComment,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaGlobe
+} from 'react-icons/fa';
 
 declare global {
   interface Window {
@@ -165,9 +177,16 @@ const Navbar: React.FC = () => {
     window.location.reload();
   };
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
   return (
     <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
+      {/* Desktop Navbar */}
+      <div className="hidden md:flex container mx-auto justify-between items-center px-6 py-4">
         {/* Logo */}
         <div
           className="text-yellow-400 font-bold text-3xl tracking-widest uppercase"
@@ -244,35 +263,83 @@ const Navbar: React.FC = () => {
           )}
         </div>
 
-        {/* Botão do Menu Mobile */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden text-yellow-400 focus:outline-none"
+      </div>
+
+      {/* Mobile Bottom Tab */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-black bg-opacity-90 flex justify-around items-center py-3 px-4 border-t border-yellow-400 z-50">
+        <Link href="/trilhaSaude" className="flex flex-col items-center text-yellow-400 text-sm">
+          <FaMedkit className="text-lg mb-1" />
+          {t('navbar.health_short')}
+        </Link>
+        <Link href="/documentacao" className="flex flex-col items-center text-yellow-400 text-sm">
+          <FaFileAlt className="text-lg mb-1" />
+          {t('navbar.docs_short')}
+        </Link>
+        <Link href="/chat" className="flex flex-col items-center text-yellow-400 text-sm">
+          <FaComment className="text-lg mb-1" />
+          {t('navbar.chat')}
+        </Link>
+        <Link href="/socioeconomico" className="flex flex-col items-center text-yellow-400 text-sm">
+          <FaChartLine className="text-lg mb-1" />
+          {t('navbar.econ_short')}
+        </Link>
+        <button 
+          onClick={toggleDrawer}
+          className="flex flex-col items-center text-yellow-400 text-sm"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            )}
-          </svg>
+          <FaEllipsisH className="text-lg mb-1" />
         </button>
       </div>
+
+      {/* Mobile Drawer */}
+      {isDrawerOpen && (
+        <div className="md:hidden fixed bottom-16 left-0 w-full bg-black bg-opacity-90 p-4 z-50">
+          <div className="grid grid-cols-2 gap-4 text-yellow-400 text-sm">
+            <Link href="/mapa" onClick={toggleDrawer} className="flex items-center gap-2">
+              <FaMap /> {t('navbar.map')}
+            </Link>
+            <Link href="/trilhaDireitosHumanos" onClick={toggleDrawer} className="flex items-center gap-2">
+              <FaHands /> {t('navbar.rights_short')}
+            </Link>
+            <div className="flex items-center gap-2">
+              <FaGlobe />
+              <select 
+                onChange={(e) => {
+                  i18n.changeLanguage(e.target.value);
+                  toggleDrawer();
+                }}
+                value={i18n.language}
+                className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+              >
+                <option value="pt">PT</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+              </select>
+            </div>
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  toggleDrawer();
+                  handleLogout();
+                }}
+                className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+              >
+                <FaSignOutAlt /> {t('navbar.logout')}
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  toggleDrawer();
+                  toggleLoginModal();
+                }}
+                className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+              >
+                <FaSignInAlt /> {t('navbar.login')}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Menu Mobile */}
       {isOpen && (

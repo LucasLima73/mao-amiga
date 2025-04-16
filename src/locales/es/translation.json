@@ -1,9 +1,13 @@
 {
   "navbar": {
     "health": "SALUD",
+    "health_short": "SAL",
     "documentation": "DOCUMENTACIÓN",
+    "docs_short": "DOC",
     "human_rights": "DERECHOS HUMANOS",
+    "rights_short": "DERECHOS",
     "socioeconomic": "SOCIOECONÓMICO",
+    "econ_short": "SOCIO",
     "map": "MAPA",
     "chat": "CHAT",
     "login": "Iniciar sesión",

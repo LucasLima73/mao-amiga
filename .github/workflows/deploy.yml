@@ -45,6 +45,7 @@ jobs:
           --build-arg OPENAI_API_KEY=$OPENAI_API_KEY \
           --build-arg OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID \
           --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY \
+          --build-arg NEXT_PUBLIC_NEWS_API_KEY=$NEXT_PUBLIC_NEWS_API_KEY \
           -t lucaslimabaseo/mao-amiga-deploy:latest .
 
     # Push da imagem para o Docker Hub

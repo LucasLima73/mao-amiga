@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"; // Importar i18next
 import WavyButton from "./(components)/utils/wavybutton";
 import FloatingArrow from "./(components)/utils/floatingarrow";
 import AboutButton from "./(components)/utils/aboutbutton";
+import NewsSection from "./(components)/NewsSection";
 
 const Home = () => {
   const { t } = useTranslation(); // Hook para acessar traduções
@@ -130,6 +131,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <NewsSection />
     </div>
   );
 };

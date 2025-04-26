@@ -11,15 +11,9 @@ export default function Chat() {
   ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Rolar para o final quando novas mensagens são adicionadas
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  // Foca no input quando o componente montar
+  // Foca no input ao montar
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -27,18 +21,16 @@ export default function Chat() {
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    setIsLoading(true)
     const userMessage = { role: 'user', content: input }
     setMessages(prev => [...prev, userMessage])
     const currentInput = input
     setInput('')
+    setIsLoading(true)
 
     try {
       const response = await fetch('https://mao-amiga-api.onrender.com/api/assistant', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: currentInput }),
       })
 
@@ -51,7 +43,6 @@ export default function Chat() {
       setMessages(prev => [...prev, { role: 'assistant', content: t('chat.error') }])
     } finally {
       setIsLoading(false)
-      // Foca no input após enviar a mensagem
       inputRef.current?.focus()
     }
   }
@@ -62,7 +53,6 @@ export default function Chat() {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Envia ao pressionar Enter (sem Shift para permitir quebras de linha com Shift+Enter)
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
@@ -70,7 +60,6 @@ export default function Chat() {
   }
 
   const formatMessage = (content: string) => {
-    // Função simples para formatar mensagens (quebras de linha)
     return content.split('\n').map((line, i) => (
       <span key={i}>
         {line}
@@ -81,10 +70,8 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-screen bg-yellow-50">
-      {/* Espaço para a navbar */}
       <div className="h-16"></div>
 
-      {/* Área de mensagens */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 pt-0">
         <div className="max-w-4xl mx-auto space-y-6">
           {messages.map((msg, i) => (
@@ -117,11 +104,9 @@ export default function Chat() {
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
       </div>
-      
-      {/* Formulário de entrada */}
+
       <footer className="bg-white border-t border-yellow-200 p-4 md:p-6">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div className="flex items-center gap-2">
@@ -139,9 +124,8 @@ export default function Chat() {
             </div>
             <button
               type="submit"
-              onClick={handleSubmit}
               className="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-600 text-white hover:bg-yellow-700 transition-colors disabled:bg-yellow-300 disabled:cursor-not-allowed"
-              disabled={!input.trim()}
+              disabled={!input.trim() || isLoading}
               aria-label={t('chat.send')}
             >
               {isLoading ? (

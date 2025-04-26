@@ -30,17 +30,36 @@ const trilhaDocumentacao = () => {
   const [selectedPath, setSelectedPath] = useState<number | null>(null);
   const { t } = useTranslation(); 
 
-
   const MapaButton: React.FC = () => (
-    <div className="absolute top-4 right-4 z-10">
+    <>
+      {/* Versão desktop do botão */}
       <a
         href="/mapa"
-        className="group inline-flex items-center h-16 w-16 bg-blue-600 text-white rounded-full transition-all duration-300 hover:w-56 hover:bg-blue-700 overflow-hidden"
+        className="
+          hidden md:inline-flex
+          fixed
+          top-4
+          right-4
+          group
+          items-center
+          h-14
+          w-14
+          bg-blue-600
+          text-white
+          rounded-full
+          transition-all
+          duration-300
+          hover:w-48
+          hover:bg-blue-700
+          overflow-hidden
+          z-20
+          shadow-lg
+        "
       >
-        <div className="flex items-center justify-center w-16 h-16">
+        <div className="flex items-center justify-center w-14 h-14">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-8 h-8"
+            className="w-6 h-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -59,11 +78,53 @@ const trilhaDocumentacao = () => {
             />
           </svg>
         </div>
-        <span className="ml-4 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-        {t("consultar_mapa")}
+        <span className="ml-2 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap font-medium">
+          {t("consultar_mapa")}
         </span>
       </a>
-    </div>
+      
+      {/* Versão mobile do botão - Flutuante no canto inferior */}
+      <a
+        href="/mapa"
+        className="
+          md:hidden
+          fixed
+          bottom-4
+          right-4
+          flex
+          items-center
+          justify-center
+          h-14
+          w-14
+          bg-blue-600
+          text-white
+          rounded-full
+          z-20
+          shadow-lg
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      </a>
+    </>
   );
 
   const docData = [
@@ -99,7 +160,9 @@ const trilhaDocumentacao = () => {
 
   const [showPopup, setShowPopup] = useState(false); 
   const [showCPFPopup, setShowCPFPopup] = useState(false); 
-  const [showThirdDocPopup, setShowThirdDocPopup] = useState(false); 
+  const [showThirdDocPopup, setShowThirdDocPopup] = useState(false);
+  const [showRefugioPopup, setShowRefugioPopup] = useState(false);
+  const [showResidenciaPopup, setShowResidenciaPopup] = useState(false);
 
   const [showCRNMBack, setShowCRNMBack] = useState(false);
   const [showDPRNMBack, setShowDPRNMBack] = useState(false);
@@ -135,6 +198,7 @@ const trilhaDocumentacao = () => {
           const fetchedSteps: Step[] = querySnapshot.docs.map(
             (doc) => doc.data() as Step
           );
+          console.log("Passos carregados:", fetchedSteps); // Log para depuração
 
           if (userId) {
             const userRef = doc(db, "user_progress", userId);
@@ -177,10 +241,20 @@ const trilhaDocumentacao = () => {
     setShowThirdDocPopup(true); 
   };
 
+  const handleRefugioClick = () => {
+    setShowRefugioPopup(true);
+  };
+
+  const handleResidenciaClick = () => {
+    setShowResidenciaPopup(true);
+  };
+
   const handleClosePopup = () => {
     setShowPopup(false);
     setShowCPFPopup(false);
     setShowThirdDocPopup(false);
+    setShowRefugioPopup(false);
+    setShowResidenciaPopup(false);
     setShowCRNMBack(false);
     setShowDPRNMBack(false);
     setShowThirdDocBack(false);
@@ -190,116 +264,164 @@ const trilhaDocumentacao = () => {
   const handleDPRNMFlip = () => setShowDPRNMBack(!showDPRNMBack);
 
   const pageTitle =
-  selectedPath === 1
-    ? t("page_title_refugio")
-    : selectedPath === 2
-    ? t("page_title_residencia")
-    : t("page_title_documentacao");
+    selectedPath === 1
+      ? t("page_title_refugio")
+      : selectedPath === 2
+      ? t("page_title_residencia")
+      : t("page_title_documentacao");
 
   return (
     <div
       key={pathname}
-      className="min-h-screen w-screen flex flex-col items-center justify-center p-8"
+      className="min-h-screen w-full flex flex-col"
       style={{
         backgroundImage: "url('/assets/images/documentacao.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <h2 className="text-4xl font-bold text-[#ffde59] mb-6 mt-[9vh]">
-        {pageTitle}
-      </h2>
+      {/* Container responsivo - Layout Desktop */}
+      <div className="hidden md:flex md:flex-col md:items-center md:justify-start md:pt-14 md:pb-20 md:px-2 md:w-full">
+        <h2 className="text-3xl font-bold text-[#ffde59] mb-6 mt-4 text-center drop-shadow-lg">
+          {pageTitle}
+        </h2>
 
-      {selectedPath === null && (
-        <div className="max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 mb-8">
-          <h3 className="text-center text-2xl font-semibold mb-4">
-            {t("caminhos_regularizacao_title")}
-          </h3>
-          <p className="mb-4">{t("caminhos_regularizacao_text")}</p>
-          <p className="text-center mb-6">{t("principais_opcoes")}</p>
-          <div className="flex gap-4 justify-center">
-            <div className="group relative">
-              <button
-                onClick={() => setSelectedPath(1)}
-                className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
-              >
-                {t("solicitacao_refugio_button")}
-              </button>
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
-                <p>{t("solicitacao_refugio_tooltip")}</p>
+        {selectedPath === null ? (
+          <div className="max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 mb-8">
+            <h3 className="text-center text-2xl font-semibold mb-4">
+              {t("caminhos_regularizacao_title")}
+            </h3>
+            <p className="mb-4">{t("caminhos_regularizacao_text")}</p>
+            <p className="text-center mb-6">{t("principais_opcoes")}</p>
+            <div className="flex gap-4 justify-center">
+              <div className="group relative">
+                <button
+                  onClick={() => setSelectedPath(1)}
+                  className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                >
+                  {t("solicitacao_refugio_button")}
+                </button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
+                  <p>{t("solicitacao_refugio_tooltip")}</p>
+                </div>
               </div>
-            </div>
 
-            <div className="group relative">
-              <button
-                onClick={() => setSelectedPath(2)}
-                className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
-              >
-                {t("autorizacao_residencia_button")}
-              </button>
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
-                <p>{t("autorizacao_residencia_tooltip")}</p>
+              <div className="group relative">
+                <button
+                  onClick={() => setSelectedPath(2)}
+                  className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                >
+                  {t("autorizacao_residencia_button")}
+                </button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
+                  <p>{t("autorizacao_residencia_tooltip")}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            <button
+              onClick={() => setSelectedPath(null)}
+              className="mb-4 text-blue-600 hover:text-blue-800 flex items-center gap-2 text-lg font-medium"
+            >
+              ← {t("voltar")}
+            </button>
+            <div className="max-w-4xl bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
+              {isClient && (
+                <Timeline
+                  steps={steps}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  userId={userId}
+                  onStepClick={(index) => {
+                    if (index === 0) {
+                      handleFirstStepClick();
+                    } else if (index === 1) {
+                      handleSecondStepClick();
+                    } else if (index === 2) {
+                      handleThirdStepClick();
+                    }
+                  }}
+                  showDocumentButton={false}
+                />
+              )}
+            </div>
+          </>
+        )}
+      </div>
 
-      {selectedPath === 1 && (
-        <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
-          <button
-            onClick={() => setSelectedPath(null)}
-            className="text-blue-600 hover:text-blue-800 mb-4"
-          >
-            ← Voltar
-          </button>
-          <MapaButton />
-          <Timeline
-            steps={steps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            userId={userId}
-            onStepClick={(index) => {
-              if (index === 0) {
-                handleFirstStepClick();
-              } else if (index === 1) {
-                handleSecondStepClick();
-              } else if (index === 2) {
-                handleThirdStepClick();
-              }
-            }}
-            showDocumentButton
-          />
+      {/* Layout Mobile */}
+      <div className="md:hidden flex flex-col w-full h-full">
+        <div className="bg-blue-600 text-white py-4 px-4 shadow-md fixed top-0 left-0 right-0 z-10">
+          <h2 className="text-xl font-bold text-center">{pageTitle}</h2>
         </div>
-      )}
+        
+        <div className="flex-1 pt-16 pb-20 px-3">
+          {selectedPath === null ? (
+            <>
+              <div className="bg-yellow-50 rounded-lg p-3 mb-4 border-l-4 border-yellow-400 shadow-sm">
+                <h3 className="text-sm font-medium text-yellow-800">{t("caminhos_regularizacao_title")}</h3>
+                <p className="text-xs text-yellow-700 mt-1">{t("caminhos_regularizacao_text")}</p>
+              </div>
 
-      {selectedPath === 2 && (
-        <div className="relative max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 w-full mb-8 overflow-visible">
-          <button
-            onClick={() => setSelectedPath(null)}
-            className="text-blue-600 hover:text-blue-800 mb-4"
-          >
-            ← Voltar
-          </button>
-          <MapaButton />
-          <Timeline
-            steps={steps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            userId={userId}
-            onStepClick={(index) => {
-              if (index === 0) {
-                handleFirstStepClick();
-              } else if (index === 1) {
-                handleSecondStepClick();
-              } else if (index === 2) {
-                handleThirdStepClick();
-              }
-            }}
-            showDocumentButton
-          />
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => setSelectedPath(1)}
+                  className="bg-[#e5b019] text-white px-4 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition text-sm font-medium"
+                >
+                  {t("solicitacao_refugio_button")}
+                </button>
+                <button
+                  onClick={() => setSelectedPath(2)}
+                  className="bg-[#e5b019] text-white px-4 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition text-sm font-medium"
+                >
+                  {t("autorizacao_residencia_button")}
+                </button>
+              </div>
+
+              <div className="mt-4 bg-blue-50 rounded-lg p-3 border-l-4 border-blue-400 shadow-sm">
+                <h3 className="text-sm font-medium text-blue-800">{t("dica")}</h3>
+                <p className="text-xs text-blue-700 mt-1">{t("escolha_caminho_dica")}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setSelectedPath(null)}
+                className="mb-4 text-blue-600 hover:text-blue-800 flex items-center gap-2 text-sm font-medium"
+              >
+                ← {t("voltar")}
+              </button>
+
+              <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
+                {isClient && (
+                  <Timeline
+                    steps={steps}
+                    activeStep={activeStep}
+                    setActiveStep={setActiveStep}
+                    userId={userId}
+                    onStepClick={(index) => {
+                      if (index === 0) {
+                        handleFirstStepClick();
+                      } else if (index === 1) {
+                        handleSecondStepClick();
+                      } else if (index === 2) {
+                        handleThirdStepClick();
+                      }
+                    }}
+                    showDocumentButton={false}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
+
+      <div className="mb-52 right-4">
+        <MapaButton />
+      </div>
 
       {showPopup && (
         <div
@@ -403,8 +525,6 @@ const trilhaDocumentacao = () => {
         </div>
       )}
 
-
-      
       {showCPFPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -450,7 +570,97 @@ const trilhaDocumentacao = () => {
         </div>
       )}
 
-     
+      {showRefugioPopup && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={handleClosePopup}
+        >
+          <div
+            className="bg-white p-4 rounded-sm shadow-lg relative max-w-6xl w-full min-h-[90vh] overflow-y-auto flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={handleClosePopup}
+              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
+            >
+              X
+            </button>
+            <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
+              {t("solicitacao_refugio_title")}
+            </p>
+            <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4">
+              <div className="max-w-4xl bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-2xl font-semibold mb-4 text-black text-center">
+                  {t("solicitacao_refugio_subtitle")}
+                </h4>
+                <div className="space-y-4 text-black">
+                  <p className="text-lg">{t("solicitacao_refugio_desc")}</p>
+                  <div className="mt-6">
+                    <h5 className="text-xl font-semibold mb-3">{t("documentos_necessarios")}:</h5>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>{t("documento_identificacao")}</li>
+                      <li>{t("comprovante_entrada")}</li>
+                      <li>{t("fotos_3x4")}</li>
+                      <li>{t("formulario_preenchido")}</li>
+                    </ul>
+                  </div>
+                  <div className="mt-6">
+                    <h5 className="text-xl font-semibold mb-3">{t("onde_solicitar")}:</h5>
+                    <p>{t("local_solicitacao_refugio")}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showResidenciaPopup && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={handleClosePopup}
+        >
+          <div
+            className="bg-white p-4 rounded-sm shadow-lg relative max-w-6xl w-full min-h-[90vh] overflow-y-auto flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={handleClosePopup}
+              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
+            >
+              X
+            </button>
+            <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
+              {t("autorizacao_residencia_title")}
+            </p>
+            <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4">
+              <div className="max-w-4xl bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-2xl font-semibold mb-4 text-black text-center">
+                  {t("autorizacao_residencia_subtitle")}
+                </h4>
+                <div className="space-y-4 text-black">
+                  <p className="text-lg">{t("autorizacao_residencia_desc")}</p>
+                  <div className="mt-6">
+                    <h5 className="text-xl font-semibold mb-3">{t("documentos_necessarios")}:</h5>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>{t("documento_identificacao")}</li>
+                      <li>{t("comprovante_residencia")}</li>
+                      <li>{t("declaracao_endereco")}</li>
+                      <li>{t("certidao_antecedentes")}</li>
+                      <li>{t("taxa_pagamento")}</li>
+                    </ul>
+                  </div>
+                  <div className="mt-6">
+                    <h5 className="text-xl font-semibold mb-3">{t("onde_solicitar")}:</h5>
+                    <p>{t("local_solicitacao_residencia")}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showThirdDocPopup && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -467,7 +677,8 @@ const trilhaDocumentacao = () => {
               X
             </button>
             <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
-            {t("documento")} - {thirdDocData[thirdDocIndex].title}            </p>
+              {t("documento")} - {thirdDocData[thirdDocIndex].title}
+            </p>
             <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4 relative">
               <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
                 <h4 className="text-2xl font-semibold mb-4 text-black">

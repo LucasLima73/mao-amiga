@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import styles from './navbar.module.css';
 import Link from "next/link";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { db } from "../../../lib/firebase";
@@ -30,6 +31,23 @@ declare global {
 
 const Navbar: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleScroll = useCallback(() => {
+    const offset = window.scrollY;
+    if (offset > 50) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   // Debug: verificar idioma atual e salvar no localStorage
   useEffect(() => {
@@ -184,7 +202,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
+    <nav className={`fixed top-0 left-0 w-full bg-transparent z-50 ${scrolled ? 'bg-white shadow-lg' : ''}`}>
+      {/* Mobile Header */}
+      <div className="md:hidden flex justify-center items-center py-4 bg-black bg-opacity-90">
+        <Link href="/" className="text-yellow-400 font-bold text-2xl tracking-widest uppercase" style={{ fontFamily: "'Cinzel Decorative', serif" }}>
+          Mão Amiga
+        </Link>
+      </div>
+
       {/* Desktop Navbar */}
       <div className="hidden md:flex container mx-auto justify-between items-center px-6 py-4">
         {/* Logo */}
@@ -238,253 +263,253 @@ const Navbar: React.FC = () => {
           </select>
         </div>
 
-        {/* Login / Logout no Desktop via Modal */}
-        <div className="hidden md:flex">
+
+
+      {/* Login / Logout no Desktop via Modal */}
+      <div className="hidden md:flex">
+        {isLoggedIn ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-yellow-400">{userName}</span>
+            <button
+              onClick={handleLogout}
+              className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+            >
+              {t('navbar.logout')}
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => {
+              handleLoginButtonEvent();
+              toggleLoginModal();
+            }}
+            className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+          >
+            {t('navbar.login')}
+          </button>
+        )}
+      </div>
+    </div>
+
+    {/* Mobile Bottom Tab */}
+    <div className="md:hidden fixed bottom-0 left-0 w-full bg-black bg-opacity-90 flex justify-around items-center py-3 px-4 border-t border-yellow-400 z-50">
+      <Link href="/trilhaSaude" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaMedkit className="text-lg mb-1" />
+        {t('navbar.health_short')}
+      </Link>
+      <Link href="/documentacao" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaFileAlt className="text-lg mb-1" />
+        {t('navbar.docs_short')}
+      </Link>
+      <Link href="/chat" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaComment className="text-lg mb-1" />
+        {t('navbar.chat')}
+      </Link>
+      <Link href="/socioeconomico" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaChartLine className="text-lg mb-1" />
+        {t('navbar.econ_short')}
+      </Link>
+      <button 
+        onClick={toggleDrawer}
+        className="flex flex-col items-center text-yellow-400 text-sm"
+      >
+        <FaEllipsisH className="text-lg mb-1" />
+      </button>
+    </div>
+
+    {/* Mobile Drawer */}
+    {isDrawerOpen && (
+      <div className="md:hidden fixed bottom-16 left-0 w-full bg-black bg-opacity-90 p-4 z-50">
+        <div className="grid grid-cols-2 gap-4 text-yellow-400 text-sm">
+          <Link href="/mapa" onClick={toggleDrawer} className="flex items-center gap-2">
+            <FaMap /> {t('navbar.map')}
+          </Link>
+          <Link href="/trilhaDireitosHumanos" onClick={toggleDrawer} className="flex items-center gap-2">
+            <FaHands /> {t('navbar.rights_short')}
+          </Link>
+          <div className="flex items-center gap-2">
+            <FaGlobe />
+            <select 
+              onChange={(e) => {
+                i18n.changeLanguage(e.target.value);
+                toggleDrawer();
+              }}
+              value={i18n.language}
+              className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+            >
+              <option value="pt">PT</option>
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+            </select>
+          </div>
           {isLoggedIn ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-yellow-400">{userName}</span>
-              <button
-                onClick={handleLogout}
-                className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
-              >
-                {t('navbar.logout')}
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                toggleDrawer();
+                handleLogout();
+              }}
+              className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+            >
+              <FaSignOutAlt /> {t('navbar.logout')}
+            </button>
           ) : (
             <button
               onClick={() => {
-                handleLoginButtonEvent();
+                toggleDrawer();
                 toggleLoginModal();
               }}
-              className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+              className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
             >
-              {t('navbar.login')}
+              <FaSignInAlt /> {t('navbar.login')}
             </button>
           )}
         </div>
-
       </div>
+    )}
 
-      {/* Mobile Bottom Tab */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-black bg-opacity-90 flex justify-around items-center py-3 px-4 border-t border-yellow-400 z-50">
-        <Link href="/trilhaSaude" className="flex flex-col items-center text-yellow-400 text-sm">
-          <FaMedkit className="text-lg mb-1" />
-          {t('navbar.health_short')}
-        </Link>
-        <Link href="/documentacao" className="flex flex-col items-center text-yellow-400 text-sm">
-          <FaFileAlt className="text-lg mb-1" />
-          {t('navbar.docs_short')}
-        </Link>
-        <Link href="/chat" className="flex flex-col items-center text-yellow-400 text-sm">
-          <FaComment className="text-lg mb-1" />
-          {t('navbar.chat')}
-        </Link>
-        <Link href="/socioeconomico" className="flex flex-col items-center text-yellow-400 text-sm">
-          <FaChartLine className="text-lg mb-1" />
-          {t('navbar.econ_short')}
-        </Link>
-        <button 
-          onClick={toggleDrawer}
-          className="flex flex-col items-center text-yellow-400 text-sm"
-        >
-          <FaEllipsisH className="text-lg mb-1" />
-        </button>
-      </div>
-
-      {/* Mobile Drawer */}
-      {isDrawerOpen && (
-        <div className="md:hidden fixed bottom-16 left-0 w-full bg-black bg-opacity-90 p-4 z-50">
-          <div className="grid grid-cols-2 gap-4 text-yellow-400 text-sm">
-            <Link href="/mapa" onClick={toggleDrawer} className="flex items-center gap-2">
-              <FaMap /> {t('navbar.map')}
+    {/* Menu Mobile */}
+    {isOpen && (
+      <div className="absolute top-full left-0 w-full bg-black bg-opacity-80 md:hidden">
+        <ul className="flex flex-col items-center py-4 space-y-4 text-yellow-400 text-sm">
+          <li>
+            <Link
+              href="/trilhaSaude"
+              onClick={() => {
+                handleNavClick("Saúde");
+                toggleMenu();
+              }}
+            >
+              {t('navbar.health')}
             </Link>
-            <Link href="/trilhaDireitosHumanos" onClick={toggleDrawer} className="flex items-center gap-2">
-              <FaHands /> {t('navbar.rights_short')}
+          </li>
+          <li>
+            <Link
+              href="/documentacao"
+              onClick={() => {
+                handleNavClick("Documentação");
+                toggleMenu();
+              }}
+            >
+              {t('navbar.documentation')}
             </Link>
-            <div className="flex items-center gap-2">
-              <FaGlobe />
-              <select 
-                onChange={(e) => {
-                  i18n.changeLanguage(e.target.value);
-                  toggleDrawer();
-                }}
-                value={i18n.language}
-                className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
-              >
-                <option value="pt">PT</option>
-                <option value="en">EN</option>
-                <option value="es">ES</option>
-              </select>
-            </div>
-            {isLoggedIn ? (
-              <button
-                onClick={() => {
-                  toggleDrawer();
-                  handleLogout();
-                }}
-                className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
-              >
-                <FaSignOutAlt /> {t('navbar.logout')}
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  toggleDrawer();
-                  toggleLoginModal();
-                }}
-                className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
-              >
-                <FaSignInAlt /> {t('navbar.login')}
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Menu Mobile */}
-      {isOpen && (
-        <div className="absolute top-full left-0 w-full bg-black bg-opacity-80 md:hidden">
-          <ul className="flex flex-col items-center py-4 space-y-4 text-yellow-400 text-sm">
-            <li>
-              <Link
-                href="/trilhaSaude"
-                onClick={() => {
-                  handleNavClick("Saúde");
-                  toggleMenu();
-                }}
-              >
-                {t('navbar.health')}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/documentacao"
-                onClick={() => {
-                  handleNavClick("Documentação");
-                  toggleMenu();
-                }}
-              >
-                {t('navbar.documentation')}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/trilhaDireitosHumanos"
-                onClick={() => {
-                  handleNavClick("Direitos Humanos");
-                  toggleMenu();
-                }}
-              >
-                {t('navbar.human_rights')}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/socioeconomico"
-                onClick={() => {
-                  handleNavClick("Socioeconômico");
-                  toggleMenu();
-                }}
-              >
-                {t('navbar.socioeconomic')}
-              </Link>
-            </li>
-            <li>
-              <Link href="/mapa" onClick={toggleMenu}>
-                {t('navbar.map')}
-              </Link>
-            </li>
-            <li>
-              <Link href="/chat" onClick={toggleMenu}>
-                {t('navbar.chat')}
-              </Link>
-            </li>
-            <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
-            {isLoggedIn ? (
-              <>
-                <li className="text-yellow-400">{userName}</li>
-                <li>
-                  <button
-                    onClick={() => {
-                      toggleMenu();
-                      handleLogout();
-                    }}
-                    className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
-                  >
-                    {t('navbar.logout')}
-                  </button>
-                </li>
-              </>
-            ) : (
+          </li>
+          <li>
+            <Link
+              href="/trilhaDireitosHumanos"
+              onClick={() => {
+                handleNavClick("Direitos Humanos");
+                toggleMenu();
+              }}
+            >
+              {t('navbar.human_rights')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/socioeconomico"
+              onClick={() => {
+                handleNavClick("Socioeconômico");
+                toggleMenu();
+              }}
+            >
+              {t('navbar.socioeconomic')}
+            </Link>
+          </li>
+          <li>
+            <Link href="/mapa" onClick={toggleMenu}>
+              {t('navbar.map')}
+            </Link>
+          </li>
+          <li>
+            <Link href="/chat" onClick={toggleMenu}>
+              {t('navbar.chat')}
+            </Link>
+          </li>
+          <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
+          {isLoggedIn ? (
+            <>
+              <li className="text-yellow-400">{userName}</li>
               <li>
                 <button
                   onClick={() => {
-                    handleLoginButtonEvent();
-                    toggleLoginModal();
+                    toggleMenu();
+                    handleLogout();
                   }}
                   className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
                 >
-                  {t('navbar.login')}
+                  {t('navbar.logout')}
                 </button>
               </li>
-            )}
-          </ul>
-        </div>
-      )}
+            </>
+          ) : (
+            <li>
+              <button
+                onClick={() => {
+                  handleLoginButtonEvent();
+                  toggleLoginModal();
+                }}
+                className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+              >
+                {t('navbar.login')}
+              </button>
+            </li>
+          )}
+        </ul>
+      </div>
+    )}
 
-      {/* Modal de Login para Desktop */}
-      {isLoginModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
-
-            <h3 className="text-xl font-bold mb-4">
-              {isCreatingAccount ? t('login.create_account') : t('login.login')}
-            </h3>
+    {/* Modal de Login para Desktop */}
+    {isLoginModalOpen && (
+      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+        <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
+          <h3 className="text-xl font-bold mb-4">
+            {isCreatingAccount ? t('login.create_account') : t('login.login')}
+          </h3>
+          <input
+            type="text"
+            placeholder={t('login.phone')}
+            className="w-full p-2 border rounded mb-4"
+            value={phone}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
+          />
+          {isCreatingAccount && (
             <input
               type="text"
-              placeholder={t('login.phone')}
+              placeholder={t('login.name')}
               className="w-full p-2 border rounded mb-4"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
             />
-            {isCreatingAccount && (
-              <input
-                type="text"
-                placeholder={t('login.name')}
-                className="w-full p-2 border rounded mb-4"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            )}
-            <button
-              onClick={isCreatingAccount ? handleCreateAccount : handleLogin}
-              className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
-            >
-              {isLoading
-                ? t('login.loading')
-                : isCreatingAccount
-                ? t('login.create_account')
-                : t('login.login')}
-            </button>
-            <button
-              onClick={handleLoginWithGoogle}
-              className="bg-red-500 text-white px-4 py-2 rounded w-full mb-4"
-            >
-              {t('login.google_login')}
-            </button>
-            <button
-              onClick={() => setIsCreatingAccount(!isCreatingAccount)}
-              className="text-blue-500 underline"
-            >
-              {isCreatingAccount
-                ? t('login.have_account')
-                : t('login.no_account')}
-            </button>
-            <button
-              onClick={toggleLoginModal}
-              className="absolute top-2 right-2 text-black hover:text-gray-500"
-            >
-              ✖
+          )}
+          <button
+            onClick={isCreatingAccount ? handleCreateAccount : handleLogin}
+            className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
+          >
+            {isLoading
+              ? t('login.loading')
+              : isCreatingAccount
+              ? t('login.create_account')
+              : t('login.login')}
+          </button>
+          <button
+            onClick={handleLoginWithGoogle}
+            className="bg-red-500 text-white px-4 py-2 rounded w-full mb-4"
+          >
+            {t('login.google_login')}
+          </button>
+          <button
+            onClick={() => setIsCreatingAccount(!isCreatingAccount)}
+            className="text-blue-500 underline"
+          >
+            {isCreatingAccount
+              ? t('login.have_account')
+              : t('login.no_account')}
+          </button>
+          <button
+            onClick={toggleLoginModal}
+            className="absolute top-2 right-2 text-black hover:text-gray-500"
+          >
+            ✖
             </button>
           </div>
         </div>

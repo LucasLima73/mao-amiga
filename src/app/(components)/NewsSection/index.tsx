@@ -1,15 +1,12 @@
-"use client";
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
 import styles from './styles.module.css';
 
 interface NewsItem {
   title: string;
   description: string;
   url: string;
-  urlToImage: string;
+  image_url: string;
 }
 
 const NewsSection = () => {
@@ -19,29 +16,29 @@ const NewsSection = () => {
   const searchTerms = {
     pt: 'imigrantes',
     en: 'refugees',
-    es: 'refugiados'
+    es: 'refugiados',
   };
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await fetch(
-          'https://newsapi.org/v2/everything?' +
-          new URLSearchParams({
-            q: searchTerms[i18n.language as keyof typeof searchTerms],
-            apiKey: process.env.NEXT_PUBLIC_NEWS_API_KEY as string
-          }).toString()
+          `https://api.thenewsapi.com/v1/news/all?` +
+            new URLSearchParams({
+              search: searchTerms[i18n.language as keyof typeof searchTerms],
+              language: i18n.language,
+              api_token: process.env.NEXT_PUBLIC_NEWS_API_KEY as string,
+            })
         );
-    
+        
         const data = await response.json();
-
-        console.log(data);
-    
-        if (data.status !== "ok") {
+        
+        if (!data.data) {
           throw new Error(data.message || "Erro ao buscar notícias");
         }
-    
-        setNews(data.articles);
+        
+        setNews(data.data);
+        
       } catch (error: any) {
         console.error('Error fetching news:', error);
       }
@@ -54,28 +51,27 @@ const NewsSection = () => {
     <div className={styles.newsSection}>
       <h2>Últimas Notícias</h2>
       <div className={styles.newsGrid}>
-      {news.slice(0, 4).map((item, index) => (
-  <a
-    key={index}
-    href={item.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={styles.newsCard}
-  >
-    <div className={styles.imageContainer}>
-      <img
-        src={item.urlToImage || '/assets/images/news-placeholder.jpg'}
-        alt={item.title}
-        className={styles.newsImage}
-      />
-    </div>
-    <div className={styles.newsContent}>
-      <h3>{item.title}</h3>
-      <p>{item.description}</p>
-    </div>
-  </a>
-))}
-
+        {news.slice(0, 4).map((item, index) => (
+          <a
+            key={index}
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.newsCard}
+          >
+            <div className={styles.imageContainer}>
+              <img
+                src={item.image_url || '/assets/images/news-placeholder.jpg'}
+                alt={item.title}
+                className={styles.newsImage}
+              />
+            </div>
+            <div className={styles.newsContent}>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   );

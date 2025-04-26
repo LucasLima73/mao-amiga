@@ -13,6 +13,7 @@ services:
         NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
         OPENAI_API_KEY: ${OPENAI_API_KEY}
         OPENAI_ASSISTANT_ID: ${OPENAI_ASSISTANT_ID}
+        NEXT_PUBLIC_NEWS_API_KEY: ${NEXT_PUBLIC_NEWS_API_KEY}
     ports:
       - "3000:3000"  # Ajustado para refletir a porta interna 3000
     container_name: mao-amiga

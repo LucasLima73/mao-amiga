@@ -23,6 +23,7 @@ ARG NEXT_PUBLIC_FIREBASE_APP_ID
 ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 ARG OPENAI_API_KEY
 ARG OPENAI_ASSISTANT_ID
+ARG NEXT_PUBLIC_NEWS_API_KEY
 
 # Cria o .env.local a partir dos ARGs
 RUN echo "NEXT_PUBLIC_FIREBASE_API_KEY=$NEXT_PUBLIC_FIREBASE_API_KEY" >> .env.local && \
@@ -32,8 +33,9 @@ RUN echo "NEXT_PUBLIC_FIREBASE_API_KEY=$NEXT_PUBLIC_FIREBASE_API_KEY" >> .env.lo
     echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID" >> .env.local && \
     echo "NEXT_PUBLIC_FIREBASE_APP_ID=$NEXT_PUBLIC_FIREBASE_APP_ID" >> .env.local && \
     echo "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY" >> .env.local && \
-    echo "NEXT_PUBLIC_OPENAI_API_KEY=$NEXT_PUBLIC_OPENAI_API_KEY" >> .env.local && \
-    echo "NEXT_PUBLIC_OPENAI_ASSISTANT_ID=$NEXT_PUBLIC_OPENAI_ASSISTANT_ID" >> .env.local
+    echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.local && \
+    echo "OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID" >> .env.local && \
+    echo "NEXT_PUBLIC_NEWS_API_KEY=$NEXT_PUBLIC_NEWS_API_KEY" >> .env.local
 
 # 🔍 LOG PARA DEBUG
 RUN echo "Conteúdo do .env.local:" && cat .env.local
@@ -51,4 +53,4 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

@@ -1,0 +1,36 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  padding: 1rem 0;
+}
+
+.navbarScrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+}
+
+.navbarScrolled a {
+  color: #000;
+}
+
+.navbarScrolled a:hover {
+  color: #fbbf24;
+}
+
+/* Adicione um padding-top no body para compensar a altura da navbar fixa */
+:global(body) {
+  padding-top: 70px;
+}
+
+@media (max-width: 768px) {
+  :global(body) {
+    padding-top: 60px;
+  }
+}

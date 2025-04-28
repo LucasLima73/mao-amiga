@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  i18n: {
+    locales: ["pt-BR", "en"],
+    defaultLocale: "pt-BR",
+    localeDetection: false,
+  },
   async headers() {
     return [
       {
@@ -23,22 +28,10 @@ const nextConfig: NextConfig = {
                 https://maps.googleapis.com
                 https://maps.gstatic.com;
               style-src 'self' 'unsafe-inline';
-              img-src 
-                'self' 
-                data: 
-                blob: 
-                https://www.google-analytics.com
-                https://maps.googleapis.com
-                https://maps.gstatic.com;
-              connect-src 
-                'self' 
-                https://identitytoolkit.googleapis.com 
-                https://www.google-analytics.com 
-                https://firestore.googleapis.com
-                https://maps.googleapis.com
-                https://maps.gstatic.com;
+              img-src 'self' blob: data: https://www.google-analytics.com;
               font-src 'self';
               object-src 'none';
+              connect-src 'self' https://identitytoolkit.googleapis.com https://www.google-analytics.com https://firestore.googleapis.com;
               base-uri 'self';
               form-action 'self';
               frame-ancestors 'none';

@@ -1,5 +1,6 @@
 "use client";
 
+// versão mesclada final
 import React, { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import {

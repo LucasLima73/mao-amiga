@@ -2,12 +2,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import styles from './navbar.module.css';
 import Link from "next/link";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../../../lib/firebase";
+import { useTranslation } from 'react-i18next';
+import { 
+  FaMedkit,
+  FaFileAlt,
+  FaHands,
+  FaChartLine,
+  FaEllipsisH,
+  FaMap,
+  FaComment,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaGlobe
+} from 'react-icons/fa';
 
 declare global {
   interface Window {
@@ -16,6 +30,7 @@ declare global {
 }
 
 const Navbar: React.FC = () => {
+  // Estados para menu mobile, modal de login e criação de conta
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -152,12 +167,20 @@ const Navbar: React.FC = () => {
     setIsLoggedIn(false);
     handleLogoutButtonEvent();
     alert("Logout bem-sucedido!");
-    window.location.reload();
+    window.location.reload(); // Recarrega a página após logout
   };
 
   return (
-    <nav className="absolute top-0 left-0 w-full bg-transparent z-50">
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
+    <nav className={`fixed top-0 left-0 w-full bg-transparent z-50 ${scrolled ? 'bg-white shadow-lg' : ''}`}>
+      {/* Mobile Header */}
+      <div className="md:hidden flex justify-center items-center py-4 bg-black bg-opacity-90">
+        <Link href="/" className="text-yellow-400 font-bold text-2xl tracking-widest uppercase" style={{ fontFamily: "'Cinzel Decorative', serif" }}>
+          Mão Amiga
+        </Link>
+      </div>
+
+      {/* Desktop Navbar */}
+      <div className="hidden md:flex container mx-auto justify-between items-center px-6 py-4">
         {/* Logo */}
         <div
           className="text-yellow-400 font-bold text-3xl tracking-widest uppercase"
@@ -167,25 +190,19 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Menu Desktop */}
-        <div className="hidden md:flex space-x-8 text-yellow-400 text-sm tracking-wide">
+        <div className="hidden md:flex items-center space-x-8 text-yellow-400 text-sm tracking-wide">
           <Link
             href="/trilhaSaude"
             onClick={() => handleNavClick("Saúde")}
             className="hover:text-yellow-300 transition"
           >
-            SAÚDE
+            {t('navbar.health')}
           </Link>
 
-          <Link href="/trilhaDocumentacao" className="hover:text-yellow-300 transition">
-            DOCUMENTAÇÃO
+          <Link href="/documentacao" className="hover:text-yellow-300 transition">
+            {t('navbar.documentation')}
           </Link>
- 
-       
-          <Link
-            href="/trilhaDireitosHumanos"
-            onClick={() => handleNavClick("Direitos Humanos")}
-            className="hover:text-yellow-300 transition"
-          >
+          <Link href="/trilhaDireitosHumanos" className="hover:text-yellow-300 transition">
             DIREITOS HUMANOS
           </Link>
          
@@ -194,73 +211,119 @@ const Navbar: React.FC = () => {
             onClick={() => handleNavClick("Socioeconômico")}
             className="hover:text-yellow-300 transition"
           >
-
-            SOCIOECONÔMICO
+            {t('navbar.socioeconomic')}
           </Link>
-          {/* Novo link para MAPA */}
           <Link href="/mapa" className="hover:text-yellow-300 transition">
-            MAPA
+            {t('navbar.map')}
           </Link>
-
           <Link href="/chat" className="hover:text-yellow-300 transition">
-            CHAT
+            {t('navbar.chat')}
           </Link>
         </div>
 
-        {/* Login / Logout no Desktop via Modal */}
-        <div className="hidden md:flex">
+
+
+      {/* Login / Logout no Desktop via Modal */}
+      <div className="hidden md:flex">
+        {isLoggedIn ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-yellow-400">{userName}</span>
+            <button
+              onClick={handleLogout}
+              className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+            >
+              {t('navbar.logout')}
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => {
+              handleLoginButtonEvent();
+              toggleLoginModal();
+            }}
+            className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+          >
+            {t('navbar.login')}
+          </button>
+        )}
+      </div>
+    </div>
+
+    {/* Mobile Bottom Tab */}
+    <div className="md:hidden fixed bottom-0 left-0 w-full bg-black bg-opacity-90 flex justify-around items-center py-3 px-4 border-t border-yellow-400 z-50">
+      <Link href="/trilhaSaude" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaMedkit className="text-lg mb-1" />
+        {t('navbar.health_short')}
+      </Link>
+      <Link href="/documentacao" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaFileAlt className="text-lg mb-1" />
+        {t('navbar.docs_short')}
+      </Link>
+      <Link href="/chat" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaComment className="text-lg mb-1" />
+        {t('navbar.chat')}
+      </Link>
+      <Link href="/socioeconomico" className="flex flex-col items-center text-yellow-400 text-sm">
+        <FaChartLine className="text-lg mb-1" />
+        {t('navbar.econ_short')}
+      </Link>
+      <button 
+        onClick={toggleDrawer}
+        className="flex flex-col items-center text-yellow-400 text-sm"
+      >
+        <FaEllipsisH className="text-lg mb-1" />
+      </button>
+    </div>
+
+    {/* Mobile Drawer */}
+    {isDrawerOpen && (
+      <div className="md:hidden fixed bottom-16 left-0 w-full bg-black bg-opacity-90 p-4 z-50">
+        <div className="grid grid-cols-2 gap-4 text-yellow-400 text-sm">
+          <Link href="/mapa" onClick={toggleDrawer} className="flex items-center gap-2">
+            <FaMap /> {t('navbar.map')}
+          </Link>
+          <Link href="/trilhaDireitosHumanos" onClick={toggleDrawer} className="flex items-center gap-2">
+            <FaHands /> {t('navbar.rights_short')}
+          </Link>
+          <div className="flex items-center gap-2">
+            <FaGlobe />
+            <select 
+              onChange={(e) => {
+                i18n.changeLanguage(e.target.value);
+                toggleDrawer();
+              }}
+              value={i18n.language}
+              className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+            >
+              <option value="pt">PT</option>
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+            </select>
+          </div>
           {isLoggedIn ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-yellow-400">{userName}</span>
-              <button
-                onClick={handleLogout}
-                className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
-              >
-                Sair
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                toggleDrawer();
+                handleLogout();
+              }}
+              className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
+            >
+              <FaSignOutAlt /> {t('navbar.logout')}
+            </button>
           ) : (
             <button
               onClick={() => {
-                handleLoginButtonEvent();
+                toggleDrawer();
                 toggleLoginModal();
               }}
-              className="text-yellow-400 border border-yellow-400 px-4 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition"
+              className="flex items-center gap-2 text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md"
             >
-              Login
+              <FaSignInAlt /> {t('navbar.login')}
             </button>
           )}
         </div>
-
-        {/* Botão do Menu Mobile */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden text-yellow-400 focus:outline-none"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            )}
-          </svg>
-        </button>
       </div>
+    )}
 
       {/* Menu Mobile */}
       {isOpen && (
@@ -316,11 +379,6 @@ const Navbar: React.FC = () => {
                 MAPA
               </Link>
             </li>
-            <li>
-              <Link href="/chat" onClick={toggleMenu}>
-                CHAT
-              </Link>
-            </li>
             <li className="border-t border-yellow-400 w-3/4 mt-4"></li>
             {isLoggedIn ? (
               <>
@@ -358,7 +416,7 @@ const Navbar: React.FC = () => {
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh]">
-            <h3 className="text-xl font-bold mb-4 text-black">
+            <h3 className="text-xl font-bold mb-4">
               {isCreatingAccount ? "Criar Conta" : "Login"}
             </h3>
             <input

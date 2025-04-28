@@ -3,7 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { usePathname } from "next/navigation";
 import Timeline from "../utils/timeline";
 
@@ -46,23 +53,14 @@ const MapaButton: React.FC = () => (
       href="/mapa"
       className="
         hidden md:inline-flex
-        fixed
-        top-4
-        right-4
-        group
-        items-center
-        h-14
-        w-14
-        bg-blue-600
-        text-white
+        fixed top-4 right-4
+        group items-center
+        h-14 w-14
+        bg-blue-600 text-white
         rounded-full
-        transition-all
-        duration-300
-        hover:w-48
-        hover:bg-blue-700
-        overflow-hidden
-        z-20
-        shadow-lg
+        transition-all duration-300
+        hover:w-48 hover:bg-blue-700
+        overflow-hidden z-20 shadow-lg
       "
     >
       <div className="flex items-center justify-center w-14 h-14">
@@ -91,25 +89,17 @@ const MapaButton: React.FC = () => (
         Consultar Mapa
       </span>
     </a>
-    
-    {/* Versão mobile do botão - Flutuante no canto inferior */}
+
+    {/* Versão mobile do botão */}
     <a
       href="/mapa"
       className="
         md:hidden
-        fixed
-        bottom-4
-        right-4
-        flex
-        items-center
-        justify-center
-        h-14
-        w-14
-        bg-blue-600
-        text-white
-        rounded-full
-        z-20
-        shadow-lg
+        fixed bottom-4 right-4
+        flex items-center justify-center
+        h-14 w-14
+        bg-blue-600 text-white
+        rounded-full z-20 shadow-lg
       "
     >
       <svg
@@ -138,71 +128,75 @@ const MapaButton: React.FC = () => (
 
 const TrilhaSaude: React.FC = () => {
   const { t } = useTranslation();
+  const pathname = usePathname();
+
+  // Estados de navegação
   const [activeStep, setActiveStep] = useState<number>(0);
   const [steps, setSteps] = useState<Step[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  // Força remount ao navegar
-  const pathname = usePathname();
+  // **Novos estados para o popup de documentos**
+  const [showHealthDocsPopup, setShowHealthDocsPopup] = useState<boolean>(false);
+  const [healthDocIndex, setHealthDocIndex] = useState<number>(0);
 
+  // força remount ao navegar
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // carrega userId do localStorage
   useEffect(() => {
     if (isClient) {
-      const storedUserId = localStorage.getItem("userId");
-      setUserId(storedUserId);
+      setUserId(localStorage.getItem("userId"));
     }
   }, [isClient]);
 
-  // Busca "steps" no Firestore
+  // busca passos no Firestore
   useEffect(() => {
     const fetchSteps = async () => {
       try {
         const q = query(collection(db, "steps"), orderBy("order"));
-        const querySnapshot = await getDocs(q);
-        const fetchedSteps: Step[] = querySnapshot.docs.map((doc) => doc.data() as Step);
+        const snap = await getDocs(q);
+        const fetched: Step[] = snap.docs.map(d => d.data() as Step);
 
         if (userId) {
           const userRef = doc(db, "user_progress", userId);
-          const userSnapshot = await getDoc(userRef);
-          if (userSnapshot.exists()) {
-            // Use uma chave exclusiva para a trilha de saúde
-            const userProgress = userSnapshot.data()?.progress_steps_saude;
-            if (userProgress) {
-              const updatedSteps = fetchedSteps.map((step) => ({
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const prog = userSnap.data()?.progress_steps_saude;
+            if (prog) {
+              const updated = fetched.map(step => ({
                 ...step,
-                checklist: step.checklist?.map((task, taskIndex) => ({
+                checklist: step.checklist?.map((task, idx) => ({
                   ...task,
-                  checked: userProgress[step.order]?.[taskIndex]?.checked || false,
+                  checked: prog[step.order]?.[idx]?.checked || false,
                 })),
               }));
-              setSteps(updatedSteps);
+              setSteps(updated);
               return;
             }
           }
         }
-        setSteps(fetchedSteps);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        setSteps(fetched);
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
       }
     };
 
     fetchSteps();
   }, [userId]);
 
-  // Ao clicar no passo 0, abre popup
+  // quando clica em um passo
   const handleStepClick = (index: number) => {
     if (index === 0) {
-      // Abre popup do primeiro passo
       setHealthDocIndex(0);
       setShowHealthDocsPopup(true);
     }
     setActiveStep(index);
   };
 
+  // fecha o popup
   const handleClosePopup = () => {
     setShowHealthDocsPopup(false);
   };
@@ -217,91 +211,90 @@ const TrilhaSaude: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      {/* Container responsivo - Layout Desktop mantido igual ao original */}
-      <div className="hidden md:flex md:flex-col md:items-center md:justify-start md:pt-14 md:pb-20 md:px-2 md:w-full">
-        {/* Título "Saúde" com cores mais vivas */}
+      {/* Layout desktop */}
+      <div className="hidden md:flex flex-col items-center justify-start pt-14 pb-20 px-2 w-full">
         <h2 className="text-3xl font-bold text-[#ffde59] mb-6 mt-4 text-center drop-shadow-lg">
-          Saúde
+          {t("navbar.health")}
         </h2>
 
-      {/* Container principal com position: relative */}
-      <div className="relative max-w-4xl w-full mb-8 overflow-visible">
-        {/* Botão "Consultar Mapa" no topo direito */}
-        <MapaButton />
+        <div className="relative max-w-4xl w-full mb-8 overflow-visible">
+          <MapaButton />
 
-        {/* Bloco branco com pt-16 para não sobrepor o primeiro passo */}
-        <div className="bg-white pt-16 p-4 rounded-sm shadow-md text-gray-800">
-          <Timeline
-            steps={steps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            userId={userId}
-            onStepClick={handleStepClick}
-            showDocumentButton
-            // Aqui informamos ao Timeline que não queremos o botão no passo 1
-            hideDocumentButtonForSteps={[1]}
-          />
-        </div>
-      </div>
-
-      {/* Popup do primeiro passo */}
-      {showHealthDocsPopup && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          onClick={handleClosePopup}
-        >
-          <div
-            className="bg-white p-4 rounded-sm shadow-lg relative max-w-6xl w-full min-h-[90vh] overflow-y-auto flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={handleClosePopup}
-              className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
-            >
-              X
-            </button>
-            <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
-              Documento - {healthDocData[healthDocIndex].title}
-            </p>
-            <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4 relative">
-              <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
-                <h4 className="text-2xl font-semibold mb-4 text-black">
-                  {healthDocData[healthDocIndex].title}
-                </h4>
-                <img
-                  src={healthDocData[healthDocIndex].image}
-                  alt={healthDocData[healthDocIndex].title}
-                  className="w-full h-auto mb-4"
-                />
-                <p className="text-center text-lg whitespace-pre-line text-black">
-                  {healthDocData[healthDocIndex].text}
-                </p>
-              </div>
-              {/* Navegação do carrossel */}
-              {healthDocIndex > 0 && (
-                <button
-                  onClick={() => setHealthDocIndex(healthDocIndex - 1)}
-                  className="absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 left-8"
-                >
-                  {"<"}
-                </button>
-              )}
-              {healthDocIndex < healthDocData.length - 1 && (
-                <button
-                  onClick={() => setHealthDocIndex(healthDocIndex + 1)}
-                  className="absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 right-8"
-                >
-                  {">"}
-                </button>
-              )}
-            </div>
+          <div className="bg-white pt-16 p-4 rounded-sm shadow-md text-gray-800">
+            <Timeline
+              steps={steps}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              userId={userId}
+              onStepClick={handleStepClick}
+              showDocumentButton
+              hideDocumentButtonForSteps={[1]}
+            />
           </div>
         </div>
-      </div>
 
-      {/* Botão "Consultar Mapa" fixo na tela */}
-      <div className=" mb-52 right-4">
-        <MapaButton />
+        {/* Popup do primeiro passo */}
+        {showHealthDocsPopup && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={handleClosePopup}
+          >
+            <div
+              className="bg-white p-4 rounded-sm shadow-lg relative max-w-6xl w-full min-h-[90vh] overflow-y-auto flex flex-col"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                onClick={handleClosePopup}
+                className="absolute top-3 right-3 text-4xl font-bold text-red-600 hover:text-red-700"
+              >
+                X
+              </button>
+              <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
+                Documento – {healthDocData[healthDocIndex].title}
+              </p>
+              <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4 relative">
+                <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
+                  <h4 className="text-2xl font-semibold mb-4 text-black">
+                    {healthDocData[healthDocIndex].title}
+                  </h4>
+                  <img
+                    src={healthDocData[healthDocIndex].image}
+                    alt={healthDocData[healthDocIndex].title}
+                    className="w-full h-auto mb-4"
+                  />
+                  <p className="text-center text-lg whitespace-pre-line text-black">
+                    {healthDocData[healthDocIndex].text}
+                  </p>
+                </div>
+                {healthDocIndex > 0 && (
+                  <button
+                    onClick={() =>
+                      setHealthDocIndex(i => Math.max(i - 1, 0))
+                    }
+                    className="absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 left-8"
+                  >
+                    {"<"}
+                  </button>
+                )}
+                {healthDocIndex < healthDocData.length - 1 && (
+                  <button
+                    onClick={() =>
+                      setHealthDocIndex(i => Math.min(i + 1, healthDocData.length - 1))
+                    }
+                    className="absolute top-1/2 transform -translate-y-1/2 text-8xl text-blue-600 hover:text-blue-800 z-10 right-8"
+                  >
+                    {">"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Botão fixo para mapa (após conteúdo) */}
+        <div className="mb-52 right-4">
+          <MapaButton />
+        </div>
       </div>
     </div>
   );

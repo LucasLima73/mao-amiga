@@ -1,16 +1,22 @@
 'use client';
 import React from 'react';
 
-const FloatingArrow = () => {
+interface FloatingArrowProps {
+  onClick?: () => void;
+}
+
+const FloatingArrow: React.FC<FloatingArrowProps> = ({ onClick }) => {
   return (
     <div
+      onClick={onClick}
       style={{
         position: 'absolute', // Para posicionamento flutuante
         bottom: '10%', // Ajuste para deixá-la acima da parte inferior
         left: '50%', // Centraliza horizontalmente
         transform: 'translateX(-50%)', // Centraliza exato pela largura
-        zIndex: '1000', // Garante que fique acima de outros elementos
-        animation: 'float 2s infinite', // Animação flutuante
+        zIndex: 1000, // Garante que fique acima de outros elementos
+        animation: 'float 2s infinite',
+        cursor: 'pointer', // Para indicar que é clicável
       }}
     >
       <svg

@@ -1,28 +1,22 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; // Importar i18next
 import WavyButton from "./(components)/utils/wavybutton";
 import FloatingArrow from "./(components)/utils/floatingarrow";
-import AboutButton from "./(components)/utils/aboutbutton";
 import NewsSection from "./(components)/NewsSection";
 
-const Home = () => {
-  const { t } = useTranslation();
-  const nextSectionRef = useRef<HTMLDivElement>(null); // <--- Add this!
-
-  const handleScroll = () => {
-    if (nextSectionRef.current) {
-      nextSectionRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+const Home: React.FC = () => {
+  const { t } = useTranslation(); // Hook para acessar traduções
 
   return (
-    <div style={{ width: "100%", overflowX: "hidden" }}>
-      <AboutButton />
-
-      {/* HERO SECTION */}
+    <div
+      style={{
+        width: "100%",
+        overflowX: "hidden",
+      }}
+    >
       <div
         style={{
           height: "100vh",
@@ -39,7 +33,7 @@ const Home = () => {
           padding: "0 5%",
         }}
       >
-        <FloatingArrow onClick={handleScroll} /> {/* Pass onClick here */}
+        <FloatingArrow />
         <div
           style={{
             color: "#ffde59",
@@ -54,10 +48,7 @@ const Home = () => {
           <p>{t("acolhimento")}</p>
         </div>
       </div>
-
-      {/* NEXT SECTION */}
       <div
-        ref={nextSectionRef} // <-- Add ref here
         style={{
           width: "100%",
           backgroundColor: "#FFDE59",
@@ -97,7 +88,6 @@ const Home = () => {
           >
             {t("trilhas_description")}
           </p>
-
           <div
             style={{
               display: "flex",
@@ -129,7 +119,7 @@ const Home = () => {
                 textColor="#000000"
               />
             </Link>
-            <Link href="/socioeconomico">
+            <Link href="/trilhaSocioeconomico">
               <WavyButton
                 buttonText={t("apoio_socioeconomico_button")}
                 backgroundColor="#ffff"
@@ -139,7 +129,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
       <NewsSection />
     </div>
   );

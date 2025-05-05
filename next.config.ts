@@ -24,14 +24,30 @@ const nextConfig: NextConfig = {
                 'unsafe-inline' 
                 'unsafe-eval' 
                 https://www.googletagmanager.com 
-                https://www.google-analytics.com
-                https://maps.googleapis.com
+                https://www.google-analytics.com 
+                https://maps.googleapis.com 
                 https://maps.gstatic.com;
               style-src 'self' 'unsafe-inline';
-              img-src 'self' blob: data: https://www.google-analytics.com;
+              img-src 
+                'self' 
+                data: 
+                blob: 
+                https://www.google-analytics.com 
+                https://identitytoolkit.googleapis.com 
+                https://maps.googleapis.com 
+                https://maps.gstatic.com;
+              connect-src 
+                'self' 
+                https://identitytoolkit.googleapis.com 
+                https://www.google-analytics.com 
+                https://firestore.googleapis.com 
+                https://maps.googleapis.com 
+                https://maps.gstatic.com 
+                https://api.thenewsapi.com 
+                https://mao-amiga-api.onrender.com/api/assistant 
+                https://newsapi.org;
               font-src 'self';
               object-src 'none';
-              connect-src 'self' https://identitytoolkit.googleapis.com https://www.google-analytics.com https://firestore.googleapis.com;
               base-uri 'self';
               form-action 'self';
               frame-ancestors 'none';

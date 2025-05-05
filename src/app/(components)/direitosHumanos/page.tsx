@@ -93,7 +93,7 @@ const TrilhaDireitosHumanos: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen w-screen flex items-center justify-center p-8 overflow-y-auto"
+      className="min-h-screen w-full overflow-x-hidden flex flex-col items-center justify-center p-8"
       style={{
         backgroundImage:
           "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('/assets/images/direitoshumanos.jpg')",

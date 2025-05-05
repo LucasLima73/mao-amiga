@@ -19,6 +19,7 @@ interface TimelineProps {
   onStepClick?: (index: number) => void;
   showDocumentButton?: boolean;
   hideDocumentButtonForSteps?: number[];
+  progressKey?: string;
 }
 
 interface LineStyle {

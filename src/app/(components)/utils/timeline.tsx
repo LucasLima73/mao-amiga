@@ -19,7 +19,6 @@ interface TimelineProps {
   onStepClick?: (index: number) => void;
   showDocumentButton?: boolean;
   hideDocumentButtonForSteps?: number[];
-  progressKey?: string; // Nova propriedade para identificar o caminho
 }
 
 interface LineStyle {
@@ -28,7 +27,7 @@ interface LineStyle {
   left: number;
 }
 
-// Função para transformar URLs em links clicáveis
+// transforma URLs em links clicáveis
 function makeLinksClickable(text: string): string {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return (text || "").replace(urlRegex, (url) => {
@@ -44,63 +43,49 @@ const Timeline: React.FC<TimelineProps> = ({
   onStepClick,
   showDocumentButton = false,
   hideDocumentButtonForSteps,
-  progressKey, // recebendo a propriedade
 }) => {
-  // Se nenhuma progressKey for passada, use "progress_steps" como padrão.
-  const effectiveProgressKey = progressKey || "progress_steps";
-
   const [localSteps, setLocalSteps] = useState<Step[]>(steps);
+  const [expandedSteps, setExpandedSteps] = useState<{ [key: number]: boolean }>({});
+  const containerRef = useRef<HTMLDivElement>(null);
+  const firstCircleRef = useRef<HTMLDivElement>(null);
+  const lastCircleRef = useRef<HTMLDivElement>(null);
+
+  const [lineStyle, setLineStyle] = useState<LineStyle>({ top: 0, height: 0, left: 0 });
 
   useEffect(() => {
     setLocalSteps(steps);
   }, [steps]);
 
-  const isStepCompleted = (stepIndex: number): boolean => {
-    const checklist = localSteps[stepIndex]?.checklist;
-    return checklist ? checklist.every((task) => task.checked) : true;
+  const isStepCompleted = (i: number) => {
+    const list = localSteps[i]?.checklist;
+    return list ? list.every((t) => t.checked) : true;
   };
 
-  const [expandedSteps, setExpandedSteps] = useState<{ [key: number]: boolean }>({});
-
+  // define active e expanded inicial
   useEffect(() => {
-    if (localSteps.length > 0) {
-      let newActiveStep = localSteps.findIndex((_, index) => !isStepCompleted(index));
-      if (newActiveStep === -1) {
-        newActiveStep = localSteps.length - 1;
-      }
-      if (newActiveStep !== activeStep) {
-        setActiveStep(newActiveStep);
-      }
-      const initialExpanded: { [key: number]: boolean } = {};
-      localSteps.forEach((_, index) => {
-        initialExpanded[index] = index === newActiveStep;
-      });
-      setExpandedSteps(initialExpanded);
-    }
+    if (!localSteps.length) return;
+    let newActive = localSteps.findIndex((_, i) => !isStepCompleted(i));
+    if (newActive === -1) newActive = localSteps.length - 1;
+    if (newActive !== activeStep) setActiveStep(newActive);
+    const initExp: { [k: number]: boolean } = {};
+    localSteps.forEach((_, i) => { initExp[i] = i === newActive; });
+    setExpandedSteps(initExp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localSteps]);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const firstCircleRef = useRef<HTMLDivElement>(null);
-  const lastCircleRef = useRef<HTMLDivElement>(null);
-
-  const [lineStyle, setLineStyle] = useState<LineStyle>({
-    top: 0,
-    height: 0,
-    left: 0,
-  });
-
+  // recalcula posição da linha
   const recalcLineStyle = useCallback(() => {
     if (containerRef.current && firstCircleRef.current && lastCircleRef.current) {
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const firstRect = firstCircleRef.current.getBoundingClientRect();
-      const lastRect = lastCircleRef.current.getBoundingClientRect();
-
-      const top = firstRect.top - containerRect.top + firstRect.height / 2;
-      const bottom = lastRect.bottom - containerRect.top - lastRect.height / 2;
-      const height = bottom - top;
-      const left = firstRect.left - containerRect.left + firstRect.width / 2;
-      setLineStyle({ top, height, left });
+      const c = containerRef.current.getBoundingClientRect();
+      const f = firstCircleRef.current.getBoundingClientRect();
+      const l = lastCircleRef.current.getBoundingClientRect();
+      const top = f.top - c.top + f.height / 2;
+      const bottom = l.bottom - c.top - l.height / 2;
+      setLineStyle({
+        top,
+        height: bottom - top,
+        left: f.left - c.left + f.width / 2,
+      });
     }
   }, []);
 
@@ -116,86 +101,85 @@ const Timeline: React.FC<TimelineProps> = ({
       return;
     }
 
-    let updatedSteps = localSteps.map((step, sIndex) =>
-      sIndex === stepIndex
+    let updated = localSteps.map((step, si) =>
+      si === stepIndex
         ? {
             ...step,
-            checklist: step.checklist?.map((task, tIndex) =>
-              tIndex === taskIndex ? { ...task, checked: !task.checked } : task
+            checklist: step.checklist?.map((t, ti) =>
+              ti === taskIndex ? { ...t, checked: !t.checked } : t
             ),
           }
         : step
     );
-    setLocalSteps(updatedSteps);
+    setLocalSteps(updated);
 
-    const toggledStep = updatedSteps[stepIndex];
-    const isNowComplete = toggledStep.checklist
-      ? toggledStep.checklist.every((task) => task.checked)
-      : true;
-
-    if (!isNowComplete) {
-      updatedSteps = updatedSteps.map((step, idx) => {
-        if (idx > stepIndex && step.checklist) {
-          return {
-            ...step,
-            checklist: step.checklist.map((task) => ({ ...task, checked: false })),
-          };
-        }
-        return step;
-      });
+    const nowComplete = updated[stepIndex].checklist?.every((t) => t.checked) ?? true;
+    if (!nowComplete) {
+      updated = updated.map((step, idx) =>
+        idx > stepIndex && step.checklist
+          ? {
+              ...step,
+              checklist: step.checklist.map((t) => ({ ...t, checked: false })),
+            }
+          : step
+      );
       setActiveStep(stepIndex);
       setExpandedSteps((prev) => {
-        const newExp = { ...prev };
-        for (let i = stepIndex + 1; i < updatedSteps.length; i++) {
-          newExp[i] = false;
-        }
-        return newExp;
+        const next = { ...prev };
+        for (let i = stepIndex + 1; i < updated.length; i++) next[i] = false;
+        return next;
       });
-      setLocalSteps(updatedSteps);
-    } else if (isNowComplete && stepIndex + 1 < updatedSteps.length) {
+      setLocalSteps(updated);
+    } else if (nowComplete && stepIndex + 1 < updated.length) {
       setActiveStep(stepIndex + 1);
     }
 
-    const progress_steps = updatedSteps.reduce((acc: any, step) => {
-      acc[step.order] = step.checklist?.map((task) => ({ checked: task.checked }));
+    const progress_steps = updated.reduce((acc: any, s) => {
+      acc[s.order] = s.checklist?.map((t) => ({ checked: t.checked }));
       return acc;
     }, {});
-    const userRef = doc(db, "user_progress", userId);
-    // Atualiza usando a chave específica para este caminho
-    await setDoc(userRef, { [effectiveProgressKey]: progress_steps }, { merge: true });
+    await setDoc(doc(db, "user_progress", userId!), { progress_steps }, { merge: true });
   };
 
-  const toggleExpansion = (stepIndex: number) => {
-    if (!isStepCompleted(stepIndex)) return;
-    setExpandedSteps((prev) => ({
-      ...prev,
-      [stepIndex]: !prev[stepIndex],
-    }));
+  const toggleExpansion = (i: number) => {
+    if (!isStepCompleted(i)) return;
+    setExpandedSteps((prev) => ({ ...prev, [i]: !prev[i] }));
   };
 
   return (
-    <div ref={containerRef} className="bg-white rounded-lg p-8 w-full max-w-4xl relative">
+    <div
+      ref={containerRef}
+      className="
+        bg-white rounded-lg
+        p-4 sm:p-6 md:p-8
+        w-full max-w-full sm:max-w-lg md:max-w-4xl
+        overflow-x-auto md:overflow-visible
+        relative
+      "
+    >
       <div
-        className="absolute w-0.5 bg-gray-300"
+        className="absolute w-0.5 bg-gray-300 hidden md:block"
         style={{
           top: `${lineStyle.top}px`,
           height: `${lineStyle.height}px`,
           left: `${lineStyle.left}px`,
         }}
       />
+
       {localSteps.length === 0 ? (
         <div>Carregando passos...</div>
       ) : (
         localSteps.map((step, index) => {
-          const totalTasks = step.checklist ? step.checklist.length : 0;
-          const completedTasks = step.checklist
-            ? step.checklist.filter((task) => task.checked).length
-            : 0;
-          const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+          const total = step.checklist?.length ?? 0;
+          const done = step.checklist?.filter((t) => t.checked).length ?? 0;
+          const percent = total > 0 ? (done / total) * 100 : 0;
 
           return (
-            <div key={index} className="flex mb-10 last:mb-0 relative">
-              <div className="relative flex items-center">
+            <div
+              key={index}
+              className="flex flex-col md:flex-row mb-8 sm:mb-10 last:mb-0 relative"
+            >
+              <div className="relative flex items-start md:items-center">
                 <div
                   ref={
                     index === 0
@@ -211,6 +195,7 @@ const Timeline: React.FC<TimelineProps> = ({
                         setActiveStep(index);
                       }
                     }}
+                    disabled={index !== 0 && !isStepCompleted(index - 1)}
                     className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
                       isStepCompleted(index)
                         ? "bg-green-500 text-white border-green-500"
@@ -218,7 +203,6 @@ const Timeline: React.FC<TimelineProps> = ({
                         ? "bg-blue-500 text-white border-blue-500"
                         : "bg-white text-gray-400 border-gray-300"
                     }`}
-                    disabled={index !== 0 && !isStepCompleted(index - 1)}
                   >
                     {isStepCompleted(index) ? "✓" : ""}
                   </button>
@@ -226,7 +210,7 @@ const Timeline: React.FC<TimelineProps> = ({
               </div>
 
               <div
-                className="flex-1 ml-6 cursor-pointer select-none"
+                className="flex-1 mt-4 md:mt-0 ml-0 md:ml-6 cursor-pointer select-none"
                 onClick={() => toggleExpansion(index)}
               >
                 <div
@@ -257,47 +241,50 @@ const Timeline: React.FC<TimelineProps> = ({
                     (!hideDocumentButtonForSteps ||
                       !hideDocumentButtonForSteps.includes(index)) && (
                       <button
-                        className="ml-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[150px] text-center"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (onStepClick) {
-                            onStepClick(index);
-                          }
+                          onStepClick?.(index);
                         }}
+                        className="
+                          mt-4 md:mt-0
+                          ml-0 md:ml-auto
+                          w-full md:w-auto
+                          px-4 py-2
+                          bg-blue-600 text-white rounded hover:bg-blue-700
+                          text-center
+                        "
                       >
                         Ver Documento
                       </button>
                     )}
                 </div>
 
-                {totalTasks > 0 && (
+                {total > 0 && (
                   <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
                     <div
                       className="bg-green-500 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${progressPercent}%` }}
+                      style={{ width: `${percent}%` }}
                     />
                   </div>
                 )}
 
                 {(activeStep === index || expandedSteps[index]) && step.checklist && (
                   <div className="mt-4 p-4 border border-gray-300 rounded-md bg-white">
-                    {step.checklist.map((task, taskIndex) => (
+                    {step.checklist.map((task, ti) => (
                       <div
-                        key={taskIndex}
+                        key={ti}
                         className="flex items-center mb-2"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <input
                           type="checkbox"
                           checked={task.checked}
-                          onChange={() => toggleCheckbox(index, taskIndex)}
+                          onChange={() => toggleCheckbox(index, ti)}
                           className="mr-2 cursor-pointer"
                         />
                         <span
                           className="text-sm text-gray-700"
-                          dangerouslySetInnerHTML={{
-                            __html: makeLinksClickable(task.task),
-                          }}
+                          dangerouslySetInnerHTML={{ __html: makeLinksClickable(task.task) }}
                         />
                       </div>
                     ))}

@@ -1,11 +1,19 @@
+// src/app/(components)/utils/footer.tsx
 "use client";
 
 import React from "react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next"; // Importar i18next
+import { useTranslation } from "react-i18next";
+import { usePathname } from "next/navigation";
 
-const Footer = () => {
-  const { t } = useTranslation(); // Hook para acessar traduções
+export default function Footer() {
+  const { t } = useTranslation();
+  const pathname = usePathname();
+
+  // Se estivermos na rota /chat, não renderiza o footer global
+  if (pathname.startsWith("/chat")) {
+    return null;
+  }
 
   return (
     <footer className="bg-black text-white py-10 px-5">
@@ -45,9 +53,6 @@ const Footer = () => {
           <p className="text-base leading-7 text-gray-300">
             <strong>{t("contact_email_label")}:</strong> tccfesa@gmail.com
           </p>
-          {/* <p className="text-base leading-7 text-gray-300">
-            <strong>{t("contact_phone_label")}:</strong> +55 (11) 99999-9999
-          </p> */}
         </div>
       </div>
 
@@ -59,6 +64,4 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

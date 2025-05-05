@@ -10,11 +10,6 @@ import {
 } from "@react-google-maps/api";
 import axios from "axios";
 
-// — layout —
-const MAP_HEIGHT_PX = 1000;
-const containerStyle = { width: "100%", height: "100%" };
-const defaultCenter = { lat: -23.55052, lng: -46.633308 };
-
 // — tipagens —
 interface PlaceApiResponse {
   geometry: { location: { lat: number; lng: number } };
@@ -29,11 +24,11 @@ interface Place {
 
 // — categorias e descrições —
 const DOC_KEYS = [
-  "policia federal","polícia federal","poupatempo","receita federal",
-  "banco do brasil","caixa econômica federal","bradesco","itaú","santander","cras",
+  "policia federal", "polícia federal", "poupatempo", "receita federal",
+  "banco do brasil", "caixa econômica federal", "bradesco", "itaú", "santander", "cras",
 ];
 const HEALTH_KEYS = [
-  "hospital","clinica","posto de saúde","centro de saúde","ubs",
+  "hospital", "clinica", "posto de saúde", "centro de saúde", "ubs",
 ];
 const getDocumentsForPlace = (name: string) => {
   const lower = name.toLowerCase();
@@ -49,12 +44,11 @@ function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: numbe
   const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
   const a =
     Math.sin(dLat/2)**2 +
-    Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
   return R * 2 * Math.asin(Math.sqrt(a));
 }
 
 const GoogleMapComponent: React.FC = () => {
-  // *** Carrega a lib do Maps apenas UMA vez aqui ***
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
@@ -62,15 +56,15 @@ const GoogleMapComponent: React.FC = () => {
 
   // — estados —
   const [cep, setCep] = useState("");
-  const [error, setError] = useState<string|null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [hasUserLocation, setHasUserLocation] = useState(false);
   const [locationChecked, setLocationChecked] = useState(false);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }|null>(null);
-  const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [mapCenter, setMapCenter] = useState({ lat: -23.55052, lng: -46.633308 });
   const [locations, setLocations] = useState<Place[]>([]);
-  const [hoveredMarker, setHoveredMarker] = useState<number|null>(null);
+  const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all"|"documentation"|"health">("all");
+  const [filterType, setFilterType] = useState<"all" | "documentation" | "health">("all");
 
   // monta link externo para rotas
   const buildGoogleMapsRouteUrl = (place: Place) => {
@@ -128,7 +122,7 @@ const GoogleMapComponent: React.FC = () => {
         name: p.name,
         distance: haversineDistance(lat, lng, p.geometry.location.lat, p.geometry.location.lng),
       }));
-      mapped.sort((a,b) => a.distance! - b.distance!);
+      mapped.sort((a, b) => a.distance! - b.distance!);
       setLocations(mapped);
       setMapCenter({ lat: mapped[0].lat, lng: mapped[0].lng });
     } catch {
@@ -164,35 +158,47 @@ const GoogleMapComponent: React.FC = () => {
     loc.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // — loading / erro —
+  // loading / erro
   if (loadError) {
-    return <div className="p-4 text-red-600">Erro ao carregar o Google Maps:<br/>{loadError.message}</div>;
+    return (
+      <div className="p-4 text-red-600">
+        Erro ao carregar o Google Maps:
+        <br />
+        {loadError.message}
+      </div>
+    );
   }
   if (!isLoaded) {
     return <div className="p-4 text-center">Carregando mapa…</div>;
   }
 
-  // — render —
   return (
-    <div
-      className="flex flex-col md:flex-row w-full rounded-lg overflow-hidden shadow-lg border border-gray-200"
-      style={{ height: `${MAP_HEIGHT_PX}px` }}
-    >
+    <div className="
+        flex flex-col md:flex-row
+        w-full rounded-lg overflow-hidden shadow-lg border border-gray-200
+      ">
       {/* SIDEBAR */}
-      <div className="w-full md:w-2/6 bg-white p-4 overflow-y-auto">
+      <div className="
+          w-full md:w-2/6
+          bg-white p-4
+          overflow-y-auto
+          max-h-[50vh] sm:max-h-[60vh] md:max-h-none
+        ">
         <h2 className="text-xl font-bold mb-2 text-gray-800">Filtros</h2>
         <div className="flex gap-2 mb-4">
-          {(["all","documentation","health"] as const).map(type => (
+          {(["all", "documentation", "health"] as const).map(type => (
             <button
               key={type}
-              onClick={()=>setFilterType(type)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
-                filterType===type
+              onClick={() => setFilterType(type)}
+              className={`
+                px-4 py-2 rounded-full text-sm font-semibold transition 
+                ${filterType === type
                   ? "bg-[#f4cb35] text-white"
                   : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-              }`}
+                }
+              `}
             >
-              {type==="all"?"Tudo":type==="documentation"?"Documentação":"Saúde"}
+              {type === "all" ? "Tudo" : type === "documentation" ? "Documentação" : "Saúde"}
             </button>
           ))}
         </div>
@@ -201,7 +207,7 @@ const GoogleMapComponent: React.FC = () => {
           <div className="mb-4">
             <input
               value={cep}
-              onChange={e=>setCep(e.target.value)}
+              onChange={e => setCep(e.target.value)}
               placeholder="Digite seu CEP"
               maxLength={8}
               className="w-full border border-gray-300 p-2 rounded mb-2 text-gray-800"
@@ -219,37 +225,44 @@ const GoogleMapComponent: React.FC = () => {
         <h2 className="text-xl font-bold mb-2 text-gray-800">Locais</h2>
         <input
           value={searchTerm}
-          onChange={e=>setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           placeholder="Pesquisar..."
           className="w-full border border-gray-300 p-2 rounded text-gray-800 mb-4"
         />
 
         <div className="space-y-4">
-          {filtered.map((loc, idx)=>(
+          {filtered.map((loc, idx) => (
             <div
               key={idx}
-              onClick={()=>setHoveredMarker(idx)}
-              className={`p-4 border border-gray-200 rounded-lg shadow-sm cursor-pointer transition ${
-                hoveredMarker===idx?"bg-[#f4cb35] text-white":"bg-white"
-              }`}
+              onClick={() => setHoveredMarker(idx)}
+              className={`
+                p-4 border border-gray-200 rounded-lg shadow-sm cursor-pointer transition
+                ${hoveredMarker === idx ? "bg-[#f4cb35] text-white" : "bg-white"}
+              `}
             >
-              <h4 className={`font-bold text-lg mb-1 ${
-                hoveredMarker===idx?"text-white":"text-gray-900"
-              }`}>{loc.name}</h4>
-              {loc.distance!==undefined&&(
-                <p className={`text-sm mb-2 ${
-                  hoveredMarker===idx?"text-white":"text-gray-600"
-                }`}>Distância: {loc.distance.toFixed(2)} km</p>
+              <h4 className={`
+                  font-bold text-lg mb-1
+                  ${hoveredMarker === idx ? "text-white" : "text-gray-900"}
+                `}>
+                {loc.name}
+              </h4>
+              {loc.distance !== undefined && (
+                <p className={`
+                    text-sm
+                    ${hoveredMarker === idx ? "text-white" : "text-gray-600"}
+                  `}>
+                  Distância: {loc.distance.toFixed(2)} km
+                </p>
               )}
             </div>
           ))}
         </div>
       </div>
 
-      {/* MAPA */}
-      <div className="w-full md:w-5/6">
+      {/* MAPA: aparece **embaixo** da sidebar no mobile */}
+      <div className="w-full md:w-5/6 h-[50vh] sm:h-[60vh] md:h-[80vh]">
         <GoogleMap
-          mapContainerStyle={containerStyle}
+          mapContainerStyle={{ width: "100%", height: "100%" }}
           center={mapCenter}
           zoom={14}
           options={{
@@ -258,11 +271,9 @@ const GoogleMapComponent: React.FC = () => {
             mapTypeControl: false,
           }}
           onLoad={map => {
-            // força redraw ao montar
             google.maps.event.trigger(map, "resize");
           }}
         >
-          {/* Usuário */}
           {userLocation && (
             <Marker
               position={userLocation}
@@ -273,30 +284,26 @@ const GoogleMapComponent: React.FC = () => {
               }}
               label={{
                 text: "Você está aqui",
-                color: "#000000",
+                color: "#000",
                 fontSize: "12px",
                 fontWeight: "bold",
               }}
-              title="Você está aqui!"
             />
           )}
 
-          {/* Marcadores */}
-          {filtered.map((loc, idx)=>(
+          {filtered.map((loc, idx) => (
             <Marker
               key={idx}
               position={{ lat: loc.lat, lng: loc.lng }}
-              onClick={()=>setHoveredMarker(idx)}
+              onClick={() => setHoveredMarker(idx)}
             >
-              {hoveredMarker===idx && (
-                <InfoWindow onCloseClick={()=>setHoveredMarker(null)}>
+              {hoveredMarker === idx && (
+                <InfoWindow onCloseClick={() => setHoveredMarker(null)}>
                   <div className="text-gray-900">
                     <h4 className="font-bold mb-1">{loc.name}</h4>
-                    {loc.distance!==undefined && (
-                      <p className="text-sm mb-2">
-                        <strong>Distância:</strong> {loc.distance.toFixed(2)} km
-                      </p>
-                    )}
+                    <p className="text-sm mb-2">
+                      <strong>Distância:</strong> {loc.distance?.toFixed(2)} km
+                    </p>
                     <p className="text-sm mb-2">
                       <strong>Descrição:</strong> {getDocumentsForPlace(loc.name)}
                     </p>

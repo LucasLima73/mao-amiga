@@ -1,3 +1,4 @@
+// FloatingArrow.tsx (permanece igual, já aceita onClick)
 'use client';
 import React from 'react';
 
@@ -10,13 +11,13 @@ const FloatingArrow: React.FC<FloatingArrowProps> = ({ onClick }) => {
     <div
       onClick={onClick}
       style={{
-        position: 'absolute', // Para posicionamento flutuante
-        bottom: '10%', // Ajuste para deixá-la acima da parte inferior
-        left: '50%', // Centraliza horizontalmente
-        transform: 'translateX(-50%)', // Centraliza exato pela largura
-        zIndex: 1000, // Garante que fique acima de outros elementos
+        position: 'absolute',
+        bottom: '10%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1000,
         animation: 'float 2s infinite',
-        cursor: 'pointer', // Para indicar que é clicável
+        cursor: 'pointer',
       }}
     >
       <svg
@@ -35,15 +36,9 @@ const FloatingArrow: React.FC<FloatingArrowProps> = ({ onClick }) => {
 
       <style jsx>{`
         @keyframes float {
-          0% {
-            transform: translate(-50%, 0);
-          }
-          50% {
-            transform: translate(-50%, -10px);
-          }
-          100% {
-            transform: translate(-50%, 0);
-          }
+          0%   { transform: translate(-50%, 0); }
+          50%  { transform: translate(-50%, -10px); }
+          100% { transform: translate(-50%, 0); }
         }
       `}</style>
     </div>

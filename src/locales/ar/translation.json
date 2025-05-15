@@ -220,11 +220,17 @@
     "saude_title": "الصحة",
     "trilha_saude_title": "مسار الوثائق",
     "trilha_saude_desc": "اتبع الخطوات أدناه للحصول على وثائقك الصحية",
+    "health": {
+      "pageTitle": "الصحة"
+    },
     "dica_title": "نصيحة",
     "dica_desc": "اضغط على كل خطوة لعرض التفاصيل ووضع علامة على المهام كمكتملة",
     "socioeconomico_title": "اجتماعي-اقتصادي",
     "trilha_socioeconomico_title": "مسار الوثائق",
     "trilha_socioeconomico_desc": "اتبع الخطوات أدناه للحصول على وثائقك الاجتماعية-الاقتصادية",
+    "socioeconomic": {
+      "pageTitle": "الدعم الاجتماعي-الاقتصادي"
+    },
     "appName": "اليد الصديقة",
     "menu": {
       "trails": "مسارات",

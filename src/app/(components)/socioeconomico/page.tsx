@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import Timeline from "@/app/(components)/utils/timeline";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface Step {
   title: string;
@@ -70,6 +71,7 @@ const TrilhaSocioeconomica: React.FC = () => {
   const [steps, setSteps] = useState<Step[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const pathname = usePathname();
 
@@ -86,7 +88,21 @@ const TrilhaSocioeconomica: React.FC = () => {
   useEffect(() => {
     const fetchSteps = async () => {
       try {
-        const q = query(collection(db, "socioeconomico-pt"), orderBy("order"));
+     
+let collectionName = "socioeconomico-en"; 
+
+if (i18n.language === "pt") {
+  collectionName = "socioeconomico-pt";
+} else if (i18n.language === "es") {
+  collectionName = "socioeconomico-es";
+} else if (i18n.language === "en") {
+  collectionName = "socioeconomico-en";
+}
+
+console.log('Current language:', i18n.language);
+console.log('Using collection:', collectionName);
+
+const q = query(collection(db, collectionName), orderBy("order"));
         const fetchedSteps: Step[] = (await getDocs(q)).docs.map((d) => d.data() as Step);
 
         if (userId) {
@@ -111,7 +127,7 @@ const TrilhaSocioeconomica: React.FC = () => {
     };
 
     fetchSteps();
-  }, [userId]);
+  }, [userId, i18n.language]);
 
   const handleStepClick = (idx: number) => {
     setActiveStep(idx);
@@ -128,7 +144,7 @@ const TrilhaSocioeconomica: React.FC = () => {
       }}
     >
       <h2 className="text-4xl font-bold text-[#ffde59] mb-6 mt-[9vh] text-center">
-        Apoio Socioeconômico
+        {t('socioeconomic.pageTitle')}
       </h2>
 
       <div className="relative max-w-4xl w-full mb-8 overflow-visible">

@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import Timeline from "../utils/timeline";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface Step {
   title: string;
@@ -94,6 +95,7 @@ const TrilhaSaude: React.FC = () => {
   const [showHealthDocsPopup, setShowHealthDocsPopup] = useState(false);
   const [healthDocIndex, setHealthDocIndex] = useState(0);
 
+  const { t, i18n } = useTranslation();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -107,7 +109,20 @@ const TrilhaSaude: React.FC = () => {
   useEffect(() => {
     const fetchSteps = async () => {
       try {
-        const q = query(collection(db, "steps"), orderBy("order"));
+        let collectionName = "saude-en";
+
+        if (i18n.language === "pt") {
+          collectionName = "steps";
+        } else if (i18n.language === "es") {
+          collectionName = "saude-es";
+        } else if (i18n.language === "en") {
+          collectionName = "saude-en";
+        }
+
+        console.log('Current language:', i18n.language);
+        console.log('Using collection:', collectionName);
+
+        const q = query(collection(db, collectionName), orderBy("order"));
         const snap = await getDocs(q);
         const fetched: Step[] = snap.docs.map((d) => d.data() as Step);
 
@@ -132,7 +147,7 @@ const TrilhaSaude: React.FC = () => {
       }
     };
     fetchSteps();
-  }, [userId]);
+  }, [userId, i18n.language]);
 
   const handleStepClick = (i: number) => {
     if (i === 0) {
@@ -154,7 +169,7 @@ const TrilhaSaude: React.FC = () => {
       }}
     >
       <h2 className="text-4xl font-bold text-[#ffde59] mb-6 mt-[9vh] text-center">
-        Saúde
+        {t('health.pageTitle')}
       </h2>
 
       <div className="relative max-w-4xl w-full mb-8 overflow-visible">

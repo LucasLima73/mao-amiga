@@ -220,11 +220,17 @@
   "saude_title": "Health",
   "trilha_saude_title": "Documents Trail",
   "trilha_saude_desc": "Follow the steps below to obtain your health documents",
+  "health": {
+    "pageTitle": "Health"
+  },
   "dica_title": "Tip",
   "dica_desc": "Tap each step to view details and mark tasks as completed",
   "socioeconomico_title": "Socioeconomic",
   "trilha_socioeconomico_title": "Documents Trail",
   "trilha_socioeconomico_desc": "Follow the steps below to obtain your socioeconomic documents",
+  "socioeconomic": {
+    "pageTitle": "Socioeconomic Support"
+  },
   "appName": "MÃO AMIGA",
   "menu": {
     "trails": "TRAILS",

@@ -224,11 +224,17 @@
   "saude_title": "Salud",
   "trilha_saude_title": "Ruta de Documentos",
   "trilha_saude_desc": "Sigue los pasos a continuación para obtener tus documentos de salud",
+  "health": {
+    "pageTitle": "Salud"
+  },
   "dica_title": "Dica",
   "dica_desc": "Toca en cada etapa para ver detalles y marcar tareas como completadas",
   "socioeconomico_title": "Socioeconómico",
   "trilha_socioeconomico_title": "Ruta de Documentos",
   "trilha_socioeconomico_desc": "Sigue los pasos a continuación para obtener tus documentos socioeconómicos",
+  "socioeconomic": {
+    "pageTitle": "Apoyo Socioeconómico"
+  },
   "appName": "MÃO AMIGA",
   "menu": {
     "trails": "CAMINOS",

@@ -235,9 +235,15 @@
   "saude_title": "Santé",
   "trilha_saude_title": "Parcours des documents",
   "trilha_saude_desc": "Suivez les étapes ci-dessous pour obtenir vos documents de santé",
+  "health": {
+    "pageTitle": "Santé"
+  },
   "dica_title": "Conseil",
   "dica_desc": "Appuyez sur chaque étape pour voir les détails et marquer les tâches comme terminées",
   "socioeconomico_title": "Socio-économique",
   "trilha_socioeconomico_title": "Parcours des documents",
-  "trilha_socioeconomico_desc": "Suivez les étapes ci-dessous pour obtenir vos documents socio-économiques"
+  "trilha_socioeconomico_desc": "Suivez les étapes ci-dessous pour obtenir vos documents socio-économiques",
+  "socioeconomic": {
+    "pageTitle": "Soutien Socio-économique"
+  }
 }

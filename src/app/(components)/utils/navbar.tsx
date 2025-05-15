@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-const Navbar: React.FC = () => {
+const Navbar = React.forwardRef<{ toggleLoginModal: () => void }, {}>((_props, ref) => {
   const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
 
@@ -84,6 +84,11 @@ const Navbar: React.FC = () => {
     setIsPhoneValid(false);
     setIsOpen(false);
   };
+  
+  // Expor a função toggleLoginModal através da ref
+  React.useImperativeHandle(ref, () => ({
+    toggleLoginModal
+  }));
 
   const handleNavClick = (label: string) => {
     window.gtag?.("event", "click_nav", { event_category: "Navigation", event_label: label });
@@ -425,6 +430,6 @@ const Navbar: React.FC = () => {
       </nav>
     </>
   );
-};
+});
 
 export default Navbar;

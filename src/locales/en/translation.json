@@ -238,7 +238,8 @@
     "about": "ABOUT",
     "aboutUs": "About Us",
     "loginRegister": "Login / Register",
-    "language": "LANGUAGE"
+    "language": "LANGUAGE",
+    "menu": "MENU"
   },
   "newsSection": {
     "title": "Articles"

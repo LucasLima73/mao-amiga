@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/next-script-for-ga */
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -25,6 +25,7 @@ const geistMono = Geist_Mono({
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   // estado para controle do menu mobile em todas as páginas
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navbarRef = useRef<any>(null);
 
   return (
     <html lang="en">
@@ -44,12 +45,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootClientProviders>
           {/* Navbar desktop/topo */}
-          <Navbar />
+          <Navbar ref={navbarRef} />
 
           {/* Mobile bottom menu (aparece em todas as páginas) */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
             <MobileNavbar onOpenMenu={() => setIsMenuOpen(true)} />
-            <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+            <MobileMenu 
+              isOpen={isMenuOpen} 
+              onClose={() => setIsMenuOpen(false)} 
+              onLoginClick={() => navbarRef.current?.toggleLoginModal()}
+            />
           </div>
 
           {/* Conteúdo das páginas */}

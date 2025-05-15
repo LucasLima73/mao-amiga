@@ -17,9 +17,10 @@ import { useTranslation } from 'react-i18next';
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onLoginClick?: () => void;
 }
 
-export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose, onLoginClick }: MobileMenuProps) {
   const { t, i18n } = useTranslation();
 
   const baseClasses =
@@ -125,7 +126,12 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </button>
             </Link>
             <button
-              onClick={onClose /* aqui você pode disparar seu modal de login */}
+              onClick={() => {
+                if (onLoginClick) {
+                  onLoginClick();
+                }
+                onClose();
+              }}
               className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
             >
               <User size={20} /> {t('menu.loginRegister')}

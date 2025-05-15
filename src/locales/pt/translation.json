@@ -204,7 +204,8 @@
     "about": "SOBRE",
     "aboutUs": "Sobre Nós",
     "loginRegister": "Login / Cadastro",
-    "language": "IDIOMA"
+    "language": "IDIOMA",
+    "menu": "MENU"
   },
   "newsSection": {
     "title": "Artigos"

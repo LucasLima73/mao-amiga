@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './styles.module.css';
+import { t } from 'i18next';
 
 interface NewsItem {
   title: string;
@@ -49,7 +50,7 @@ const NewsSection = () => {
 
   return (
     <div className={styles.newsSection}>
-      <h2>Últimas Notícias</h2>
+      <h2>{t('newsSection.title')}</h2>
       <div className={styles.newsGrid}>
         {news.slice(0, 4).map((item, index) => (
           <a

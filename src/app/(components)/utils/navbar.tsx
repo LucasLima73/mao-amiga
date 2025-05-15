@@ -109,12 +109,12 @@ const Navbar: React.FC = () => {
         setUserId(data?.userId);
         setIsLoggedIn(true);
         toggleLoginModal();
-        alert(t('login.loading'));
+        alert(t('login.success'));
       } else {
-        alert("Telefone não encontrado!");
+        alert(t('login.phone_not_found'));
       }
     } catch (error: any) {
-      alert("Erro ao fazer login: " + error.message);
+      alert(t('login.error') + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -125,7 +125,7 @@ const Navbar: React.FC = () => {
     try {
       const userDoc = await getDoc(doc(db, "users", phone));
       if (userDoc.exists()) {
-        alert("Este telefone já está registrado!");
+        alert(t('login.phone_already_registered'));
       } else {
         await setDoc(doc(db, "users", phone), { userName: name, userId: phone });
         localStorage.setItem("userName", name);
@@ -134,10 +134,10 @@ const Navbar: React.FC = () => {
         setUserId(phone);
         setIsLoggedIn(true);
         toggleLoginModal();
-        alert("Conta criada com sucesso!");
+        alert(t('login.account_created'));
       }
     } catch (error: any) {
-      alert("Erro ao criar conta: " + error.message);
+      alert(t('login.create_error') + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -145,27 +145,32 @@ const Navbar: React.FC = () => {
 
   const handleLoginWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      localStorage.setItem("userName", user.displayName || "Usuário");
-      localStorage.setItem("userId", user.uid);
-      setUserName(user.displayName);
-      setUserId(user.uid);
-      setIsLoggedIn(true);
-      toggleLoginModal();
-      alert("Login com Google bem-sucedido!");
+
+      if (user.displayName && user.email) {
+        localStorage.setItem("userName", user.displayName);
+        localStorage.setItem("userId", user.email);
+        setUserName(user.displayName);
+        setUserId(user.email);
+        setIsLoggedIn(true);
+        toggleLoginModal();
+        alert(t('login.google_success'));
+      }
     } catch (error: any) {
-      alert("Erro ao fazer login com Google: " + error.message);
+      alert(t('login.google_error') + error.message);
     }
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     setUserName(null);
     setUserId(null);
     setIsLoggedIn(false);
     handleLogoutButtonEvent();
-    alert("Logout bem-sucedido!");
+    alert(t('login.logout_success'));
   };
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -219,6 +224,7 @@ const Navbar: React.FC = () => {
               <option value="pt-BR">PT</option>
               <option value="en">EN</option>
               <option value="es">ES</option>
+              <option value="ar">AR</option>
             </select>
           </div>
 
@@ -280,6 +286,7 @@ const Navbar: React.FC = () => {
                   <option value="pt-BR">PT</option>
                   <option value="en">EN</option>
                   <option value="es">ES</option>
+                  <option value="ar">AR</option>
                 </select>
               </div>
               {isLoggedIn ? (
@@ -320,9 +327,9 @@ const Navbar: React.FC = () => {
 
         {/* Login Modal */}
         {isLoginModalOpen && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg relative mt-[9vh] w-full max-w-md">
-              <h3 className="text-xl font-bold mb-4">
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+            <div className="bg-black border border-yellow-400 p-8 rounded-lg shadow-lg relative mt-[9vh] w-full max-w-md">
+              <h3 className="text-xl font-bold mb-4 text-yellow-400">
                 {isCreatingAccount ? t('login.create_account') : t('login.login')}
               </h3>
 
@@ -333,14 +340,16 @@ const Navbar: React.FC = () => {
                 value={phone}
                 onChange={(e) => {
                   const v = e.target.value;
-                  setPhone(v);
-                  setIsPhoneValid(phonePattern.test(v));
+                  // Permite apenas números no campo de telefone
+                  const numbersOnly = v.replace(/[^0-9]/g, '');
+                  setPhone(numbersOnly);
+                  setIsPhoneValid(phonePattern.test(numbersOnly));
                 }}
-                className="w-full p-2 border rounded mb-1"
+                className="w-full p-2 border border-yellow-400 bg-black text-white rounded mb-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               {phone && !isPhoneValid && (
                 <p className="text-sm text-red-500 mb-2">
-                  Formato inválido. Use: XX9XXXXXXXX
+                  {t('login.invalid_format')}
                 </p>
               )}
 
@@ -351,7 +360,7 @@ const Navbar: React.FC = () => {
                   placeholder={t('login.name')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-2 border rounded mb-4"
+                  className="w-full p-2 border border-yellow-400 bg-black text-white rounded mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               )}
 
@@ -366,9 +375,8 @@ const Navbar: React.FC = () => {
                 className={`
                   w-full px-4 py-2 rounded mb-4
                   ${isCreatingAccount
-                    ? "bg-white text-black border border-black"
-                    : "bg-blue-500 text-white"
-                  }
+                    ? "bg-black text-yellow-400 border border-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+                    : "bg-yellow-400 text-black hover:bg-yellow-500 transition"}
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
@@ -383,16 +391,23 @@ const Navbar: React.FC = () => {
               {/* botão Login com Google */}
               <button
                 onClick={handleLoginWithGoogle}
-                disabled={!isPhoneValid}
-                className="w-full bg-red-500 text-white px-4 py-2 rounded mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-black text-white border border-white px-4 py-2 rounded mb-4 hover:bg-white hover:text-black transition"
               >
-                {t('login.google_login')}
+                <div className="flex items-center justify-center">
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
+                    <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
+                    <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
+                    <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
+                  </svg>
+                  {t('login.google_login')}
+                </div>
               </button>
 
               {/* alterna entre login e criar conta */}
               <button
                 onClick={() => setIsCreatingAccount(!isCreatingAccount)}
-                className="text-blue-500 underline mb-4"
+                className="text-yellow-400 hover:text-yellow-300 underline mb-4"
               >
                 {isCreatingAccount ? t('login.have_account') : t('login.no_account')}
               </button>
@@ -400,7 +415,7 @@ const Navbar: React.FC = () => {
               {/* fechar modal */}
               <button
                 onClick={toggleLoginModal}
-                className="absolute top-2 right-2 text-black hover:text-gray-500"
+                className="absolute top-2 right-2 text-yellow-400 hover:text-yellow-300"
               >
                 ✖
               </button>

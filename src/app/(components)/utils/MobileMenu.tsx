@@ -12,6 +12,7 @@ import {
   Info,
   User,
 } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -19,9 +20,16 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { t, i18n } = useTranslation();
+
   const baseClasses =
     "fixed inset-0 bg-black/90 z-50 transform transition-transform duration-300";
   const positionClass = isOpen ? "translate-y-0" : "translate-y-full";
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    onClose();
+  };
 
   return (
     <div className={`${baseClasses} ${positionClass}`}>
@@ -29,7 +37,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-yellow-500/20">
           <Link href="/" onClick={onClose}>
-            <h1 className="text-xl font-bold cursor-pointer">MÃO AMIGA</h1>
+            <h1 className="text-xl font-bold cursor-pointer">{t('appName')}</h1>
           </Link>
           <button
             onClick={onClose}
@@ -43,13 +51,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="flex-1 overflow-y-auto py-6 px-6">
           {/* Trilhas */}
           <div className="space-y-1">
-            <h2 className="text-gray-400 text-xs font-medium py-2">TRILHAS</h2>
+            <h2 className="text-gray-400 text-xs font-medium py-2">{t('menu.trails')}</h2>
             <Link href="/trilhaDocumentacao">
               <button
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <FileText size={20} /> Documentação
+                <FileText size={20} /> {t('menu.documentation')}
               </button>
             </Link>
             <Link href="/trilhaSaude">
@@ -57,7 +65,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <Heart size={20} /> Saúde
+                <Heart size={20} /> {t('menu.health')}
               </button>
             </Link>
             <Link href="/socioeconomico">
@@ -65,7 +73,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <HandCoins size={20} /> Socioeconômico
+                <HandCoins size={20} /> {t('menu.socioeconomic')}
               </button>
             </Link>
             <Link href="/direitosHumanos">
@@ -73,7 +81,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <Gavel size={20} /> Direitos
+                <Gavel size={20} /> {t('menu.rights')}
               </button>
             </Link>
           </div>
@@ -83,14 +91,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           {/* Ferramentas */}
           <div className="space-y-1">
             <h2 className="text-gray-400 text-xs font-medium py-2">
-              FERRAMENTAS
+              {t('menu.tools')}
             </h2>
             <Link href="/chat">
               <button
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <MessageSquare size={20} /> Chat Assistente
+                <MessageSquare size={20} /> {t('menu.chatAssistant')}
               </button>
             </Link>
             <Link href="/mapa">
@@ -98,7 +106,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <MapPin size={20} /> Mapa de Serviços
+                <MapPin size={20} /> {t('menu.serviceMap')}
               </button>
             </Link>
           </div>
@@ -107,41 +115,41 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
           {/* Sobre */}
           <div className="space-y-1">
-            <h2 className="text-gray-400 text-xs font-medium py-2">SOBRE</h2>
+            <h2 className="text-gray-400 text-xs font-medium py-2">{t('menu.about')}</h2>
             <Link href="/sobre">
               <button
                 onClick={onClose}
                 className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
               >
-                <Info size={20} /> Sobre Nós
+                <Info size={20} /> {t('menu.aboutUs')}
               </button>
             </Link>
             <button
               onClick={onClose /* aqui você pode disparar seu modal de login */}
               className="flex items-center gap-3 p-3 rounded-md hover:bg-yellow-500/10 w-full"
             >
-              <User size={20} /> Login / Cadastro
+              <User size={20} /> {t('menu.loginRegister')}
             </button>
           </div>
         </div>
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-yellow-500/20">
-          <h2 className="text-gray-400 text-xs font-medium">IDIOMA</h2>
+          <h2 className="text-gray-400 text-xs font-medium">{t('menu.language')}</h2>
           <div className="flex justify-center gap-4 mt-3">
-            {["PT", "EN", "ES", "FR"].map((l) => {
-              const active = l === "PT";
+            {["pt", "en", "es", "fr", "ar"].map((l) => {
+              const active = l === i18n.language;
               return (
                 <button
                   key={l}
-                  onClick={onClose /* se trocar idioma, fecha o menu */}
+                  onClick={() => changeLanguage(l)}
                   className={`h-8 w-12 rounded border text-sm font-medium transition-colors ${
                     active
                       ? "border-yellow-500 bg-yellow-500 text-black"
                       : "border-yellow-500 hover:bg-yellow-500/10 text-yellow-500"
                   }`}
                 >
-                  {l}
+                  {l.toUpperCase()}
                 </button>
               );
             })}

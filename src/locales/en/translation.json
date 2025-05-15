@@ -11,7 +11,11 @@
     "map": "MAP",
     "chat": "CHAT",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "about": "ABOUT",
+    "about_us": "About Us",
+    "login_register": "Login / Register",
+    "language": "LANGUAGE"
   },
   "login": {
     "phone": "Phone",
@@ -26,7 +30,17 @@
     "login": "Login",
     "signup": "Sign Up",
     "forgot_password": "Forgot Password",
-    "create_account": "Create Account"
+    "create_account": "Create Account",
+    "success": "Login successful!",
+    "phone_not_found": "Phone number not found!",
+    "error": "Login error: ",
+    "phone_already_registered": "This phone is already registered!",
+    "account_created": "Account created successfully!",
+    "create_error": "Error creating account: ",
+    "google_success": "Google login successful!",
+    "google_error": "Error logging in with Google: ",
+    "invalid_format": "Invalid format. Use: XX9XXXXXXXX",
+    "logout_success": "Logout successful!"
   },
   "chat": {
     "placeholder": "Type your message...",
@@ -210,8 +224,23 @@
   "dica_desc": "Tap each step to view details and mark tasks as completed",
   "socioeconomico_title": "Socioeconomic",
   "trilha_socioeconomico_title": "Documents Trail",
-  "trilha_socioeconomico_desc": "Follow the steps below to obtain your socioeconomic documents"
-  
-  
-
+  "trilha_socioeconomico_desc": "Follow the steps below to obtain your socioeconomic documents",
+  "appName": "MÃO AMIGA",
+  "menu": {
+    "trails": "TRAILS",
+    "documentation": "Documentation",
+    "health": "Health",
+    "socioeconomic": "Socioeconomic",
+    "rights": "Rights",
+    "tools": "TOOLS",
+    "chatAssistant": "Chat Assistant",
+    "serviceMap": "Service Map",
+    "about": "ABOUT",
+    "aboutUs": "About Us",
+    "loginRegister": "Login / Register",
+    "language": "LANGUAGE"
+  },
+  "newsSection": {
+    "title": "Articles"
+  }
 }

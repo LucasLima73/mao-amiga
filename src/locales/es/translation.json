@@ -11,7 +11,11 @@
     "map": "MAPA",
     "chat": "CHAT",
     "login": "Iniciar sesión",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "about": "ACERCA DE",
+    "about_us": "Sobre Nosotros",
+    "login_register": "Iniciar Sesión / Registrarse",
+    "language": "IDIOMA"
   },
   "login": {
     "phone": "Teléfono",
@@ -26,7 +30,20 @@
     "login": "Iniciar sesión",
     "signup": "Registrarse",
     "forgot_password": "Olvidé mi contraseña",
-    "create_account": "Crear cuenta"
+    "create_account": "Crear cuenta",
+    "success": "¡Inicio de sesión exitoso!",
+    "phone_not_found": "Teléfono no encontrado!",
+    "error": "Error al iniciar sesión: ",
+    "phone_already_registered": "Este teléfono ya está registrado!",
+    "account_created": "Cuenta creada con éxito!",
+    "create_error": "Error al crear cuenta: ",
+    "google_success": "Inicio de sesión con Google exitoso!",
+    "google_error": "Error al iniciar sesión con Google: ",
+    "invalid_format": "Formato inválido. Use: XX9XXXXXXXX",
+    "logout_success": "Cierre de sesión exitoso!"
+  },
+  "logout": {
+    "success": "¡Cierre de sesión exitoso!"
   },
   "chat": {
     "placeholder": "Escribe tu mensaje...",
@@ -111,8 +128,7 @@
       "sus": "La Tarjeta SUS permite el acceso a los servicios de salud pública."
     }
   
-}
-,
+},
   "consultar_mapa": "Consultar Mapa",
   "page_title_documentacao": "Documentación",
   "page_title_refugio": "Documentación - Solicitud de Refugio",
@@ -212,7 +228,23 @@
   "dica_desc": "Toca en cada etapa para ver detalles y marcar tareas como completadas",
   "socioeconomico_title": "Socioeconómico",
   "trilha_socioeconomico_title": "Ruta de Documentos",
-  "trilha_socioeconomico_desc": "Sigue los pasos a continuación para obtener tus documentos socioeconómicos"
-  
-
+  "trilha_socioeconomico_desc": "Sigue los pasos a continuación para obtener tus documentos socioeconómicos",
+  "appName": "MÃO AMIGA",
+  "menu": {
+    "trails": "CAMINOS",
+    "documentation": "Documentación",
+    "health": "Salud",
+    "socioeconomic": "Socioeconómico",
+    "rights": "Derechos",
+    "tools": "HERRAMIENTAS",
+    "chatAssistant": "Asistente de Chat",
+    "serviceMap": "Mapa de Servicios",
+    "about": "ACERCA DE",
+    "aboutUs": "Sobre Nosotros",
+    "loginRegister": "Iniciar Sesión / Registrarse",
+    "language": "IDIOMA"
+  },
+  "newsSection": {
+    "title": "Artículos"
+  }
 }

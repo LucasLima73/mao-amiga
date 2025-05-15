@@ -11,7 +11,11 @@
     "map": "MAPA",
     "chat": "CHAT",
     "login": "Login",
-    "logout": "Sair"
+    "logout": "Sair",
+    "about": "SOBRE",
+    "about_us": "SOBRE NÓS",
+    "login_register": "Login / Cadastro",
+    "language": "IDIOMA"
   },
   "login": {
     "phone": "Telefone",
@@ -26,7 +30,17 @@
     "login": "Login",
     "signup": "Cadastrar",
     "forgot_password": "Esqueci minha senha",
-    "create_account": "Criar conta"
+    "create_account": "Criar conta",
+    "success": "Login realizado com sucesso!",
+    "phone_not_found": "Telefone não encontrado!",
+    "error": "Erro ao fazer login: ",
+    "phone_already_registered": "Este telefone já está registrado!",
+    "account_created": "Conta criada com sucesso!",
+    "create_error": "Erro ao criar conta: ",
+    "google_success": "Login com Google realizado com sucesso!",
+    "google_error": "Erro ao fazer login com Google: ",
+    "invalid_format": "Formato inválido. Use: XX9XXXXXXXX",
+    "logout_success": "Logout realizado com sucesso!"
   },
   "chat": {
     "placeholder": "Digite sua mensagem...",
@@ -176,6 +190,23 @@
   "dica_desc": "Toque em cada etapa para ver detalhes e marcar tarefas como concluídas",
   "socioeconomico_title": "Socioeconómico",
   "trilha_socioeconomico_title": "Trilha de Documentos",
-  "trilha_socioeconomico_desc": "Siga os passos abaixo para obter seus documentos socioeconómicos"
-  
+  "trilha_socioeconomico_desc": "Siga os passos abaixo para obter seus documentos socioeconómicos",
+  "appName": "MÃO AMIGA",
+  "menu": {
+    "trails": "TRILHAS",
+    "documentation": "Documentação",
+    "health": "Saúde",
+    "socioeconomic": "Socioeconômico",
+    "rights": "Direitos",
+    "tools": "FERRAMENTAS",
+    "chatAssistant": "Chat Assistente",
+    "serviceMap": "Mapa de Serviços",
+    "about": "SOBRE",
+    "aboutUs": "Sobre Nós",
+    "loginRegister": "Login / Cadastro",
+    "language": "IDIOMA"
+  },
+  "newsSection": {
+    "title": "Artigos"
+  }
 }

@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import Timeline from "../utils/timeline";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface Step {
   title: string;
@@ -100,11 +101,37 @@ const MapaButton: React.FC = () => (
 );
 
 const TrilhaDocumentacao: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [steps, setSteps] = useState<Step[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [selectedPath, setSelectedPath] = useState<number | null>(null);
+  const [language, setLanguage] = useState(i18n.language)
+
+  useEffect(() => {
+    const handleLanguageChange = (lng: string) => {
+      console.log('Language changed to:', lng);
+      setLanguage(lng);
+    }
+  
+    i18n.on('languageChanged', handleLanguageChange)
+  
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange)
+    }
+  }, [i18n])
+  
+  // Force a refresh of data when language changes
+  useEffect(() => {
+    console.log('Language state changed to:', language);
+    if (selectedPath !== null) {
+      console.log('Forcing data refresh due to language change');
+      // This will trigger the fetchSteps useEffect
+      setSelectedPath(selectedPath);
+    }
+  }, [language, selectedPath])
+  
 
   // Popups
   const [showPopup, setShowPopup] = useState(false); // CRNM/DPRNM
@@ -147,13 +174,36 @@ const TrilhaDocumentacao: React.FC = () => {
 
   // Busca dos passos no Firestore (baseado em selectedPath)
   useEffect(() => {
+    console.log('fetchSteps useEffect triggered - language:', i18n.language, 'selectedPath:', selectedPath);
     if (selectedPath !== null) {
       const fetchSteps = async () => {
         try {
-          const collectionName =
-            selectedPath === 2
-              ? "stepsDocumentacao-autorizacaoResidencia"
-              : "stepsDocumentacao";
+          let collectionName = "steps-en-doc-autorizaresidencia";
+          if (selectedPath === 2) {
+            // For authorization residence path
+            if (i18n.language === "pt") {
+              collectionName = "stepsDocumentacao-autorizacaoResidencia"
+            } else if (i18n.language === "en") {
+              collectionName = "ssteps-en-doc-autorizaresidencia";
+            } else if (i18n.language === "es") {
+              collectionName = "steps- es-doc-autorizacaoresidencia";
+            } else {
+              collectionName = "steps-en-doc-autorizaresidencia";
+            }
+          } else {
+            // For regular documentation path
+            if (i18n.language === "pt") {
+              collectionName = "stepsDocumentacao";
+            } else if (i18n.language === "en") {
+              collectionName = "stepsDocumentacao - en";
+            } else if (i18n.language === "es") {
+              collectionName = "stepsDocumenetacao - es";
+            } else {
+              collectionName = "stepsDocumentacao - en";
+            }
+          }
+          console.log('Current language:', i18n.language);
+          console.log('Using collection:', collectionName);
           const q = query(collection(db, collectionName), orderBy("order"));
           const querySnapshot = await getDocs(q);
           const fetchedSteps: Step[] = querySnapshot.docs.map(
@@ -187,7 +237,7 @@ const TrilhaDocumentacao: React.FC = () => {
       };
       fetchSteps();
     }
-  }, [userId, selectedPath, progressKey]);
+  }, [userId, selectedPath, progressKey, language, i18n.language]);
 
   // Handlers para abrir popups
   const handleFirstStepClick = () => {
@@ -217,10 +267,10 @@ const TrilhaDocumentacao: React.FC = () => {
 
   const pageTitle =
     selectedPath === 1
-      ? "Documentação - Solicitação de Refúgio"
+      ? t('documentation.pageTitle.refuge')
       : selectedPath === 2
-      ? "Documentação - Autorização de Residência"
-      : "Documentação";
+      ? t('documentation.pageTitle.residence')
+      : t('documentation.pageTitle.main');
 
   return (
     <div

@@ -108,15 +108,15 @@
       "description": "Notre objectif à long terme est d'élargir Main Amie pour inclure plus de parcours d'assistance, des partenariats avec des ONG, et une intégration avec les plateformes gouvernementales. Nous visons à être un point de référence pour les réfugiés en quête d'accueil et de soutien."
     }
   },
-  "documentation": {
+  "doc_info": {
     "title": "Documentation",
     "refuge_request": "Demande de refuge",
     "residence_authorization": "Autorisation de résidence",
     "choose_path": "Parcours pour la régularisation migratoire au Brésil",
-    "choose_path_description": "En arrivant au Brésil, les immigrants et les réfugiés peuvent régulariser leur statut légal de différentes manières, selon chaque cas.",
+    "choose_path_description": "En arrivant au Brésil, les immigrants et les réfugiés peuvent régulariser leur statut juridique de différentes façons, selon chaque cas.",
     "main_options": "Options principales :",
-    "refuge_info": "Refuge : Pour ceux qui ont fui des persécutions, des guerres ou des crises humanitaires, garantissant une protection internationale pendant l'analyse de la demande.",
-    "residence_info": "Résidence : Pour ceux qui souhaitent vivre et travailler légalement au Brésil par des liens familiaux, un emploi ou des accords internationaux.",
+    "refuge_info": "Refuge : Pour ceux qui ont fui la persécution, la guerre ou les crises humanitaires, garantissant une protection internationale pendant l'analyse de la demande.",
+    "residence_info": "Résidence : Pour ceux qui souhaitent vivre et travailler légalement au Brésil grâce à des liens familiaux, à l'emploi ou à des accords internationaux.",
     "step_title": {
       "doc_refuge": "Documentation - Demande de refuge",
       "doc_residence": "Documentation - Autorisation de résidence"
@@ -237,6 +237,13 @@
   "trilha_saude_desc": "Suivez les étapes ci-dessous pour obtenir vos documents de santé",
   "health": {
     "pageTitle": "Santé"
+  },
+  "documentation": {
+    "pageTitle": {
+      "main": "Documentation",
+      "refuge": "Documentation - Demande de Refuge",
+      "residence": "Documentation - Autorisation de Résidence"
+    }
   },
   "dica_title": "Conseil",
   "dica_desc": "Appuyez sur chaque étape pour voir les détails et marquer les tâches comme terminées",

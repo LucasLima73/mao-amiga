@@ -189,6 +189,13 @@
   "health": {
     "pageTitle": "Saúde"
   },
+  "documentation": {
+    "pageTitle": {
+      "main": "Documentação",
+      "refuge": "Documentação - Solicitação de Refúgio",
+      "residence": "Documentação - Autorização de Residência"
+    }
+  },
   "dica_title": "Dica",
   "dica_desc": "Toque em cada etapa para ver detalhes e marcar tarefas como concluídas",
   "socioeconomico_title": "Socioeconómico",

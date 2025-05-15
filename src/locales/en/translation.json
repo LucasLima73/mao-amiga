@@ -91,7 +91,7 @@
     "description": "Our long-term goal is to expand Mão Amiga to include more support tracks, partnerships with NGOs, and integration with government platforms. We aim to be a point of reference for refugees seeking welcome and support."
   }
 },
-"documentation": {
+"doc_info": {
   "title": "Documentation",
   "refuge_request": "Refuge Request",
   "residence_authorization": "Residence Authorization",
@@ -222,6 +222,13 @@
   "trilha_saude_desc": "Follow the steps below to obtain your health documents",
   "health": {
     "pageTitle": "Health"
+  },
+  "documentation": {
+    "pageTitle": {
+      "main": "Documentation",
+      "refuge": "Documentation - Refugee Application",
+      "residence": "Documentation - Residence Authorization"
+    }
   },
   "dica_title": "Tip",
   "dica_desc": "Tap each step to view details and mark tasks as completed",

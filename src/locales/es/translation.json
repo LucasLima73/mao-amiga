@@ -95,7 +95,7 @@
   }
 },
 
-  "documentation": {
+  "doc_info": {
     "title": "Documentación",
     "refuge_request": "Solicitud de Refugio",
     "residence_authorization": "Autorización de Residencia",
@@ -226,6 +226,13 @@
   "trilha_saude_desc": "Sigue los pasos a continuación para obtener tus documentos de salud",
   "health": {
     "pageTitle": "Salud"
+  },
+  "documentation": {
+    "pageTitle": {
+      "main": "Documentación",
+      "refuge": "Documentación - Solicitud de Refugio",
+      "residence": "Documentación - Autorización de Residencia"
+    }
   },
   "dica_title": "Dica",
   "dica_desc": "Toca en cada etapa para ver detalles y marcar tareas como completadas",

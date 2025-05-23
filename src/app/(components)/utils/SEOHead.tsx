@@ -38,7 +38,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   const currentLang = i18n.language || 'pt';
   
   // Constrói a URL canônica
-  const baseUrl = 'https://maoamiga.org';
+  const baseUrl = 'https://mao-amiga.site';
   const canonical = canonicalPath 
     ? `${baseUrl}${canonicalPath}` 
     : `${baseUrl}${pathname}`;

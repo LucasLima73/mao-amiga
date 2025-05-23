@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/admin/'],
     },
-    sitemap: 'https://maoamiga.org/sitemap.xml',
+    sitemap: 'https://mao-amiga.site/sitemap.xml',
   };
 }

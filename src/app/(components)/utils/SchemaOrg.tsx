@@ -41,7 +41,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({
   const pageDescription = description || t('site_description', 'Plataforma de apoio e informações para imigrantes e refugiados no Brasil');
   
   // Constrói a URL completa
-  const baseUrl = 'https://maoamiga.org';
+  const baseUrl = 'https://mao-amiga.site';
   const pageUrl = url || `${baseUrl}${pathname}`;
   const fullImageUrl = `${baseUrl}${imageUrl}`;
   

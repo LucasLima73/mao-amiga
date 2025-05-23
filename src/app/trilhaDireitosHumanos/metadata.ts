@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     ...defaultMetadata.openGraph,
     title: 'Trilha de Direitos Humanos | Mão Amiga',
     description: 'Informações sobre direitos humanos para imigrantes e refugiados no Brasil, incluindo direitos básicos, proteção contra discriminação e recursos de apoio.',
-    url: 'https://maoamiga.org/trilhaDireitosHumanos',
+    url: 'https://mao-amiga.site/trilhaDireitosHumanos',
     type: 'article',
   }
 };

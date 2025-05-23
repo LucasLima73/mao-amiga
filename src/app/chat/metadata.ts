@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     ...defaultMetadata.openGraph,
     title: 'Chat de Atendimento | Mão Amiga',
     description: 'Chat de atendimento para imigrantes e refugiados no Brasil. Tire suas dúvidas sobre documentação, direitos, saúde e apoio socioeconômico.',
-    url: 'https://maoamiga.org/chat',
+    url: 'https://mao-amiga.site/chat',
     type: 'website',
   }
 };

@@ -53,8 +53,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               '@context': 'https://schema.org',
               '@type': 'Organization',
               'name': 'Mão Amiga',
-              'url': 'https://maoamiga.org',
-              'logo': 'https://maoamiga.org/logo.png',
+              'url': 'https://mao-amiga.site',
+              'logo': 'https://mao-amiga.site/logo.png',
               'description': 'Plataforma de apoio e informações para imigrantes e refugiados no Brasil',
               'sameAs': [
                 'https://facebook.com/maoamiga',

@@ -21,7 +21,7 @@ const HrefLangTags: React.FC = () => {
   ];
   
   // Constrói a URL base
-  const baseUrl = 'https://maoamiga.org';
+  const baseUrl = 'https://mao-amiga.site';
   
   // Remove o prefixo de idioma do caminho atual, se existir
   const langPrefixPattern = /^\/(pt|en|es|fr|ar)(\/|$)/;

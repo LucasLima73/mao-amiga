@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://maoamiga.org';
+  const baseUrl = 'https://mao-amiga.site';
   
   // Define all available languages from the i18n configuration
   const languages = ['pt', 'en', 'es', 'fr', 'ar'];

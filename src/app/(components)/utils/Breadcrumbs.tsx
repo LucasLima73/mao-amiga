@@ -54,7 +54,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
       '@type': 'ListItem',
       'position': index + 1,
       'name': item.label,
-      'item': `https://maoamiga.org${item.path}`
+      'item': `https://mao-amiga.site${item.path}`
     }))
   };
   

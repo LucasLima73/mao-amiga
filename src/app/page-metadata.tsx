@@ -9,6 +9,6 @@ export const metadata: Metadata = {
     ...defaultMetadata.openGraph,
     title: 'Mão Amiga | Apoio a Imigrantes e Refugiados no Brasil',
     description: 'Plataforma de acolhimento e informações para imigrantes e refugiados no Brasil, com trilhas de acesso à saúde, direitos humanos, documentação e apoio socioeconômico.',
-    url: 'https://maoamiga.org',
+    url: 'https://mao-amiga.site',
   }
 };

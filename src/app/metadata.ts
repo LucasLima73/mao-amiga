@@ -16,7 +16,7 @@ export const defaultMetadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://maoamiga.org'),
+  metadataBase: new URL('https://mao-amiga.site'),
   alternates: {
     canonical: '/',
     languages: {
@@ -30,7 +30,7 @@ export const defaultMetadata: Metadata = {
   openGraph: {
     title: 'Mão Amiga | Apoio a Imigrantes e Refugiados',
     description: 'Plataforma de apoio e informações para imigrantes e refugiados no Brasil, oferecendo trilhas de acesso à saúde, direitos humanos, documentação e apoio socioeconômico.',
-    url: 'https://maoamiga.org',
+    url: 'https://mao-amiga.site',
     siteName: 'Mão Amiga',
     images: [
       {

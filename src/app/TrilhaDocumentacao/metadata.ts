@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     ...defaultMetadata.openGraph,
     title: 'Trilha de Documentação | Mão Amiga',
     description: 'Guia completo sobre documentação para imigrantes e refugiados no Brasil, incluindo processos de regularização, documentos necessários e onde obtê-los.',
-    url: 'https://maoamiga.org/trilhaDocumentacao',
+    url: 'https://mao-amiga.site/trilhaDocumentacao',
     type: 'article',
   }
 };

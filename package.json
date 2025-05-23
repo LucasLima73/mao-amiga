@@ -12,6 +12,7 @@
     "@expo/vector-icons": "^14.0.4",
     "@react-google-maps/api": "^2.20.6",
     "axios": "^1.7.9",
+    "critters": "^0.0.23",
     "firebase": "^11.3.0",
     "framer-motion": "^12.0.6",
     "i18next": "^25.0.1",

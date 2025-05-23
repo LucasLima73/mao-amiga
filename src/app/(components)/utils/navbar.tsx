@@ -5,6 +5,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styles from './navbar.module.css';
 import Link from "next/link";
+import Image from "next/image";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { db } from "../../../lib/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
@@ -22,6 +23,7 @@ import {
   FaSignOutAlt,
   FaGlobe
 } from 'react-icons/fa';
+import LanguageSelector from "./LanguageSelector";
 
 declare global {
   interface Window {
@@ -225,12 +227,8 @@ const Navbar = React.forwardRef<{ toggleLoginModal: () => void }, {}>((_props, r
               {t('navbar.about', 'Sobre')}
             </Link>
 
-            <select value={i18n.language} onChange={(e) => i18n.changeLanguage(e.target.value)} className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md">
-              <option value="pt-BR">PT</option>
-              <option value="en">EN</option>
-              <option value="es">ES</option>
-              <option value="ar">AR</option>
-            </select>
+            <LanguageSelector />
+
           </div>
 
           <div>
@@ -287,12 +285,27 @@ const Navbar = React.forwardRef<{ toggleLoginModal: () => void }, {}>((_props, r
               </Link>
               <div className="flex items-center gap-2">
                 <FaGlobe />
-                <select value={i18n.language} onChange={(e) => { i18n.changeLanguage(e.target.value); toggleDrawer(); }} className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md">
-                  <option value="pt-BR">PT</option>
-                  <option value="en">EN</option>
-                  <option value="es">ES</option>
-                  <option value="ar">AR</option>
-                </select>
+                <div className="flex items-center">
+                  <select 
+                    value={i18n.language} 
+                    onChange={(e) => { i18n.changeLanguage(e.target.value); toggleDrawer(); }} 
+                    className="bg-transparent text-yellow-400 border border-yellow-400 px-2 py-1 rounded-md pr-8"
+                    style={{ backgroundPosition: 'right 0.5rem center' }}
+                  >
+                    <option value="pt-BR">PT</option>
+                    <option value="en">EN</option>
+                    <option value="es">ES</option>
+                    <option value="fr">FR</option>
+                    <option value="ar">AR</option>
+                  </select>
+                  <div className="ml-2 w-6 h-4 relative">
+                    {i18n.language === 'pt-BR' && <Image src="/assets/flags/brazil.svg" alt="Brazil flag" fill className="object-contain" />}
+                    {i18n.language === 'en' && <Image src="/assets/flags/usa.svg" alt="USA flag" fill className="object-contain" />}
+                    {i18n.language === 'es' && <Image src="/assets/flags/spain.svg" alt="Spain flag" fill className="object-contain" />}
+                    {i18n.language === 'fr' && <Image src="/assets/flags/france.svg" alt="France flag" fill className="object-contain" />}
+                    {i18n.language === 'ar' && <Image src="/assets/flags/arabic.svg" alt="Arabic flag" fill className="object-contain" />}
+                  </div>
+                </div>
               </div>
               {isLoggedIn ? (
                 <button onClick={() => { toggleDrawer(); handleLogout(); }} className="flex items-center gap-2 border border-yellow-400 px-2 py-1 rounded-md hover:bg-yellow-400 hover:text-black transition text-yellow-400">

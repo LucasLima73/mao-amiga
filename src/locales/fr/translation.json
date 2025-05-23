@@ -252,5 +252,9 @@
   "trilha_socioeconomico_desc": "Suivez les étapes ci-dessous pour obtenir vos documents socio-économiques",
   "socioeconomic": {
     "pageTitle": "Soutien Socio-économique"
+  },
+  "languageModal": {
+    "title": "Sélectionnez votre langue",
+    "subtitle": "Select your language"
   }
 }

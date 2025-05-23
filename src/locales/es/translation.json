@@ -259,5 +259,9 @@
   },
   "newsSection": {
     "title": "Artículos"
+  },
+  "languageModal": {
+    "title": "Seleccione su idioma",
+    "subtitle": "Select your language"
   }
 }

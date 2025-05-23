@@ -222,5 +222,9 @@
   },
   "newsSection": {
     "title": "Artigos"
+  },
+  "languageModal": {
+    "title": "Selecione seu idioma",
+    "subtitle": "Select your language"
   }
 }

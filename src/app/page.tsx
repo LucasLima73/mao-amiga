@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import WavyButton from './(components)/utils/wavybutton';
@@ -9,6 +9,7 @@ import NewsSection from './(components)/NewsSection';
 // Mobile responsive components
 import MobileMenu from './(components)/utils/MobileMenu';
 import MobileNavbar from './(components)/utils/MobileNavbar';
+import LanguageSelectionModal from './(components)/utils/LanguageSelectionModal';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -21,6 +22,17 @@ const Home: React.FC = () => {
 
   // controla menu mobile
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // controla modal de seleção de idioma
+  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
+
+  // verifica se é a primeira visita
+  useEffect(() => {
+    const hasSelectedLanguage = localStorage.getItem('language-selected');
+    if (!hasSelectedLanguage) {
+      setIsLanguageModalOpen(true);
+    }
+  }, []);
 
   return (
     <div style={{ width: '100%', overflowX: 'hidden' }}>
@@ -153,6 +165,12 @@ const Home: React.FC = () => {
         <MobileNavbar onOpenMenu={() => setIsMenuOpen(true)} />
         <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
+
+      {/* Modal de seleção de idioma */}
+      <LanguageSelectionModal 
+        isOpen={isLanguageModalOpen} 
+        onClose={() => setIsLanguageModalOpen(false)} 
+      />
     </div>
   );
 };

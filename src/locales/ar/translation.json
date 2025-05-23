@@ -255,5 +255,9 @@
     },
     "newsSection": {
       "title": "المقالات"
+    },
+    "languageModal": {
+      "title": "اختر لغتك",
+      "subtitle": "Select your language"
     }
   }

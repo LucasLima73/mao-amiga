@@ -6,9 +6,23 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   i18n: {
-    locales: ["pt-BR", "en"],
+    locales: ["pt-BR", "en", "es", "fr", "ar"],
     defaultLocale: "pt-BR",
     localeDetection: false,
+  },
+  // Otimizações para SEO e performance
+  poweredByHeader: false, // Remove o header X-Powered-By para segurança
+  compress: true, // Compressão gzip para melhor performance
+  reactStrictMode: true, // Modo estrito do React para melhor qualidade de código
+  images: {
+    domains: ['maoamiga.org'],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  experimental: {
+    optimizeCss: true, // Otimização de CSS
+    optimizeServerReact: true, // Otimização do React no servidor
   },
   async headers() {
     return [

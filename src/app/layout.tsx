@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/next-script-for-ga */
 'use client';
 import React, { useState, useRef } from 'react';
-import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from './(components)/utils/navbar';
@@ -11,6 +10,9 @@ import Footer from './(components)/utils/footer';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../lib/i18n';
 import RootClientProviders from './RootClientProviders';
+
+// Import metadata from layout-metadata.tsx
+// This allows us to use metadata in a client component setup
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,8 +30,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const navbarRef = useRef<any>(null);
 
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
+        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-4JXWD7BCWV"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -39,6 +42,26 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             gtag('js', new Date());
             gtag('config', 'G-4JXWD7BCWV');
           `,
+          }}
+        />
+        
+        {/* Structured Data - Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              'name': 'Mão Amiga',
+              'url': 'https://maoamiga.org',
+              'logo': 'https://maoamiga.org/logo.png',
+              'description': 'Plataforma de apoio e informações para imigrantes e refugiados no Brasil',
+              'sameAs': [
+                'https://facebook.com/maoamiga',
+                'https://instagram.com/maoamiga',
+                'https://twitter.com/maoamiga'
+              ]
+            })
           }}
         />
       </head>

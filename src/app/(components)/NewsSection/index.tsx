@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './styles.module.css';
 import { t } from 'i18next';
-
-interface NewsItem {
-  title: string;
-  description: string;
-  url: string;
-  image_url: string;
-}
+import { NewsItem, compareAndGetArticles } from '../../../services/newsService';
 
 const NewsSection = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -18,30 +12,51 @@ const NewsSection = () => {
     pt: 'imigrantes',
     en: 'refugees',
     es: 'refugiados',
+    ar: 'مهاجرين',
+    fr: 'refugiés',
   };
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          `https://api.thenewsapi.com/v1/news/all?` +
-            new URLSearchParams({
-              search: searchTerms[i18n.language as keyof typeof searchTerms],
-              language: i18n.language,
-              api_token: process.env.NEXT_PUBLIC_NEWS_API_KEY as string,
-            })
-        );
+        // Get the current language and search term
+        const currentLanguage = i18n.language;
+        const searchTerm = searchTerms[currentLanguage as keyof typeof searchTerms];
         
-        const data = await response.json();
+        let apiArticles: NewsItem[] | null = null;
         
-        if (!data.data) {
-          throw new Error(data.message || "Erro ao buscar notícias");
+        try {
+          // Try to fetch from API first
+          const response = await fetch(
+            `https://api.thenewsapi.com/v1/news/all?` +
+              new URLSearchParams({
+                search: searchTerm,
+                language: currentLanguage,
+                api_token: process.env.NEXT_PUBLIC_NEWS_API_KEY as string,
+              })
+          );
+          console.log("response", response)
+          const data = await response.json();
+          
+          if (data.data) {
+            apiArticles = data.data;
+          }
+        } catch (apiError) {
+          console.error('Error fetching news from API:', apiError);
+          // We'll continue and try to get articles from Supabase
         }
         
-        setNews(data.data);
+        // Compare API articles with Supabase and get the appropriate articles to display
+        const articlesToDisplay = await compareAndGetArticles(
+          apiArticles, 
+          currentLanguage, 
+          searchTerm
+        );
+        
+        setNews(articlesToDisplay);
         
       } catch (error: any) {
-        console.error('Error fetching news:', error);
+        console.error('Error in news fetching process:', error);
       }
     };
 

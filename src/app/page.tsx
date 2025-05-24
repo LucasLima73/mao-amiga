@@ -3,7 +3,6 @@ import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import WavyButton from './(components)/utils/wavybutton';
-import FloatingArrow from './(components)/utils/floatingarrow';
 import NewsSection from './(components)/NewsSection';
 
 // Mobile responsive components
@@ -68,7 +67,6 @@ const Home: React.FC = () => {
         }}
       >
         {/* mostra setinha só se menu fechado */}
-        {!isMenuOpen && <FloatingArrow onClick={scrollToTrilhas} />}
 
         <div
           style={{

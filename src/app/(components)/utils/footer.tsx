@@ -33,7 +33,7 @@ export default function Footer() {
               { href: "/trilhaSaude", label: t("link_acesso_saude") },
               { href: "/trilhaDocumentacao", label: t("link_documentacao") },
               { href: "/trilhaDireitosHumanos", label: t("link_direitos_humanos") },
-              { href: "/trilhaSocioeconomico", label: t("link_apoio_socioeconomico") },
+              { href: "/socioeconomico", label: t("link_apoio_socioeconomico") },
             ].map((link, index) => (
               <li key={index}>
                 <Link

@@ -13,6 +13,7 @@ import {
 import Timeline from "../utils/timeline";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 interface Step {
   title: string;
@@ -21,26 +22,22 @@ interface Step {
   order: number;
 }
 
-const healthDocData = [
+// Use translations for health document data
+const getHealthDocData = (t: any) => [
   {
-    title: "CPF (Cadastro de Pessoa Física)",
+    title: t('healthDocData.cpf.title'),
     image: "/assets/images/cpf.png",
-    text: `O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:
-• Abrir conta bancária e obter serviços financeiros.
-• Realizar compras online e emitir notas fiscais.
-• Acessar programas sociais e benefícios do governo.
-• Emitir outros documentos (CNH, passaporte).
-Em resumo, o CPF é indispensável para viver legalmente no Brasil.`,
+    text: t('healthDocData.cpf.text'),
   },
   {
-    title: "Cartão SUS",
+    title: t('healthDocData.cartaoSUS.title'),
     image: "/assets/images/cartao-do-sus.png",
-    text: "O Cartão SUS assegura o acesso aos serviços de saúde pública.",
+    text: t('healthDocData.cartaoSUS.text'),
   },
   {
-    title: "Cadastro Único",
+    title: t('healthDocData.cadastroUnico.title'),
     image: "/assets/images/CadUnico.png",
-    text: "O Cadastro Único identifica e caracteriza famílias de baixa renda, sendo essencial para o acesso a programas sociais.",
+    text: t('healthDocData.cadastroUnico.text'),
   },
 ];
 
@@ -81,7 +78,7 @@ const MapaButton: React.FC = () => (
       </svg>
     </div>
     <span className="ml-4 text-base whitespace-nowrap">
-      Consultar Mapa
+      {t('consultar_mapa')}
     </span>
   </a>
 );
@@ -97,6 +94,9 @@ const TrilhaSaude: React.FC = () => {
 
   const { t, i18n } = useTranslation();
   const pathname = usePathname();
+  
+  // Get localized health document data
+  const healthDocData = getHealthDocData(t);
 
   useEffect(() => {
     setIsClient(true);
@@ -210,7 +210,7 @@ const TrilhaSaude: React.FC = () => {
             {/* Header sticky */}
             <div className="sticky top-0 bg-white z-20 flex items-center justify-between p-4 border-b">
               <h3 className="text-2xl font-bold flex-1 text-center text-black">
-                Documento – {healthDocData[healthDocIndex].title}
+                {t('documento')} – {healthDocData[healthDocIndex].title}
               </h3>
               <button
                 onClick={handleClosePopup}

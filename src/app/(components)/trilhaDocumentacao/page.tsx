@@ -65,40 +65,37 @@ const thirdDocData = [
 ];
 
 // Botão "Consultar Mapa" – posicionado no canto superior direito
-const MapaButton: React.FC = () => (
-  <div className="absolute top-4 right-4 z-10">
-    <a
-      href="/mapa"
-      className="group inline-flex items-center h-16 w-16 bg-blue-600 text-white rounded-full transition-all duration-300 hover:w-56 hover:bg-blue-700 overflow-hidden"
-    >
-      <div className="flex items-center justify-center w-16 h-16">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-      </div>
-      <span className="ml-4 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-        Consultar Mapa
-      </span>
-    </a>
-  </div>
-);
+const MapaButton: React.FC = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="absolute top-4 right-4 z-10">
+      <a
+        href="/mapa"
+        className="group inline-flex items-center h-16 w-16 bg-blue-600 text-white rounded-full transition-all duration-300 hover:w-56 hover:bg-blue-700 overflow-hidden"
+      >
+        <div className="flex items-center justify-center w-16 h-16">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-8 h-8"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"
+            />
+          </svg>
+        </div>
+        <span className="whitespace-nowrap pr-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {t('trilhaDocumentacao.consultarMapa')}
+        </span>
+      </a>
+    </div>
+  );
+};
 
 const TrilhaDocumentacao: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -288,27 +285,31 @@ const TrilhaDocumentacao: React.FC = () => {
       </h2>
 
       {selectedPath === null && (
-        <div className="max-w-4xl bg-white p-4 rounded-sm shadow-md text-gray-800 mb-8">
-          <h3 className="text-center text-2xl font-semibold mb-4">
-            Caminhos para Regularização Migratória no Brasil
-          </h3>
-          <p className="mb-4">
-            Ao chegar ao Brasil, imigrantes e refugiados podem regularizar sua situação
-            legal de diferentes maneiras, dependendo de cada caso.
-          </p>
-          <p className="text-center mb-6">Principais opções:</p>
-          <div className="flex gap-4 justify-center">
+        <div className="max-w-5xl mx-auto px-4 py-8 bg-white rounded-lg shadow-lg relative">
+        <MapaButton />
+        <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
+          {t('trilhaDocumentacao.caminhos')}
+        </h1>
+        <p className="text-lg text-center mb-8">
+          {t('trilhaDocumentacao.descricaoCaminhos')}
+        </p>
+
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          {t('trilhaDocumentacao.principaisOpcoes')}
+        </h2>  
+        <div className="flex gap-4 justify-center">
             <div className="group relative">
               <button
                 onClick={() => setSelectedPath(1)}
                 className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
               >
-                Solicitação de Refúgio
+                {t('trilhaDocumentacao.solicitacaoRefugio')}
               </button>
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
                 <p>
-                  <strong>Refúgio:</strong> Para quem fugiu de perseguição, guerra ou crises
-                  humanitárias, garantindo proteção internacional enquanto o pedido é analisado.
+                  <strong>{t('trilhaDocumentacao.solicitacaoRefugio')}</strong>
+                  <br />
+                  {t('trilhaDocumentacao.descricaoRefugio')}
                 </p>
               </div>
             </div>
@@ -318,12 +319,13 @@ const TrilhaDocumentacao: React.FC = () => {
                 onClick={() => setSelectedPath(2)}
                 className="bg-[#e5b019] text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
               >
-                Autorização de Residência
+                {t('trilhaDocumentacao.autorizacaoResidencia')}
               </button>
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition bg-gray-200 text-gray-800 p-2 rounded-sm shadow-md text-sm w-72 z-10">
                 <p>
-                  <strong>Residência:</strong> Para quem deseja viver e trabalhar legalmente no Brasil,
-                  via vínculos familiares, emprego ou acordos internacionais.
+                  <strong>{t('trilhaDocumentacao.autorizacaoResidencia')}</strong>
+                  <br />
+                  {t('trilhaDocumentacao.descricaoResidencia')}
                 </p>
               </div>
             </div>
@@ -406,7 +408,7 @@ const TrilhaDocumentacao: React.FC = () => {
               X
             </button>
             <p className="text-2xl font-bold text-center mb-8 mt-4 text-black">
-              Clique no documento para ver o verso e o descritivo
+              {t('trilhaDocumentacao.cliqueDocumento')}
             </p>
             <div
               className="flex-1 flex flex-col items-center justify-center gap-24 w-full"
@@ -425,15 +427,15 @@ const TrilhaDocumentacao: React.FC = () => {
                   {/* Frente CRNM */}
                   <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
                     <h4 className="text-3xl font-semibold mb-4 text-black">
-                      CRNM (Frente)
+                      {t('trilhaDocumentacao.crnmFrente')}
                     </h4>
                     <img
                       src="/assets/images/crnm.png"
-                      alt="CRNM Frente"
+                      alt={t('trilhaDocumentacao.crnmFrente')}
                       className="w-full h-auto max-w-lg mb-4"
                     />
                     <p className="text-center text-xl text-black">
-                      Clique para ver o verso.
+                      {t('trilhaDocumentacao.cliqueVerVerso')}
                     </p>
                   </div>
                   {/* Verso CRNM */}
@@ -441,15 +443,15 @@ const TrilhaDocumentacao: React.FC = () => {
                     <div className="flex flex-row items-center justify-center w-full">
                       <img
                         src="/assets/images/verso-crnm.png"
-                        alt="CRNM Verso"
+                        alt={`${t('trilhaDocumentacao.crnmFrente')} - ${t('trilhaDocumentacao.versoCartaoSUS')}`}
                         className="w-1/2 h-auto max-w-lg mr-4"
                       />
                       <p className="text-center text-xl text-black px-2">
-                        <strong>CRNM (Carteira de Registro Nacional Migratório):</strong>
+                        <strong>{t('trilhaDocumentacao.crnmTitulo')}</strong>
                         <br />
-                        Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.
+                        {t('trilhaDocumentacao.crnmDescricao')}
                         <br />
-                        Clique novamente para voltar à frente.
+                        {t('trilhaDocumentacao.cliqueVoltar')}
                       </p>
                     </div>
                   </div>
@@ -469,15 +471,15 @@ const TrilhaDocumentacao: React.FC = () => {
                   {/* Frente DPRNM */}
                   <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center bg-white p-4">
                     <h4 className="text-3xl font-semibold mb-4 text-black">
-                      DPRNM (Frente)
+                      {t('trilhaDocumentacao.dprnmFrente')}
                     </h4>
                     <img
                       src="/assets/images/dprnm.png"
-                      alt="DPRNM Frente"
+                      alt={t('trilhaDocumentacao.dprnmFrente')}
                       className="w-full h-auto max-w-lg mb-4"
                     />
                     <p className="text-center text-xl text-black">
-                      Clique para ver o verso.
+                      {t('trilhaDocumentacao.cliqueVerVerso')}
                     </p>
                   </div>
                   {/* Verso DPRNM */}
@@ -485,15 +487,15 @@ const TrilhaDocumentacao: React.FC = () => {
                     <div className="flex flex-row items-center justify-center w-full">
                       <img
                         src="/assets/images/verso-dprnm.png"
-                        alt="DPRNM Verso"
+                        alt={`${t('trilhaDocumentacao.dprnmFrente')} - ${t('trilhaDocumentacao.versoCartaoSUS')}`}
                         className="w-1/2 h-auto max-w-lg mr-4"
                       />
                       <p className="text-center text-xl text-black px-2">
-                        <strong>DPRNM (Documento Provisório de Registro Nacional Migratório):</strong>
+                        <strong>{t('trilhaDocumentacao.dprnmTitulo')}</strong>
                         <br />
-                        Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.
+                        {t('trilhaDocumentacao.dprnmDescricao')}
                         <br />
-                        Clique novamente para voltar à frente.
+                        {t('trilhaDocumentacao.cliqueVoltar')}
                       </p>
                     </div>
                   </div>
@@ -521,7 +523,7 @@ const TrilhaDocumentacao: React.FC = () => {
               X
             </button>
             <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
-              Documento - {docData[docIndex].title}
+              {t('trilhaDocumentacao.documento')} {docData[docIndex].title}
             </p>
             <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4">
               <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
@@ -565,7 +567,7 @@ const TrilhaDocumentacao: React.FC = () => {
               X
             </button>
             <p className="text-2xl font-bold text-center mb-4 mt-4 text-black">
-              Documento - {thirdDocData[thirdDocIndex].title}
+              {t('trilhaDocumentacao.documento')} {thirdDocData[thirdDocIndex].title}
             </p>
             <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full px-4 relative">
               <div className="max-w-xl bg-white p-4 rounded-md shadow-md flex flex-col items-center">
@@ -585,7 +587,7 @@ const TrilhaDocumentacao: React.FC = () => {
                       }
                       alt={
                         showThirdDocBack
-                          ? "Verso Cartão SUS"
+                          ? t('trilhaDocumentacao.versoCartaoSUS')
                           : thirdDocData[thirdDocIndex].title
                       }
                       className="w-full h-auto mb-4"

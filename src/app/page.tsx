@@ -105,7 +105,6 @@ const Home: React.FC = () => {
         >
           <h1
             style={{
-              fontFamily: "'Gochi Hand', cursive",
               fontSize: '4rem',
               color: '#fff',
               marginBottom: '20px',
@@ -157,7 +156,7 @@ const Home: React.FC = () => {
                 textColor="#000000"
               />
             </Link>
-            <Link href="/trilhaSocioeconomico">
+            <Link href="/socioeconomico">
               <WavyButton
                 buttonText={t('apoio_socioeconomico_button')}
                 backgroundColor="#ffff"

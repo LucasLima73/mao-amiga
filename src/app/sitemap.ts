@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '',
     '/trilhaDireitosHumanos',
     '/trilhaDocumentacao',
-    '/trilhaSocioeconomica',
+    '/socioeconomico',
     '/chat',
   ];
 

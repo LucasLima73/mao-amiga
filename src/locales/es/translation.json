@@ -203,6 +203,47 @@
   "contact_email_label": "Correo",
   "contact_phone_label": "Teléfono",
   "footer_copyright": "Mano Amiga. Todos los derechos reservados.",
+  "healthDocData": {
+    "cpf": {
+      "title": "CPF (Registro de Contribuyente Individual)",
+      "text": "El CPF es un número de identificación emitido por la Receita Federal. Es fundamental para:\n• Abrir cuentas bancarias y acceder a servicios financieros.\n• Realizar compras en línea y emitir facturas.\n• Acceder a programas sociales y beneficios gubernamentales.\n• Obtener otros documentos (licencia de conducir, pasaporte).\nEn resumen, el CPF es indispensable para vivir legalmente en Brasil."
+    },
+    "cartaoSUS": {
+      "title": "Tarjeta SUS",
+      "text": "La Tarjeta SUS asegura el acceso a los servicios de salud pública."
+    },
+    "cadastroUnico": {
+      "title": "Cadastro Único",
+      "text": "El Cadastro Único identifica y caracteriza a familias de bajos ingresos, siendo esencial para acceder a programas sociales."
+    }
+  },
+  "timeline": {
+    "loading": "Cargando pasos...",
+    "viewDocument": "Ver Documento",
+    "loginRequired": "¡Debes iniciar sesión para guardar tu progreso!"
+  },
+  "trilhaDocumentacao": {
+    "consultarMapa": "Consultar Mapa",
+    "caminhos": "Caminos para la Regularización Migratoria en Brasil",
+    "descricaoCaminhos": "Al llegar a Brasil, los inmigrantes y refugiados pueden regularizar su situación legal de diferentes maneras, dependiendo de cada caso.",
+    "principaisOpcoes": "Opciones principales:",
+    "solicitacaoRefugio": "Solicitud de Refugio",
+    "descricaoRefugio": "Refugio: Para quienes huyeron de persecución, guerra o crisis humanitarias, garantizando protección internacional mientras se analiza la solicitud.",
+    "autorizacaoResidencia": "Autorización de Residencia",
+    "descricaoResidencia": "Residencia: Para quienes desean vivir y trabajar legalmente en Brasil, a través de vínculos familiares, empleo o acuerdos internacionales.",
+    "voltar": "← Volver",
+    "cliqueDocumento": "Haz clic en el documento para ver el reverso y la descripción",
+    "crnmFrente": "CRNM (Frente)",
+    "cliqueVerVerso": "Haz clic para ver el reverso.",
+    "crnmTitulo": "CRNM (Tarjeta de Registro Nacional Migratorio):",
+    "crnmDescricao": "Documento definitivo para inmigrantes con autorización de residencia o estatus de refugiado reconocido.",
+    "cliqueVoltar": "Haz clic nuevamente para volver al frente.",
+    "dprnmFrente": "DPRNM (Frente)",
+    "dprnmTitulo": "DPRNM (Documento Provisorio de Registro Nacional Migratorio):",
+    "dprnmDescricao": "Documento temporal para solicitantes de refugio, renovable anualmente hasta la decisión final.",
+    "documento": "Documento - ",
+    "versoCartaoSUS": "Reverso Tarjeta SUS"
+  },
   "solicitacao_refugio_title": "Solicitud de Refugio",
   "solicitacao_refugio_subtitle": "Cómo solicitar refugio en Brasil",
   "solicitacao_refugio_desc": "La solicitud de refugio es un derecho de las personas que han dejado su país de origen debido a persecuciones, conflictos, violencia o violaciones de derechos humanos. En Brasil, el proceso es gratuito y se puede iniciar tan pronto como llegue al país.",

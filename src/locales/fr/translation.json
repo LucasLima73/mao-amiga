@@ -198,7 +198,48 @@
   "cidadania": "CITOYENNETÉ",
   "acolhimento": "ACCUEIL",
   "trilhas_title": "PARCOURS",
-  "trilhas_description": "Les parcours visent à faciliter l'intégration des réfugiés au Brésil, en fournissant un soutien pratique pour les défis juridiques, culturels et linguistiques.",
+  "trilhas_description": "Les parcours visent à faciliter l'intégration des réfugiés au Brésil, en fournissant un soutien pratique pour les défis juridiques, culturels et linguistiques",
+  "healthDocData": {
+    "cpf": {
+      "title": "CPF (Registre des Contribuables Individuels)",
+      "text": "Le CPF est un numéro d'identification émis par le Service Fédéral des Impôts. Il est essentiel pour :\n• Ouvrir des comptes bancaires et accéder aux services financiers.\n• Effectuer des achats en ligne et émettre des factures.\n• Accéder aux programmes sociaux et aux prestations gouvernementales.\n• Obtenir d'autres documents (permis de conduire, passeport).\nEn résumé, le CPF est indispensable pour vivre légalement au Brésil."
+    },
+    "cartaoSUS": {
+      "title": "Carte SUS",
+      "text": "La carte SUS garantit l'accès aux services de santé publics."
+    },
+    "cadastroUnico": {
+      "title": "Cadastro Único",
+      "text": "Le Cadastro Único identifie et caractérise les familles à faible revenu, étant essentiel pour accéder aux programmes sociaux."
+    }
+  },
+  "timeline": {
+    "loading": "Chargement des étapes...",
+    "viewDocument": "Voir le Document",
+    "loginRequired": "Vous devez être connecté pour sauvegarder votre progression !"
+  },
+  "trilhaDocumentacao": {
+    "consultarMapa": "Consulter la carte",
+    "caminhos": "Parcours pour la régularisation migratoire au Brésil",
+    "descricaoCaminhos": "En arrivant au Brésil, les immigrants et les réfugiés peuvent régulariser leur statut juridique de différentes façons, selon chaque cas.",
+    "principaisOpcoes": "Options principales :",
+    "solicitacaoRefugio": "Demande de refuge",
+    "descricaoRefugio": "Refuge : Pour ceux qui ont fui la persécution, la guerre ou les crises humanitaires, garantissant une protection internationale pendant l'analyse de la demande.",
+    "autorizacaoResidencia": "Autorisation de résidence",
+    "descricaoResidencia": "Résidence : Pour ceux qui souhaitent vivre et travailler légalement au Brésil grâce à des liens familiaux, à l'emploi ou à des accords internationaux.",
+    "voltar": "← Retour",
+    "cliqueDocumento": "Cliquez sur le document pour voir le verso et la description",
+    "crnmFrente": "CRNM (Recto)",
+    "cliqueVerVerso": "Cliquez pour voir le verso.",
+    "crnmTitulo": "CRNM (Carte Nationale d'Enregistrement Migratoire) :",
+    "crnmDescricao": "Document final pour les immigrants avec une résidence ou un statut de réfugié reconnu.",
+    "cliqueVoltar": "Cliquez à nouveau pour revenir au recto.",
+    "dprnmFrente": "DPRNM (Recto)",
+    "dprnmTitulo": "DPRNM (Document Provisoire National d'Enregistrement Migratoire) :",
+    "dprnmDescricao": "Document temporaire pour les demandeurs d'asile, renouvelable annuellement jusqu'à une décision finale.",
+    "documento": "Document - ",
+    "versoCartaoSUS": "Verso de la carte SUS"
+  },
   "acesso_saude_button": "ACCÈS À LA SANTÉ",
   "direitos_humanos_button": "DROITS HUMAINS",
   "documentacao_button": "DOCUMENTATION",

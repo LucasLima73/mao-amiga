@@ -165,6 +165,47 @@
   "contact_email_label": "Email",
   "contact_phone_label": "Telefone",
   "footer_copyright": "Mão Amiga. Todos os direitos reservados.",
+  "healthDocData": {
+    "cpf": {
+      "title": "CPF (Cadastro de Pessoa Física)",
+      "text": "O CPF é um número de identificação emitido pela Receita Federal. É fundamental para:\n• Abrir conta bancária e obter serviços financeiros.\n• Realizar compras online e emitir notas fiscais.\n• Acessar programas sociais e benefícios do governo.\n• Emitir outros documentos (CNH, passaporte).\nEm resumo, o CPF é indispensável para viver legalmente no Brasil."
+    },
+    "cartaoSUS": {
+      "title": "Cartão SUS",
+      "text": "O Cartão SUS assegura o acesso aos serviços de saúde pública."
+    },
+    "cadastroUnico": {
+      "title": "Cadastro Único",
+      "text": "O Cadastro Único identifica e caracteriza famílias de baixa renda, sendo essencial para o acesso a programas sociais."
+    }
+  },
+  "timeline": {
+    "loading": "Carregando passos...",
+    "viewDocument": "Ver Documento",
+    "loginRequired": "Você precisa estar logado para salvar seu progresso!"
+  },
+  "trilhaDocumentacao": {
+    "consultarMapa": "Consultar Mapa",
+    "caminhos": "Caminhos para Regularização Migratória no Brasil",
+    "descricaoCaminhos": "Ao chegar ao Brasil, imigrantes e refugiados podem regularizar sua situação legal de diferentes maneiras, dependendo de cada caso.",
+    "principaisOpcoes": "Principais opções:",
+    "solicitacaoRefugio": "Solicitação de Refúgio",
+    "descricaoRefugio": "Refúgio: Para quem fugiu de persecução, guerra ou crises humanitárias, garantindo proteção internacional enquanto o pedido é analisado.",
+    "autorizacaoResidencia": "Autorização de Residência",
+    "descricaoResidencia": "Residência: Para quem deseja viver e trabalhar legalmente no Brasil, via vínculos familiares, emprego ou acordos internacionais.",
+    "voltar": "← Voltar",
+    "cliqueDocumento": "Clique no documento para ver o verso e o descritivo",
+    "crnmFrente": "CRNM (Frente)",
+    "cliqueVerVerso": "Clique para ver o verso.",
+    "crnmTitulo": "CRNM (Carteira de Registro Nacional Migratório):",
+    "crnmDescricao": "Documento definitivo para imigrantes com autorização de residência ou refúgio reconhecido.",
+    "cliqueVoltar": "Clique novamente para voltar à frente.",
+    "dprnmFrente": "DPRNM (Frente)",
+    "dprnmTitulo": "DPRNM (Documento Provisório de Registro Nacional Migratório):",
+    "dprnmDescricao": "Documento temporário para solicitantes de refúgio, renovável anualmente até a decisão final.",
+    "documento": "Documento - ",
+    "versoCartaoSUS": "Verso Cartão SUS"
+  },
   "solicitacao_refugio_title": "Solicitação de Refúgio",
   "solicitacao_refugio_subtitle": "Como solicitar refúgio no Brasil",
   "solicitacao_refugio_desc": "A solicitação de refúgio é um direito de pessoas que deixaram seu país de origem devido a perseguições, conflitos, violência ou violações de direitos humanos. No Brasil, o processo é gratuito e pode ser iniciado assim que você chegar ao país.",

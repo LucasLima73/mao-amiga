@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useTranslation } from "react-i18next";
 
 interface Step {
   title: string;
@@ -45,6 +46,7 @@ const Timeline: React.FC<TimelineProps> = ({
   showDocumentButton = false,
   hideDocumentButtonForSteps,
 }) => {
+  const { t } = useTranslation();
   const [localSteps, setLocalSteps] = useState<Step[]>(steps);
   const [expandedSteps, setExpandedSteps] = useState<{ [key: number]: boolean }>({});
   const containerRef = useRef<HTMLDivElement>(null);
@@ -98,7 +100,7 @@ const Timeline: React.FC<TimelineProps> = ({
 
   const toggleCheckbox = async (stepIndex: number, taskIndex: number) => {
     if (!userId) {
-      alert("Você precisa estar logado para salvar seu progresso!");
+      alert(t('timeline.loginRequired'));
       return;
     }
 
@@ -168,7 +170,7 @@ const Timeline: React.FC<TimelineProps> = ({
       />
 
       {localSteps.length === 0 ? (
-        <div>Carregando passos...</div>
+        <div>{t('timeline.loading')}</div>
       ) : (
         localSteps.map((step, index) => {
           const total = step.checklist?.length ?? 0;
@@ -255,7 +257,7 @@ const Timeline: React.FC<TimelineProps> = ({
                           text-center
                         "
                       >
-                        Ver Documento
+                        {t('timeline.viewDocument')}
                       </button>
                     )}
                 </div>

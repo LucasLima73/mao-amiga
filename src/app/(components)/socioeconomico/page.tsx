@@ -13,6 +13,7 @@ import {
 import Timeline from "@/app/(components)/utils/timeline";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 interface Step {
   title: string;
@@ -60,7 +61,7 @@ const MapaButton: React.FC = () => (
       </svg>
     </div>
     <span className="ml-4 text-base opacity-100 whitespace-nowrap">
-      Consultar Mapa
+      {t('consultar_mapa')}
     </span>
   </a>
 );

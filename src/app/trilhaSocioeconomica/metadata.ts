@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     ...defaultMetadata.openGraph,
     title: 'Trilha Socioeconômica | Mão Amiga',
     description: 'Informações sobre apoio socioeconômico para imigrantes e refugiados no Brasil, incluindo acesso a benefícios sociais, oportunidades de emprego e educação.',
-    url: 'https://mao-amiga.site/trilhaSocioeconomica',
+    url: 'https://mao-amiga.site/socioeconomico',
     type: 'article',
   }
 };

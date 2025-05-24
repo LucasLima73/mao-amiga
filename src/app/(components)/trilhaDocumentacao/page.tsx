@@ -179,11 +179,11 @@ const TrilhaDocumentacao: React.FC = () => {
           if (selectedPath === 2) {
             // For authorization residence path
             if (i18n.language === "pt") {
-              collectionName = "stepsDocumentacao-autorizacaoResidencia"
+              collectionName = "stepsDocumentacao-autorizacaoResidencia";
             } else if (i18n.language === "en") {
-              collectionName = "ssteps-en-doc-autorizaresidencia";
+              collectionName = "steps-en-doc-autorizaresidencia";
             } else if (i18n.language === "es") {
-              collectionName = "steps- es-doc-autorizacaoresidencia";
+              collectionName = "steps -es-doc-autorizacaoresidencia";
             } else {
               collectionName = "steps-en-doc-autorizaresidencia";
             }
@@ -192,11 +192,11 @@ const TrilhaDocumentacao: React.FC = () => {
             if (i18n.language === "pt") {
               collectionName = "stepsDocumentacao";
             } else if (i18n.language === "en") {
-              collectionName = "stepsDocumentacao - en";
+              collectionName = "documentacao-ingles";
             } else if (i18n.language === "es") {
-              collectionName = "stepsDocumenetacao - es";
+              collectionName = "documentacao-espanhol";
             } else {
-              collectionName = "stepsDocumentacao - en";
+              collectionName = "documentacao-ingles";
             }
           }
           console.log('Current language:', i18n.language);

@@ -28,7 +28,7 @@ const trilhaDocumentacao = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [selectedPath, setSelectedPath] = useState<number | null>(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const MapaButton: React.FC = () => (
     <a
@@ -126,14 +126,50 @@ const trilhaDocumentacao = () => {
     }
   }, [isClient]);
 
+  // Define a key for user progress based on the selected path
+  const progressKey = selectedPath === 2 ? "progress_authorization" : "progress_steps";
+  // Track the current language
+  const [language, setLanguage] = useState(i18n.language || "pt");
+  
+  // Update language state when i18n.language changes
+  useEffect(() => {
+    setLanguage(i18n.language);
+  }, [i18n.language]);
+
+  // Busca dos passos no Firestore (baseado em selectedPath e idioma)
   useEffect(() => {
     if (selectedPath !== null) {
+      const currentLanguage = i18n.language || "pt";
+      console.log('fetchSteps useEffect triggered - language:', currentLanguage, 'selectedPath:', selectedPath);
+      
       const fetchSteps = async () => {
         try {
-          const collectionName =
-            selectedPath === 2
-              ? "stepsDocumentacao-autorizacaoResidencia"
-              : "stepsDocumentacao";
+          let collectionName = "steps-en-doc-autorizaresidencia";
+          if (selectedPath === 2) {
+            // For authorization residence path
+            if (currentLanguage === "pt") {
+              collectionName = "stepsDocumentacao-autorizacaoResidencia";
+            } else if (currentLanguage === "en") {
+              collectionName = "steps-en-doc-autorizaresidencia";
+            } else if (currentLanguage === "es") {
+              collectionName = "steps-es-doc-autorizaresidencia";
+            } else {
+              collectionName = "steps-en-doc-autorizaresidencia";
+            }
+          } else {
+            // For regular documentation path
+            if (currentLanguage === "pt") {
+              collectionName = "stepsDocumentacao";
+            } else if (currentLanguage === "en") {
+              collectionName = "documentacao-ingles";
+            } else if (currentLanguage === "es") {
+              collectionName = "documentacao-espanhol";
+            } else {
+              collectionName = "documentacao-ingles";
+            }
+          }
+          console.log('Current language:', currentLanguage);
+          console.log('Using collection:', collectionName);
           const q = query(collection(db, collectionName), orderBy("order"));
           const querySnapshot = await getDocs(q);
           const fetchedSteps: Step[] = querySnapshot.docs.map(
@@ -144,7 +180,8 @@ const trilhaDocumentacao = () => {
             const userRef = doc(db, "user_progress", userId);
             const userSnapshot = await getDoc(userRef);
             if (userSnapshot.exists()) {
-              const userProgress = userSnapshot.data()?.progress_steps;
+              // Usa a progressKey correta ao buscar o progresso
+              const userProgress = userSnapshot.data()?.[progressKey];
               if (userProgress) {
                 const updatedSteps = fetchedSteps.map((step) => ({
                   ...step,
@@ -166,7 +203,7 @@ const trilhaDocumentacao = () => {
       };
       fetchSteps();
     }
-  }, [userId, selectedPath]);
+  }, [userId, selectedPath, progressKey, language, i18n.language]);
 
   const handleFirstStepClick = () => {
     setShowPopup(true);

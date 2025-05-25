@@ -3,7 +3,6 @@
 import React from "react";
 import TrilhaDocumentacao from "../(components)/documentacao/page";
 import SEOProvider from "../(components)/utils/SEOProvider";
-import Breadcrumbs from "../(components)/utils/Breadcrumbs";
 import { useTranslation } from "react-i18next";
 
 export default function TrilhaDocumentacaoPage() {
@@ -23,10 +22,7 @@ export default function TrilhaDocumentacaoPage() {
         dateModified="2025-05-23"
         authorName="Equipe Mão Amiga"
       />
-      
-      {/* Breadcrumbs para navegação e SEO */}
-      <Breadcrumbs />
-      
+
       {/* Conteúdo da página */}
       <TrilhaDocumentacao />
     </>

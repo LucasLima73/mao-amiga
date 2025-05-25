@@ -3,7 +3,6 @@
 import React from "react";
 import TrilhaSocioeconomica from "../(components)/socioeconomico/page";
 import SEOProvider from "../(components)/utils/SEOProvider";
-import Breadcrumbs from "../(components)/utils/Breadcrumbs";
 import { useTranslation } from "react-i18next";
 
 export default function TrilhaSocioeconomicaPage() {
@@ -24,9 +23,7 @@ export default function TrilhaSocioeconomicaPage() {
         authorName="Equipe Mão Amiga"
       />
       
-      {/* Breadcrumbs para navegação e SEO */}
-      <Breadcrumbs />
-      
+
       {/* Conteúdo da página */}
       <TrilhaSocioeconomica />
     </>

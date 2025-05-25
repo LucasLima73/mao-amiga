@@ -3,7 +3,6 @@
 import React from "react";
 import Chat from "@/app/(components)/chat/Chat";
 import SEOProvider from "../(components)/utils/SEOProvider";
-import Breadcrumbs from "../(components)/utils/Breadcrumbs";
 import { useTranslation } from "react-i18next";
 
 export default function ChatPage() {
@@ -20,9 +19,6 @@ export default function ChatPage() {
         ogType="website"
         schemaType="WebPage"
       />
-      
-      {/* Breadcrumbs para navegação e SEO */}
-      <Breadcrumbs />
       
       {/* Conteúdo da página */}
       <Chat />

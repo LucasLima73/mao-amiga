@@ -12,7 +12,6 @@ import LanguageSelectionModal from './(components)/utils/LanguageSelectionModal'
 
 // SEO components
 import SEOProvider from './(components)/utils/SEOProvider';
-import Breadcrumbs from './(components)/utils/Breadcrumbs';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();

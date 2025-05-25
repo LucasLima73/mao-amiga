@@ -63,13 +63,31 @@ export default function Chat() {
     }
   }
 
-  const formatMessage = (content: string) =>
-    content.split('\n').map((line, i, arr) => (
+  const formatMessage = (content: string) => {
+    // Remove marcações do tipo 【4:1†source】
+    let cleanContent = content.replace(/【\d+:\d+†source】/g, '');
+    
+    // Transforma texto com **Marcação de consulta** em elementos em negrito
+    const processedContent = cleanContent.split('\n').map(line => {
+      // Procura por padrões de **texto** e substitui por elementos em negrito
+      if (line.includes('**')) {
+        // Divide a linha em partes, alternando entre texto normal e marcado
+        const parts = line.split(/\*\*([^*]+)\*\*/);
+        return parts.map((part, index) => {
+          // Se o índice for ímpar, é um texto marcado que deve ficar em negrito
+          return index % 2 === 1 ? <strong key={index}>{part}</strong> : part;
+        });
+      }
+      return line;
+    });
+    
+    return processedContent.map((line, i, arr) => (
       <span key={i}>
         {line}
         {i < arr.length - 1 && <br />}
       </span>
-    ))
+    ));
+  }
 
   return (
     <div className="flex flex-col h-screen bg-yellow-50 pb-14 md:pb-0">

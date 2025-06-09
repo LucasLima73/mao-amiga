@@ -198,7 +198,8 @@
   "contact_title": "Contact",
   "contact_email_label": "Email",
   "contact_phone_label": "Phone",
-  "footer_copyright": "Friendly Hand. All rights reserved.",
+  "footer_copyright": "Mão Amiga. All rights reserved.",
+  "footer_terms_link": "Terms of Use",
   "healthDocData": {
     "cpf": {
       "title": "CPF (Individual Taxpayer Registry)",
@@ -301,5 +302,67 @@
   "languageModal": {
     "title": "Select your language",
     "subtitle": "Selecione seu idioma"
+  },
+  "termsOfUse": {
+    "title": "Mão Amiga Platform Terms of Use",
+    "lastUpdate": "Last update: 06/01/2025",
+    "welcome": "Welcome to Mão Amiga! These Terms of Use govern the use of the Mão Amiga platform, developed with the objective of assisting refugees and immigrants in their integration process in Brazil, offering information about documentation, health, human rights, and socioeconomic support.",
+    "agreement": "By accessing or using this site, you agree to the terms and conditions described below.",
+    "sections": {
+      "purpose": {
+        "title": "1. Platform Purpose",
+        "content": "The Mão Amiga platform is exclusively informative, educational, and supportive in nature. We do not replace legal, medical, or official services provided by government agencies."
+      },
+      "registration": {
+        "title": "2. Registration and Account",
+        "content1": "To use certain services, the user may create an account, providing information such as name, email, and phone number.",
+        "content2": "The user commits to providing truthful information and keeping their data updated."
+      },
+      "privacy": {
+        "title": "3. Privacy and Data Protection (LGPD)",
+        "content": "We are committed to protecting your personal data, as established by Law No. 13,709/2018 (LGPD).",
+        "data": {
+          "title": "Data collected:",
+          "item1": "Personal data provided during registration;",
+          "item2": "Navigation and platform usage data;",
+          "item3": "Voluntarily entered data."
+        },
+        "purposes": {
+          "title": "Collection purposes:",
+          "item1": "Provide access to integration pathways;",
+          "item2": "Personalize user experience;",
+          "item3": "Improve service and ensure security."
+        },
+        "sharing": {
+          "title": "Sharing:",
+          "content": "Only when required by law or with consent."
+        },
+        "rights": {
+          "title": "User rights:",
+          "item1": "Access, correct, delete, or port data;",
+          "item2": "Revoke consent;",
+          "item3": "Be informed about usage."
+        },
+        "contact": "Contact: tccfesa@gmail.com"
+      },
+      "responsibleUse": {
+        "title": "4. Responsible Use",
+        "item1": "Illegal, offensive, or dangerous use is prohibited.",
+        "item2": "Do not copy or reuse content without authorization."
+      },
+      "responsibility": {
+        "title": "5. Responsibility",
+        "item1": "We are not responsible for decisions made based on information from the platform.",
+        "item2": "Subject to technical errors and unavailability."
+      },
+      "modifications": {
+        "title": "6. Modifications",
+        "content": "Terms may be updated periodically."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "content": "Questions or requests: tccfesa@gmail.com"
+      }
+    }
   }
 }

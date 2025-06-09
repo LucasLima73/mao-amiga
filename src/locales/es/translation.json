@@ -203,6 +203,7 @@
   "contact_email_label": "Correo",
   "contact_phone_label": "Teléfono",
   "footer_copyright": "Mano Amiga. Todos los derechos reservados.",
+  "footer_terms_link": "Términos de Uso",
   "healthDocData": {
     "cpf": {
       "title": "CPF (Registro de Contribuyente Individual)",
@@ -304,5 +305,67 @@
   "languageModal": {
     "title": "Seleccione su idioma",
     "subtitle": "Select your language"
+  },
+  "termsOfUse": {
+    "title": "Términos de Uso de la Plataforma Mão Amiga",
+    "lastUpdate": "Última actualización: 01/06/2025",
+    "welcome": "¡Bienvenido a Mão Amiga! Estos Términos de Uso regulan la utilización de la plataforma Mão Amiga, desarrollada con el objetivo de ayudar a refugiados e inmigrantes en su proceso de integración en Brasil, ofreciendo información sobre documentación, salud, derechos humanos y apoyo socioeconómico.",
+    "agreement": "Al acceder o utilizar este sitio, usted acepta los términos y condiciones descritos a continuación.",
+    "sections": {
+      "purpose": {
+        "title": "1. Objetivo de la Plataforma",
+        "content": "La plataforma Mão Amiga tiene carácter exclusivamente informativo, educativo y de apoyo. No sustituimos servicios jurídicos, médicos u oficiales prestados por organismos gubernamentales."
+      },
+      "registration": {
+        "title": "2. Registro y Cuenta",
+        "content1": "Para utilizar determinados servicios, el usuario podrá crear una cuenta, proporcionando datos como nombre, correo electrónico y teléfono.",
+        "content2": "El usuario se compromete a proporcionar información verídica y mantener sus datos actualizados."
+      },
+      "privacy": {
+        "title": "3. Privacidad y Protección de Datos (LGPD)",
+        "content": "Nos comprometemos con la protección de sus datos personales, conforme establece la Ley nº 13.709/2018 (LGPD).",
+        "data": {
+          "title": "Datos recopilados:",
+          "item1": "Datos personales proporcionados en el registro;",
+          "item2": "Datos de navegación y uso de la plataforma;",
+          "item3": "Datos ingresados voluntariamente."
+        },
+        "purposes": {
+          "title": "Finalidades de la recopilación:",
+          "item1": "Proporcionar acceso a las rutas de integración;",
+          "item2": "Personalizar la experiencia del usuario;",
+          "item3": "Mejorar el servicio y garantizar la seguridad."
+        },
+        "sharing": {
+          "title": "Compartición:",
+          "content": "Solo cuando lo exija la ley o mediante consentimiento."
+        },
+        "rights": {
+          "title": "Derechos del usuario:",
+          "item1": "Acceder, corregir, eliminar o portar datos;",
+          "item2": "Revocar consentimiento;",
+          "item3": "Ser informado sobre el uso."
+        },
+        "contact": "Contacto: tccfesa@gmail.com"
+      },
+      "responsibleUse": {
+        "title": "4. Uso Responsable",
+        "item1": "Prohibido uso ilegal, ofensivo o peligroso.",
+        "item2": "No copiar o reutilizar contenido sin autorización."
+      },
+      "responsibility": {
+        "title": "5. Responsabilidad",
+        "item1": "No nos responsabilizamos por decisiones tomadas con base en la información de la plataforma.",
+        "item2": "Sujeto a errores técnicos e indisponibilidades."
+      },
+      "modifications": {
+        "title": "6. Modificaciones",
+        "content": "Los términos pueden ser actualizados periódicamente."
+      },
+      "contact": {
+        "title": "7. Contacto",
+        "content": "Dudas o solicitudes: tccfesa@gmail.com"
+      }
+    }
   }
 }

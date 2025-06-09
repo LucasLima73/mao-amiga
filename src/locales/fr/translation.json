@@ -255,6 +255,7 @@
   "contact_email_label": "Email",
   "contact_phone_label": "Téléphone",
   "footer_copyright": "Main Amie. Tous droits réservés.",
+  "footer_terms_link": "Conditions d'Utilisation",
   "solicitacao_refugio_title": "Demande de refuge",
   "solicitacao_refugio_subtitle": "Comment demander le statut de réfugié au Brésil",
   "solicitacao_refugio_desc": "Demander le statut de réfugié est un droit pour les personnes qui ont quitté leur pays d'origine en raison de persécutions, de conflits, de violences ou de violations des droits humains. Au Brésil, le processus est gratuit et peut être initié dès votre arrivée dans le pays.",
@@ -297,5 +298,67 @@
   "languageModal": {
     "title": "Sélectionnez votre langue",
     "subtitle": "Select your language"
+  },
+  "termsOfUse": {
+    "title": "Conditions d'Utilisation de la Plateforme Mão Amiga",
+    "lastUpdate": "Dernière mise à jour: 01/06/2025",
+    "welcome": "Bienvenue sur Mão Amiga ! Ces Conditions d'Utilisation régissent l'utilisation de la plateforme Mão Amiga, développée dans le but d'aider les réfugiés et les immigrants dans leur processus d'intégration au Brésil, en offrant des informations sur la documentation, la santé, les droits humains et le soutien socio-économique.",
+    "agreement": "En accédant ou en utilisant ce site, vous acceptez les termes et conditions décrits ci-dessous.",
+    "sections": {
+      "purpose": {
+        "title": "1. Objectif de la Plateforme",
+        "content": "La plateforme Mão Amiga a un caractère exclusivement informatif, éducatif et de soutien. Nous ne remplaçons pas les services juridiques, médicaux ou officiels fournis par les organismes gouvernementaux."
+      },
+      "registration": {
+        "title": "2. Inscription et Compte",
+        "content1": "Pour utiliser certains services, l'utilisateur peut créer un compte en fournissant des informations telles que le nom, l'e-mail et le numéro de téléphone.",
+        "content2": "L'utilisateur s'engage à fournir des informations véridiques et à maintenir ses données à jour."
+      },
+      "privacy": {
+        "title": "3. Confidentialité et Protection des Données (LGPD)",
+        "content": "Nous nous engageons à protéger vos données personnelles, conformément à la loi n° 13.709/2018 (LGPD).",
+        "data": {
+          "title": "Données collectées:",
+          "item1": "Données personnelles fournies lors de l'inscription;",
+          "item2": "Données de navigation et d'utilisation de la plateforme;",
+          "item3": "Données saisies volontairement."
+        },
+        "purposes": {
+          "title": "Finalités de la collecte:",
+          "item1": "Fournir l'accès aux parcours d'intégration;",
+          "item2": "Personnaliser l'expérience de l'utilisateur;",
+          "item3": "Améliorer le service et assurer la sécurité."
+        },
+        "sharing": {
+          "title": "Partage:",
+          "content": "Uniquement lorsque requis par la loi ou avec consentement."
+        },
+        "rights": {
+          "title": "Droits de l'utilisateur:",
+          "item1": "Accéder, corriger, supprimer ou transférer des données;",
+          "item2": "Révoquer le consentement;",
+          "item3": "Être informé de l'utilisation."
+        },
+        "contact": "Contact: tccfesa@gmail.com"
+      },
+      "responsibleUse": {
+        "title": "4. Utilisation Responsable",
+        "item1": "Utilisation illégale, offensive ou dangereuse interdite.",
+        "item2": "Ne pas copier ou réutiliser le contenu sans autorisation."
+      },
+      "responsibility": {
+        "title": "5. Responsabilité",
+        "item1": "Nous ne sommes pas responsables des décisions prises sur la base des informations de la plateforme.",
+        "item2": "Sujet aux erreurs techniques et aux indisponibilités."
+      },
+      "modifications": {
+        "title": "6. Modifications",
+        "content": "Les conditions peuvent être mises à jour périodiquement."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "content": "Questions ou demandes: tccfesa@gmail.com"
+      }
+    }
   }
 }

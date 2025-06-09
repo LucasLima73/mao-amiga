@@ -58,9 +58,16 @@ export default function Footer() {
 
       {/* Rodapé Inferior */}
       <div className="border-t border-gray-700 mt-8 pt-5 text-sm text-gray-500">
-        <p>
-          © {new Date().getFullYear()} {t("footer_copyright")}
-        </p>
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <p>
+            © {new Date().getFullYear()} {t("footer_copyright")}
+          </p>
+          <div className="mt-3 md:mt-0">
+            <Link href="/termos-de-uso" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300">
+              {t("footer_terms_link")}
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
